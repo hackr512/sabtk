@@ -124,13 +124,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   /** Replace cached price/stock with fresh catalogue data. */
   const refresh = useCallback((fresh: Product[]) => {
     setItems((prev) =>
-      prev
-        .map((i) => {
-          const f = fresh.find((p) => p.id === i.productId);
-          if (!f) return i;
-          return { ...toItem(f, Math.min(i.quantity, Math.max(cap(f), 0))) };
-        })
-        .filter((i) => i.quantity > 0 || fresh.find((p) => p.id === i.productId)?.stock === 0),
+      prev.map((i) => {
+        const f = fresh.find((p) => p.id === i.productId);
+        // Missing = no longer sold. Keep the line visible (qty 0) so the customer sees why.
+        if (!f) return { ...i, stock: 0, quantity: 0 };
+        return toItem(f, Math.min(Math.max(i.quantity, 1), cap(f)));
+      }),
     );
   }, []);
 
