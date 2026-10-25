@@ -67,17 +67,28 @@ export const searchProducts = createServerFn({ method: "GET" })
     const db = createPublicClient();
     const pageSize = data.pageSize ?? 24;
     const page = data.page ?? 1;
-    const { data: rows, error } = await db.rpc("search_products", {
-      p_q: data.q || undefined,
-      p_category: data.category || undefined,
-      p_brands: data.brands?.length ? data.brands : undefined,
-      p_min: data.min,
-      p_max: data.max,
+    const args: {
+      p_q?: string;
+      p_category?: string;
+      p_brands?: string[];
+      p_min?: number;
+      p_max?: number;
+      p_in_stock: boolean;
+      p_sort: string;
+      p_limit: number;
+      p_offset: number;
+    } = {
       p_in_stock: data.inStock ?? false,
       p_sort: data.sort ?? "relevance",
       p_limit: pageSize,
       p_offset: (page - 1) * pageSize,
-    });
+    };
+    if (data.q) args.p_q = data.q;
+    if (data.category) args.p_category = data.category;
+    if (data.brands?.length) args.p_brands = data.brands;
+    if (data.min != null) args.p_min = data.min;
+    if (data.max != null) args.p_max = data.max;
+    const { data: rows, error } = await db.rpc("search_products", args);
     if (error) {
       console.error("searchProducts", error);
       throw new Error("Search is unavailable right now");
