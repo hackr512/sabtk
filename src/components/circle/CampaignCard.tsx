@@ -77,7 +77,10 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
   const joinM = useMutation({
     mutationFn: () => join({ data: { campaignId: campaign.id, quantity: qty, zoneId: zoneId ?? undefined } }),
     onSuccess: (r) => {
-      if (!r.ok) return toast.error(r.error);
+      if (!r.ok) {
+        toast.error(r.error);
+        return;
+      }
       toast.success("You're in! We'll update you when the campaign status changes.");
       setOpen(false);
       qc.invalidateQueries({ queryKey: ["campaigns"] });
@@ -89,7 +92,10 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
   const leaveM = useMutation({
     mutationFn: () => leave({ data: { campaignId: campaign.id } }),
     onSuccess: (r) => {
-      if (!r.ok) return toast.error(r.error);
+      if (!r.ok) {
+        toast.error(r.error);
+        return;
+      }
       toast.success("Reservation withdrawn");
       qc.invalidateQueries({ queryKey: ["campaigns"] });
       qc.invalidateQueries({ queryKey: ["home"] });
