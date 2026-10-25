@@ -9,11 +9,11 @@ export function Footer() {
   const { data } = useQuery(storeConfigQuery);
   const s = data?.settings ?? {};
   const socials = [
-    { label: "Facebook", url: s.facebook_url },
-    { label: "Instagram", url: s.instagram_url },
-    { label: "TikTok", url: s.tiktok_url },
+    { label: "Facebook", url: s["facebook_url"] },
+    { label: "Instagram", url: s["instagram_url"] },
+    { label: "TikTok", url: s["tiktok_url"] },
   ].filter((x) => x.url);
-  const hasContact = s.support_phone || s.whatsapp_number || s.support_email;
+  const hasContact = s["support_phone"] || s["whatsapp_number"] || s["support_email"];
 
   return (
     <footer className="mt-16 bg-deep pb-24 text-deep-foreground md:pb-0">
@@ -55,29 +55,29 @@ export function Footer() {
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wider text-lime">Contact</h3>
           <ul className="mt-3 space-y-2 text-sm text-deep-foreground/80">
-            {s.whatsapp_number && (
+            {s["whatsapp_number"] && (
               <li>
                 <a
-                  href={`https://wa.me/${s.whatsapp_number.replace(/\D/g, "")}`}
+                  href={`https://wa.me/${s["whatsapp_number"].replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 hover:text-deep-foreground"
                 >
-                  <MessageCircle className="size-4" /> WhatsApp {s.whatsapp_number}
+                  <MessageCircle className="size-4" /> WhatsApp {s["whatsapp_number"]}
                 </a>
               </li>
             )}
-            {s.support_phone && (
+            {s["support_phone"] && (
               <li>
-                <a href={`tel:${s.support_phone}`} className="inline-flex items-center gap-2 hover:text-deep-foreground">
-                  <Phone className="size-4" /> {s.support_phone}
+                <a href={`tel:${s["support_phone"]}`} className="inline-flex items-center gap-2 hover:text-deep-foreground">
+                  <Phone className="size-4" /> {s["support_phone"]}
                 </a>
               </li>
             )}
-            {s.support_email && (
+            {s["support_email"] && (
               <li>
-                <a href={`mailto:${s.support_email}`} className="inline-flex items-center gap-2 hover:text-deep-foreground">
-                  <Mail className="size-4" /> {s.support_email}
+                <a href={`mailto:${s["support_email"]}`} className="inline-flex items-center gap-2 hover:text-deep-foreground">
+                  <Mail className="size-4" /> {s["support_email"]}
                 </a>
               </li>
             )}

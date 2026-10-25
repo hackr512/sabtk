@@ -239,7 +239,7 @@ function bestValue(products: Product[]): (Product & { valueNote: string })[] {
   for (const list of groups.values()) {
     if (list.length < 2) continue;
     list.sort((a, b) => a.v - b.v);
-    const best = list[0];
+    const best = list[0]!;
     out.push({
       ...best.p,
       valueNote: `Lowest price per ${best.base} in ${best.p.categoryName ?? "its category"}`,
