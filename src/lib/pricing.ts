@@ -82,7 +82,7 @@ export function computeTotals(lines: PricingLine[], promo?: PromoRule | null): O
 export function formatPKR(amount: number): string {
   const rounded = Math.round(amount * 100) / 100;
   const isWhole = Number.isInteger(rounded);
-  const [int = "0", dec] = Math.abs(rounded).toFixed(isWhole ? 0 : 2).split(".");
+  const [int, dec] = Math.abs(rounded).toFixed(isWhole ? 0 : 2).split(".");
   const withCommas = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return `${rounded < 0 ? "-" : ""}Rs. ${withCommas}${dec ? `.${dec}` : ""}`;
 }

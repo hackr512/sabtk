@@ -15,7 +15,7 @@ export function StockLabel({ stock, className }: { stock: number; className?: st
   return <span className={cn("text-xs font-medium text-success", className)}>In stock</span>;
 }
 
-export function ProductCard({ product, note }: { product: Product; note?: string | undefined }) {
+export function ProductCard({ product, note }: { product: Product; note?: string }) {
   const cart = useCart();
   const { saved, toggle } = useWishlist();
   const qty = cart.quantityOf(product.id);
@@ -123,7 +123,7 @@ export function ProductCard({ product, note }: { product: Product; note?: string
   );
 }
 
-export function ProductGrid({ products, notes }: { products: Product[]; notes?: Record<string, string> | undefined }) {
+export function ProductGrid({ products, notes }: { products: Product[]; notes?: Record<string, string> }) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
       {products.map((p) => (
@@ -133,7 +133,7 @@ export function ProductGrid({ products, notes }: { products: Product[]; notes?: 
   );
 }
 
-export function ProductRail({ products, notes }: { products: Product[]; notes?: Record<string, string> | undefined }) {
+export function ProductRail({ products, notes }: { products: Product[]; notes?: Record<string, string> }) {
   return (
     <div className="scrollbar-none -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:px-0">
       {products.map((p) => (
