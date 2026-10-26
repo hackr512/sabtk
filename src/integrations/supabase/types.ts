@@ -408,348 +408,6 @@ export type Database = {
           },
         ]
       }
-      membership_credit_ledger: {
-        Row: {
-          actor: string | null
-          created_at: string
-          cycle_id: string
-          delta: number
-          id: number
-          kind: string
-          membership_id: string
-          note: string | null
-          order_id: string | null
-          user_id: string
-        }
-        Insert: {
-          actor?: string | null
-          created_at?: string
-          cycle_id: string
-          delta: number
-          id?: never
-          kind: string
-          membership_id: string
-          note?: string | null
-          order_id?: string | null
-          user_id: string
-        }
-        Update: {
-          actor?: string | null
-          created_at?: string
-          cycle_id?: string
-          delta?: number
-          id?: never
-          kind?: string
-          membership_id?: string
-          note?: string | null
-          order_id?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "membership_credit_ledger_cycle_id_fkey"
-            columns: ["cycle_id"]
-            isOneToOne: false
-            referencedRelation: "membership_cycles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "membership_credit_ledger_membership_id_fkey"
-            columns: ["membership_id"]
-            isOneToOne: false
-            referencedRelation: "memberships"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "membership_credit_ledger_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      membership_cycles: {
-        Row: {
-          closed_at: string | null
-          created_at: string
-          credits_carried: number
-          credits_granted: number
-          cycle_number: number
-          id: string
-          max_carry_forward: number
-          membership_id: string
-          min_basket: number
-          payment_id: string | null
-          period_end: string
-          period_start: string
-          plan_id: string
-          plan_name: string
-          price: number
-          status: string
-          user_id: string
-          zone_ids: string[]
-        }
-        Insert: {
-          closed_at?: string | null
-          created_at?: string
-          credits_carried?: number
-          credits_granted: number
-          cycle_number: number
-          id?: string
-          max_carry_forward?: number
-          membership_id: string
-          min_basket?: number
-          payment_id?: string | null
-          period_end: string
-          period_start: string
-          plan_id: string
-          plan_name: string
-          price: number
-          status?: string
-          user_id: string
-          zone_ids?: string[]
-        }
-        Update: {
-          closed_at?: string | null
-          created_at?: string
-          credits_carried?: number
-          credits_granted?: number
-          cycle_number?: number
-          id?: string
-          max_carry_forward?: number
-          membership_id?: string
-          min_basket?: number
-          payment_id?: string | null
-          period_end?: string
-          period_start?: string
-          plan_id?: string
-          plan_name?: string
-          price?: number
-          status?: string
-          user_id?: string
-          zone_ids?: string[]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "membership_cycles_membership_id_fkey"
-            columns: ["membership_id"]
-            isOneToOne: false
-            referencedRelation: "memberships"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "membership_cycles_payment_id_fkey"
-            columns: ["payment_id"]
-            isOneToOne: false
-            referencedRelation: "membership_payments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "membership_cycles_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "membership_plans"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      membership_payments: {
-        Row: {
-          amount: number
-          created_at: string
-          cycle_id: string | null
-          id: string
-          kind: string
-          membership_id: string
-          method: string | null
-          note: string | null
-          paid_at: string | null
-          plan_id: string
-          provider: string
-          provider_reference: string | null
-          recorded_by: string | null
-          refund_amount: number | null
-          refunded_at: string | null
-          status: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          cycle_id?: string | null
-          id?: string
-          kind: string
-          membership_id: string
-          method?: string | null
-          note?: string | null
-          paid_at?: string | null
-          plan_id: string
-          provider?: string
-          provider_reference?: string | null
-          recorded_by?: string | null
-          refund_amount?: number | null
-          refunded_at?: string | null
-          status?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          cycle_id?: string | null
-          id?: string
-          kind?: string
-          membership_id?: string
-          method?: string | null
-          note?: string | null
-          paid_at?: string | null
-          plan_id?: string
-          provider?: string
-          provider_reference?: string | null
-          recorded_by?: string | null
-          refund_amount?: number | null
-          refunded_at?: string | null
-          status?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "membership_payments_cycle_fk"
-            columns: ["cycle_id"]
-            isOneToOne: false
-            referencedRelation: "membership_cycles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "membership_payments_membership_id_fkey"
-            columns: ["membership_id"]
-            isOneToOne: false
-            referencedRelation: "memberships"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "membership_payments_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "membership_plans"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      membership_plans: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          included_credits: number
-          is_active: boolean
-          is_recommended: boolean
-          max_carry_forward: number
-          min_basket: number
-          monthly_price: number
-          name: string
-          slug: string
-          sort_order: number
-          updated_at: string
-          validity_days: number
-          zone_ids: string[]
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          included_credits: number
-          is_active?: boolean
-          is_recommended?: boolean
-          max_carry_forward?: number
-          min_basket?: number
-          monthly_price: number
-          name: string
-          slug: string
-          sort_order?: number
-          updated_at?: string
-          validity_days?: number
-          zone_ids?: string[]
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          included_credits?: number
-          is_active?: boolean
-          is_recommended?: boolean
-          max_carry_forward?: number
-          min_basket?: number
-          monthly_price?: number
-          name?: string
-          slug?: string
-          sort_order?: number
-          updated_at?: string
-          validity_days?: number
-          zone_ids?: string[]
-        }
-        Relationships: []
-      }
-      memberships: {
-        Row: {
-          cancel_at_period_end: boolean
-          cancelled_at: string | null
-          created_at: string
-          current_cycle_id: string | null
-          current_period_end: string | null
-          current_period_start: string | null
-          id: string
-          plan_id: string
-          status: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          cancel_at_period_end?: boolean
-          cancelled_at?: string | null
-          created_at?: string
-          current_cycle_id?: string | null
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan_id: string
-          status?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          cancel_at_period_end?: boolean
-          cancelled_at?: string | null
-          created_at?: string
-          current_cycle_id?: string | null
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan_id?: string
-          status?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "memberships_current_cycle_fk"
-            columns: ["current_cycle_id"]
-            isOneToOne: false
-            referencedRelation: "membership_cycles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "memberships_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "membership_plans"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       order_items: {
         Row: {
           brand: string | null
@@ -851,14 +509,11 @@ export type Database = {
           customer_name: string
           delivery_date: string
           delivery_fee: number
-          delivery_fee_waived: number
           delivery_window: string
           discount_total: number
           eligible_points_subtotal: number
           id: string
           instructions: string | null
-          membership_credit_status: string
-          membership_cycle_id: string | null
           notes: string | null
           order_number: string
           payment_method: string
@@ -883,14 +538,11 @@ export type Database = {
           customer_name: string
           delivery_date: string
           delivery_fee: number
-          delivery_fee_waived?: number
           delivery_window: string
           discount_total?: number
           eligible_points_subtotal?: number
           id?: string
           instructions?: string | null
-          membership_credit_status?: string
-          membership_cycle_id?: string | null
           notes?: string | null
           order_number: string
           payment_method: string
@@ -915,14 +567,11 @@ export type Database = {
           customer_name?: string
           delivery_date?: string
           delivery_fee?: number
-          delivery_fee_waived?: number
           delivery_window?: string
           discount_total?: number
           eligible_points_subtotal?: number
           id?: string
           instructions?: string | null
-          membership_credit_status?: string
-          membership_cycle_id?: string | null
           notes?: string | null
           order_number?: string
           payment_method?: string
@@ -940,13 +589,6 @@ export type Database = {
           zone_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "orders_membership_cycle_id_fkey"
-            columns: ["membership_cycle_id"]
-            isOneToOne: false
-            referencedRelation: "membership_cycles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "orders_reward_id_fkey"
             columns: ["reward_id"]
@@ -1400,39 +1042,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      membership_adjust_credits: {
-        Args: {
-          p_actor: string
-          p_cycle: string
-          p_delta: number
-          p_note: string
-        }
-        Returns: undefined
-      }
-      membership_available_credits: {
-        Args: { p_cycle: string }
-        Returns: number
-      }
-      membership_record_payment: {
-        Args: {
-          p_actor: string
-          p_method: string
-          p_payment: string
-          p_reference: string
-        }
-        Returns: Json
-      }
-      membership_refresh: { Args: { p_user?: string }; Returns: undefined }
-      membership_refund_payment: {
-        Args: {
-          p_actor: string
-          p_amount: number
-          p_note: string
-          p_payment: string
-        }
-        Returns: undefined
-      }
-      membership_report: { Args: never; Returns: Json }
       my_points_balance: { Args: never; Returns: number }
       search_products: {
         Args: {
