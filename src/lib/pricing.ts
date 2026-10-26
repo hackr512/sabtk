@@ -26,7 +26,10 @@ export type PromoRule = {
 export type OrderTotals = {
   subtotal: number;
   discount: number;
+  /** Delivery fee the customer actually pays (after any membership credit). */
   deliveryFee: number;
+  /** Delivery fee covered by a membership credit (0 when no credit is used). */
+  deliveryFeeWaived: number;
   total: number;
   eligiblePointsSubtotal: number;
   pointsToEarn: number;
@@ -58,13 +61,20 @@ export function promoDiscount(promo: PromoRule | null | undefined, subtotal: num
   return round2(Math.min(d, subtotal));
 }
 
-export function computeTotals(lines: PricingLine[], promo?: PromoRule | null): OrderTotals {
+export function computeTotals(
+  lines: PricingLine[],
+  promo?: PromoRule | null,
+  opts?: { useMembershipCredit?: boolean },
+): OrderTotals {
   const subtotal = round2(lines.reduce((s, l) => s + l.unitPrice * l.quantity, 0));
   const eligibleRaw = lines
     .filter((l) => l.pointsEligible)
     .reduce((s, l) => s + l.unitPrice * l.quantity, 0);
   const discount = promoDiscount(promo, subtotal);
-  const deliveryFee = deliveryFeeFor(subtotal);
+  const baseFee = deliveryFeeFor(subtotal);
+  // A membership credit only ever covers a delivery fee that would otherwise be charged.
+  const deliveryFeeWaived = opts?.useMembershipCredit && baseFee > 0 ? baseFee : 0;
+  const deliveryFee = baseFee - deliveryFeeWaived;
   // Promo discounts reduce the points-eligible amount proportionally.
   const eligiblePointsSubtotal =
     subtotal > 0 ? round2(eligibleRaw * (1 - discount / subtotal)) : 0;
@@ -72,11 +82,77 @@ export function computeTotals(lines: PricingLine[], promo?: PromoRule | null): O
     subtotal,
     discount,
     deliveryFee,
+    deliveryFeeWaived,
     total: round2(subtotal - discount + deliveryFee),
     eligiblePointsSubtotal,
     pointsToEarn: pointsForAmount(eligiblePointsSubtotal),
     amountToFreeDelivery: amountToFreeDelivery(subtotal),
   };
+}
+
+/* ---------- Monthly Delivery Membership ---------- */
+
+export type MembershipCreditContext = {
+  /** Credits left in the current billing cycle (reserved credits already deducted). */
+  available: number;
+  /** Minimum item subtotal for a credit to apply. */
+  minBasket: number;
+  /** Service zones the plan covers; empty = every delivery area. */
+  zoneIds: string[];
+};
+
+export type MembershipIneligibleReason =
+  | "no_membership"
+  | "empty_cart"
+  | "already_free"
+  | "no_credits"
+  | "min_basket"
+  | "zone";
+
+export type MembershipEligibility =
+  | { eligible: true; saves: number }
+  | { eligible: false; reason: MembershipIneligibleReason };
+
+/**
+ * Whether one membership credit can pay for this order's delivery.
+ * Never true when delivery is already free, so a credit is never spent on a free delivery.
+ */
+export function membershipCreditEligibility(
+  itemSubtotal: number,
+  ctx: MembershipCreditContext | null | undefined,
+  zoneId: string | null | undefined,
+): MembershipEligibility {
+  if (!ctx) return { eligible: false, reason: "no_membership" };
+  const fee = deliveryFeeFor(itemSubtotal);
+  if (itemSubtotal <= 0) return { eligible: false, reason: "empty_cart" };
+  if (fee === 0) return { eligible: false, reason: "already_free" };
+  if (ctx.available < 1) return { eligible: false, reason: "no_credits" };
+  if (itemSubtotal < ctx.minBasket) return { eligible: false, reason: "min_basket" };
+  if (ctx.zoneIds.length > 0 && zoneId && !ctx.zoneIds.includes(zoneId)) return { eligible: false, reason: "zone" };
+  return { eligible: true, saves: fee };
+}
+
+export function membershipReasonText(reason: MembershipIneligibleReason, minBasket = 0): string {
+  switch (reason) {
+    case "no_membership":
+      return "You don't have an active membership.";
+    case "empty_cart":
+      return "Add items to use a delivery credit.";
+    case "already_free":
+      return `Delivery is already free on orders of ${formatPKR(FREE_DELIVERY_THRESHOLD)}+, so no credit is used.`;
+    case "no_credits":
+      return "You've used all delivery credits for this billing cycle.";
+    case "min_basket":
+      return `Your plan's delivery credits apply to baskets of ${formatPKR(minBasket)} or more.`;
+    case "zone":
+      return "Your plan's delivery credits don't cover this delivery area.";
+  }
+}
+
+/** Membership price divided by included deliveries, e.g. Rs. 899 / 7 = Rs. 128.43. */
+export function costPerIncludedDelivery(monthlyPrice: number, credits: number): number {
+  if (credits <= 0) return 0;
+  return round2(monthlyPrice / credits);
 }
 
 export function formatPKR(amount: number): string {
