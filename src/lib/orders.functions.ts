@@ -88,6 +88,7 @@ const placeOrderSchema = z.object({
   rewardId: z.string().uuid().optional(),
   notes: z.string().trim().max(300).optional(),
   saveAddress: z.boolean().optional(),
+  useMembershipCredit: z.boolean().optional(),
 });
 
 export type PlaceOrderInput = z.infer<typeof placeOrderSchema>;
