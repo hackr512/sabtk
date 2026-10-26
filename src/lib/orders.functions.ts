@@ -127,9 +127,21 @@ export const placeOrder = createServerFn({ method: "POST" })
       promoCode = res.code;
     }
 
+    // Membership delivery credit: checked here for a clear message, then re-checked and
+    // reserved atomically inside create_order so two orders can't spend the same credit.
+    let useCredit = false;
+    if (data.useMembershipCredit) {
+      const ctx = await loadCreditContext(admin, userId);
+      const elig = membershipCreditEligibility(Math.round(subtotalPre * 100) / 100, ctx, zone.id);
+      if (elig.eligible) useCredit = true;
+      else if (elig.reason !== "already_free")
+        return { ok: false as const, error: membershipReasonText(elig.reason, ctx?.minBasket ?? 0) };
+    }
+
     const totals = computeTotals(
       lines.map((l) => ({ unitPrice: Number(l.p.price), quantity: l.qty, pointsEligible: l.p.points_eligible })),
       promoRule,
+      { useMembershipCredit: useCredit },
     );
 
     const items = lines.map((l) => ({
