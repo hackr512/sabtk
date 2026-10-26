@@ -1,9 +1,33 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { computeTotals, deliveryDateOptions, type PromoRule } from "./pricing";
+import {
+  computeTotals,
+  deliveryDateOptions,
+  membershipCreditEligibility,
+  membershipReasonText,
+  type MembershipCreditContext,
+  type PromoRule,
+} from "./pricing";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+/** Current-cycle credit context for a customer, after rolling over any finished cycle. */
+export async function loadCreditContext(admin: any, userId: string): Promise<MembershipCreditContext | null> {
+  await admin.rpc("membership_refresh", { p_user: userId });
+  const { data: m } = await admin
+    .from("memberships")
+    .select("id, status, current_cycle_id, membership_cycles!memberships_current_cycle_fk(id, status, period_start, period_end, min_basket, zone_ids)")
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .maybeSingle();
+  const c = m?.membership_cycles;
+  if (!m || !c || c.status !== "active") return null;
+  const now = Date.now();
+  if (new Date(c.period_start).getTime() > now || new Date(c.period_end).getTime() <= now) return null;
+  const { data: avail } = await admin.rpc("membership_available_credits", { p_cycle: c.id });
+  return { available: Number(avail ?? 0), minBasket: Number(c.min_basket), zoneIds: c.zone_ids ?? [] };
+}
 
 async function loadPromo(admin: any, code: string, subtotal: number) {
   const { data: promo } = await admin
@@ -64,6 +88,7 @@ const placeOrderSchema = z.object({
   rewardId: z.string().uuid().optional(),
   notes: z.string().trim().max(300).optional(),
   saveAddress: z.boolean().optional(),
+  useMembershipCredit: z.boolean().optional(),
 });
 
 export type PlaceOrderInput = z.infer<typeof placeOrderSchema>;
@@ -127,9 +152,21 @@ export const placeOrder = createServerFn({ method: "POST" })
       promoCode = res.code;
     }
 
+    // Membership delivery credit: checked here for a clear message, then re-checked and
+    // reserved atomically inside create_order so two orders can't spend the same credit.
+    let useCredit = false;
+    if (data.useMembershipCredit) {
+      const ctx = await loadCreditContext(admin, userId);
+      const elig = membershipCreditEligibility(Math.round(subtotalPre * 100) / 100, ctx, zone.id);
+      if (elig.eligible) useCredit = true;
+      else if (elig.reason !== "already_free")
+        return { ok: false as const, error: membershipReasonText(elig.reason, ctx?.minBasket ?? 0) };
+    }
+
     const totals = computeTotals(
       lines.map((l) => ({ unitPrice: Number(l.p.price), quantity: l.qty, pointsEligible: l.p.points_eligible })),
       promoRule,
+      { useMembershipCredit: useCredit },
     );
 
     const items = lines.map((l) => ({
@@ -200,6 +237,7 @@ export const placeOrder = createServerFn({ method: "POST" })
         subtotal: totals.subtotal,
         discount_total: totals.discount,
         delivery_fee: totals.deliveryFee,
+        delivery_fee_waived: totals.deliveryFeeWaived,
         total: totals.total,
         eligible_points_subtotal: totals.eligiblePointsSubtotal,
         points_to_earn: totals.pointsToEarn,
@@ -219,6 +257,10 @@ export const placeOrder = createServerFn({ method: "POST" })
         };
       if (msg.includes("INSUFFICIENT_POINTS"))
         return { ok: false as const, error: "You don't have enough points for this reward." };
+      if (msg.includes("NO_MEMBERSHIP_CREDIT"))
+        return { ok: false as const, error: "Your last delivery credit was just used on another order. Untick the credit to continue." };
+      if (msg.includes("MEMBERSHIP"))
+        return { ok: false as const, error: "Your membership credit couldn't be applied to this order. Untick it to continue." };
       console.error("create_order failed", cErr);
       return { ok: false as const, error: "We couldn't place your order. Nothing was charged. Please try again." };
     }
