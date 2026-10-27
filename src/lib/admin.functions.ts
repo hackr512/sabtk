@@ -187,7 +187,7 @@ export const adminSaveProduct = createServerFn({ method: "POST" })
     };
     if (data.id) {
       row["is_archived"] = false;
-      const { error } = await context.supabase.from("products").update(row).eq("id", data.id);
+      const { error } = await context.supabase.from("products").update(row as any).eq("id", data.id);
       if (error) return fail(error.code === "23505" ? "That SKU or link is already used by another product." : "Could not save the product.");
       return { ok: true as const, id: data.id };
     }
