@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { supabaseAdmin as admin } from "@/integrations/supabase/client.server";
+
 // Server-only: loads a customer's plan, credits and history with the privileged client.
 export type MyMembership = Awaited<ReturnType<typeof loadMyMembership>>;
 
 export async function loadMyMembership(userId: string) {
-  const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
   await admin.rpc("membership_refresh", { p_user: userId });
   const [{ data: ms }, { data: cycles }, { data: payments }, { data: plans }] = await Promise.all([
     admin.from("memberships").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
