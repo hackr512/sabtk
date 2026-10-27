@@ -15,6 +15,20 @@
       "when": 1792932765871,
       "tag": "0001_sabtk_starter_data",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793085024802,
+      "tag": "0002_admin_products_and_subscriptions",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793085066898,
+      "tag": "0003_product_images_storage_policies",
+      "breakpoints": true
     }
   ]
 }
