@@ -641,6 +641,7 @@ export type Database = {
       }
       membership_plans: {
         Row: {
+          benefits: string[]
           created_at: string
           description: string | null
           id: string
@@ -658,6 +659,7 @@ export type Database = {
           zone_ids: string[]
         }
         Insert: {
+          benefits?: string[]
           created_at?: string
           description?: string | null
           id?: string
@@ -675,6 +677,7 @@ export type Database = {
           zone_ids?: string[]
         }
         Update: {
+          benefits?: string[]
           created_at?: string
           description?: string | null
           id?: string
@@ -975,6 +978,7 @@ export type Database = {
           images: string[]
           ingredients: string | null
           is_active: boolean
+          is_archived: boolean
           is_featured: boolean
           max_per_order: number
           name: string
@@ -982,6 +986,7 @@ export type Database = {
           pack_size: string
           points_eligible: boolean
           price: number
+          purchase_cost: number | null
           sku: string | null
           slug: string
           stock_quantity: number
@@ -1001,6 +1006,7 @@ export type Database = {
           images?: string[]
           ingredients?: string | null
           is_active?: boolean
+          is_archived?: boolean
           is_featured?: boolean
           max_per_order?: number
           name: string
@@ -1008,6 +1014,7 @@ export type Database = {
           pack_size: string
           points_eligible?: boolean
           price: number
+          purchase_cost?: number | null
           sku?: string | null
           slug: string
           stock_quantity?: number
@@ -1027,6 +1034,7 @@ export type Database = {
           images?: string[]
           ingredients?: string | null
           is_active?: boolean
+          is_archived?: boolean
           is_featured?: boolean
           max_per_order?: number
           name?: string
@@ -1034,6 +1042,7 @@ export type Database = {
           pack_size?: string
           points_eligible?: boolean
           price?: number
+          purchase_cost?: number | null
           sku?: string | null
           slug?: string
           stock_quantity?: number
@@ -1433,6 +1442,19 @@ export type Database = {
         Returns: undefined
       }
       membership_report: { Args: never; Returns: Json }
+      membership_request: {
+        Args: { p_plan: string; p_user: string }
+        Returns: Json
+      }
+      membership_set_status: {
+        Args: {
+          p_action: string
+          p_actor: string
+          p_membership: string
+          p_note?: string
+        }
+        Returns: undefined
+      }
       my_points_balance: { Args: never; Returns: number }
       search_products: {
         Args: {
