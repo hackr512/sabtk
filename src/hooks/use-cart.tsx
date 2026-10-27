@@ -112,7 +112,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           continue;
         }
         const idx = next.findIndex((i) => i.productId === product.id);
-        const q = Math.min(cap(product), (idx >= 0 ? next[idx].quantity : 0) + quantity);
+        const q = Math.min(cap(product), (idx >= 0 ? next[idx]!.quantity : 0) + quantity);
         if (idx >= 0) next[idx] = toItem(product, q);
         else next.push(toItem(product, q));
       }
