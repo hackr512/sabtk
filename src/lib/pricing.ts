@@ -139,3 +139,53 @@ export function formatDeliveryDate(iso: string): string {
     timeZone: "UTC",
   });
 }
+
+/* ---------------- Monthly Delivery Plans ---------------- */
+
+/** What the customer's active plan allows on this order (loaded server-side, never trusted from the client). */
+export type MembershipBenefit = {
+  creditsAvailable: number;
+  minBasket: number;
+  zoneIds: string[];
+};
+
+export type MembershipDecision = {
+  applies: boolean;
+  /** Why a credit can't be used (null when it applies or there is no plan). */
+  reason: string | null;
+  deliveryFeeWaived: number;
+};
+
+/**
+ * One credit covers the delivery fee of one eligible order. A credit is never spent
+ * when delivery is already free (it doesn't stack with free delivery).
+ */
+export function membershipDecision(
+  totals: Pick<OrderTotals, "subtotal" | "deliveryFee">,
+  plan: MembershipBenefit | null,
+  zoneId: string | null,
+): MembershipDecision {
+  const no = (reason: string | null): MembershipDecision => ({ applies: false, reason, deliveryFeeWaived: 0 });
+  if (!plan) return no(null);
+  if (totals.subtotal <= 0) return no(null);
+  if (totals.deliveryFee <= 0) return no("Delivery is already free on this order, so no plan credit is used.");
+  if (plan.creditsAvailable < 1) return no("You have no delivery credits left in this period.");
+  if (totals.subtotal < plan.minBasket)
+    return no(`Add ${formatPKR(plan.minBasket - totals.subtotal)} more to use a plan delivery credit.`);
+  if (plan.zoneIds.length > 0 && (!zoneId || !plan.zoneIds.includes(zoneId)))
+    return no("Your plan doesn't cover this delivery area.");
+  return { applies: true, reason: null, deliveryFeeWaived: totals.deliveryFee };
+}
+
+/** Totals after a plan credit covers the delivery fee. */
+export function applyMembershipCredit(totals: OrderTotals, decision: MembershipDecision): OrderTotals & { deliveryFeeWaived: number } {
+  if (!decision.applies) return { ...totals, deliveryFeeWaived: 0 };
+  const waived = decision.deliveryFeeWaived;
+  return { ...totals, deliveryFee: 0, total: round2(totals.total - waived), deliveryFeeWaived: waived };
+}
+
+/** Effective cost of one included delivery, e.g. Rs. 499 / 4 = Rs. 124.75. */
+export function costPerDelivery(price: number, credits: number): number {
+  if (credits <= 0) return 0;
+  return round2(price / credits);
+}
