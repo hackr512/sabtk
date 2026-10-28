@@ -13,12 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BudgetRouteImport } from './routes/budget'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as OffersRouteImport } from './routes/offers'
+import { Route as PlansRouteImport } from './routes/plans'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RationRouteImport } from './routes/ration'
@@ -50,6 +52,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BudgetRoute = BudgetRouteImport.update({
+  id: '/budget',
+  path: '/budget',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
@@ -78,6 +85,11 @@ const FaqRoute = FaqRouteImport.update({
 const OffersRoute = OffersRouteImport.update({
   id: '/offers',
   path: '/offers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoliciesRoute = PoliciesRouteImport.update({
@@ -141,12 +153,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/budget': typeof BudgetRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/delivery': typeof DeliveryRoute
   '/faq': typeof FaqRoute
   '/offers': typeof OffersRoute
+  '/plans': typeof PlansRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/ration': typeof RationRoute
@@ -163,12 +177,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/budget': typeof BudgetRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/delivery': typeof DeliveryRoute
   '/faq': typeof FaqRoute
   '/offers': typeof OffersRoute
+  '/plans': typeof PlansRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/ration': typeof RationRoute
@@ -187,12 +203,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/budget': typeof BudgetRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/delivery': typeof DeliveryRoute
   '/faq': typeof FaqRoute
   '/offers': typeof OffersRoute
+  '/plans': typeof PlansRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/ration': typeof RationRoute
@@ -211,12 +229,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/budget'
     | '/cart'
     | '/categories'
     | '/contact'
     | '/delivery'
     | '/faq'
     | '/offers'
+    | '/plans'
     | '/policies'
     | '/privacy'
     | '/ration'
@@ -233,12 +253,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/budget'
     | '/cart'
     | '/categories'
     | '/contact'
     | '/delivery'
     | '/faq'
     | '/offers'
+    | '/plans'
     | '/policies'
     | '/privacy'
     | '/ration'
@@ -256,12 +278,14 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/auth'
+    | '/budget'
     | '/cart'
     | '/categories'
     | '/contact'
     | '/delivery'
     | '/faq'
     | '/offers'
+    | '/plans'
     | '/policies'
     | '/privacy'
     | '/ration'
@@ -280,12 +304,14 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  BudgetRoute: typeof BudgetRoute
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRoute
   ContactRoute: typeof ContactRoute
   DeliveryRoute: typeof DeliveryRoute
   FaqRoute: typeof FaqRoute
   OffersRoute: typeof OffersRoute
+  PlansRoute: typeof PlansRoute
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
   RationRoute: typeof RationRoute
@@ -324,6 +350,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/budget': {
+      id: '/budget'
+      path: '/budget'
+      fullPath: '/budget'
+      preLoaderRoute: typeof BudgetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -366,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/offers'
       fullPath: '/offers'
       preLoaderRoute: typeof OffersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/policies': {
@@ -468,12 +508,14 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  BudgetRoute: BudgetRoute,
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRoute,
   ContactRoute: ContactRoute,
   DeliveryRoute: DeliveryRoute,
   FaqRoute: FaqRoute,
   OffersRoute: OffersRoute,
+  PlansRoute: PlansRoute,
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
   RationRoute: RationRoute,
