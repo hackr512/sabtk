@@ -224,6 +224,7 @@ export const placeOrder = createServerFn({ method: "POST" })
         reward_id: data.rewardId ?? "",
         promo_code: promoCode ?? "",
         notes: data.notes ?? "",
+        delivery_fee_waived: totals.deliveryFeeWaived,
         items,
       },
     });
@@ -236,6 +237,10 @@ export const placeOrder = createServerFn({ method: "POST" })
         };
       if (msg.includes("INSUFFICIENT_POINTS"))
         return { ok: false as const, error: "You don't have enough points for this reward." };
+      if (msg.includes("NO_MEMBERSHIP_CREDIT"))
+        return { ok: false as const, error: "Your last delivery credit is already held by another order. Untick the plan credit to continue." };
+      if (msg.includes("MEMBERSHIP_") || msg.includes("NO_MEMBERSHIP"))
+        return { ok: false as const, error: "Your plan credit can't be used on this order. Untick it to continue." };
       console.error("create_order failed", cErr);
       return { ok: false as const, error: "We couldn't place your order. Nothing was charged. Please try again." };
     }
