@@ -18,8 +18,12 @@ import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as OffersRouteImport } from './routes/offers'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RationRouteImport } from './routes/ration'
+import { Route as RationCircleRouteImport } from './routes/ration-circle'
+import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
@@ -71,6 +75,11 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OffersRoute = OffersRouteImport.update({
+  id: '/offers',
+  path: '/offers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoliciesRoute = PoliciesRouteImport.update({
   id: '/policies',
   path: '/policies',
@@ -79,6 +88,21 @@ const PoliciesRoute = PoliciesRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RationRoute = RationRouteImport.update({
+  id: '/ration',
+  path: '/ration',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RationCircleRoute = RationCircleRouteImport.update({
+  id: '/ration-circle',
+  path: '/ration-circle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -122,8 +146,12 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/delivery': typeof DeliveryRoute
   '/faq': typeof FaqRoute
+  '/offers': typeof OffersRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
+  '/ration': typeof RationRoute
+  '/ration-circle': typeof RationCircleRoute
+  '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
@@ -140,8 +168,12 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/delivery': typeof DeliveryRoute
   '/faq': typeof FaqRoute
+  '/offers': typeof OffersRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
+  '/ration': typeof RationRoute
+  '/ration-circle': typeof RationCircleRoute
+  '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
@@ -160,8 +192,12 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/delivery': typeof DeliveryRoute
   '/faq': typeof FaqRoute
+  '/offers': typeof OffersRoute
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
+  '/ration': typeof RationRoute
+  '/ration-circle': typeof RationCircleRoute
+  '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
@@ -180,8 +216,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/delivery'
     | '/faq'
+    | '/offers'
     | '/policies'
     | '/privacy'
+    | '/ration'
+    | '/ration-circle'
+    | '/rewards'
     | '/shop'
     | '/terms'
     | '/checkout'
@@ -198,8 +238,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/delivery'
     | '/faq'
+    | '/offers'
     | '/policies'
     | '/privacy'
+    | '/ration'
+    | '/ration-circle'
+    | '/rewards'
     | '/shop'
     | '/terms'
     | '/checkout'
@@ -217,8 +261,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/delivery'
     | '/faq'
+    | '/offers'
     | '/policies'
     | '/privacy'
+    | '/ration'
+    | '/ration-circle'
+    | '/rewards'
     | '/shop'
     | '/terms'
     | '/_authenticated/checkout'
@@ -237,8 +285,12 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DeliveryRoute: typeof DeliveryRoute
   FaqRoute: typeof FaqRoute
+  OffersRoute: typeof OffersRoute
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
+  RationRoute: typeof RationRoute
+  RationCircleRoute: typeof RationCircleRoute
+  RewardsRoute: typeof RewardsRoute
   ShopRoute: typeof ShopRoute
   TermsRoute: typeof TermsRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -309,6 +361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/offers': {
+      id: '/offers'
+      path: '/offers'
+      fullPath: '/offers'
+      preLoaderRoute: typeof OffersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/policies': {
       id: '/policies'
       path: '/policies'
@@ -321,6 +380,27 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ration': {
+      id: '/ration'
+      path: '/ration'
+      fullPath: '/ration'
+      preLoaderRoute: typeof RationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ration-circle': {
+      id: '/ration-circle'
+      path: '/ration-circle'
+      fullPath: '/ration-circle'
+      preLoaderRoute: typeof RationCircleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -393,8 +473,12 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DeliveryRoute: DeliveryRoute,
   FaqRoute: FaqRoute,
+  OffersRoute: OffersRoute,
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
+  RationRoute: RationRoute,
+  RationCircleRoute: RationCircleRoute,
+  RewardsRoute: RewardsRoute,
   ShopRoute: ShopRoute,
   TermsRoute: TermsRoute,
   ProductSlugRoute: ProductSlugRoute,
