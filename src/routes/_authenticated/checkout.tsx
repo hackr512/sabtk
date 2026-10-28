@@ -14,8 +14,17 @@ import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
 import { usePointsBalance } from "@/hooks/use-customer";
 import { supabase } from "@/integrations/supabase/client";
+import { getMyMembership } from "@/lib/membership.functions";
 import { checkPromo, placeOrder } from "@/lib/orders.functions";
-import { computeTotals, deliveryDateOptions, formatDeliveryDate, formatPKR, type PromoRule } from "@/lib/pricing";
+import {
+  applyMembershipCredit,
+  computeTotals,
+  deliveryDateOptions,
+  formatDeliveryDate,
+  formatPKR,
+  membershipDecision,
+  type PromoRule,
+} from "@/lib/pricing";
 import { storeConfigQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
@@ -70,8 +79,11 @@ function Checkout() {
   const [promoInput, setPromoInput] = useState("");
   const [promo, setPromo] = useState<{ code: string; rule: PromoRule } | null>(null);
   const [rewardId, setRewardId] = useState<string | null>(null);
+  const [useCredit, setUseCredit] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const membershipFn = useServerFn(getMyMembership);
+  const { data: membership } = useQuery({ queryKey: ["my-membership", user?.id], enabled: !!user, queryFn: () => membershipFn() });
 
   useEffect(() => {
     const a = addresses?.[0];
@@ -91,10 +103,18 @@ function Checkout() {
   }, [config, f.windowId]);
 
   const lines = cart.items.filter((i) => i.quantity > 0);
-  const totals = computeTotals(
+  const baseTotals = computeTotals(
     lines.map((i) => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })),
     promo?.rule ?? null,
   );
+  const plan = membership?.current?.status === "active" ? membership.current : null;
+  const decision = membershipDecision(
+    baseTotals,
+    plan ? { creditsAvailable: plan.credits.available, minBasket: plan.minBasket, zoneIds: plan.zoneIds } : null,
+    f.zoneId || null,
+  );
+  const creditOn = useCredit && decision.applies;
+  const totals = applyMembershipCredit(baseTotals, { ...decision, applies: creditOn });
   const balance = points.data ?? 0;
 
   if (cart.ready && lines.length === 0) {
