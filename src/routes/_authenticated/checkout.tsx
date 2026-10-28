@@ -15,7 +15,7 @@ import { useCart } from "@/hooks/use-cart";
 import { usePointsBalance } from "@/hooks/use-customer";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyMembership } from "@/lib/membership.functions";
-import { checkPromo, placeOrder } from "@/lib/orders.functions";
+import { checkPromo, placeOrder, type PlaceOrderInput } from "@/lib/orders.functions";
 import {
   applyMembershipCredit,
   computeTotals,
@@ -142,7 +142,7 @@ function Checkout() {
     setError(null);
     setBusy(true);
     try {
-      const payload: Parameters<typeof place>[0]["data"] = {
+      const payload: PlaceOrderInput = {
         items: lines.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         customerName: f.name,
         phone: f.phone.replace(/\s/g, ""),

@@ -46,7 +46,10 @@ function Rewards() {
   const submit = async () => {
     try {
       const r = await apply({ data: { code } });
-      if (!r.ok) return toast.error(r.error);
+      if (!r.ok) {
+        toast.error(r.error);
+        return;
+      }
       toast.success("Referral code added. Your friend earns points after your first qualifying order.");
       qc.invalidateQueries({ queryKey: ["rewards-me"] });
       setCode("");
