@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { computeTotals, deliveryDateOptions, type PromoRule } from "./pricing";
+import { applyMembershipCredit, computeTotals, deliveryDateOptions, membershipDecision, type PromoRule } from "./pricing";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -64,6 +64,7 @@ const placeOrderSchema = z.object({
   rewardId: z.string().uuid().optional(),
   notes: z.string().trim().max(300).optional(),
   saveAddress: z.boolean().optional(),
+  useMembershipCredit: z.boolean().optional(),
 });
 
 export type PlaceOrderInput = z.infer<typeof placeOrderSchema>;
@@ -127,10 +128,26 @@ export const placeOrder = createServerFn({ method: "POST" })
       promoCode = res.code;
     }
 
-    const totals = computeTotals(
+    const baseTotals = computeTotals(
       lines.map((l) => ({ unitPrice: Number(l.p.price), quantity: l.qty, pointsEligible: l.p.points_eligible })),
       promoRule,
     );
+
+    // Plan delivery credit: re-checked here and again inside create_order (row lock), never trusted from the client.
+    let totals = { ...baseTotals, deliveryFeeWaived: 0 };
+    if (data.useMembershipCredit) {
+      const { loadMyMembership } = await import("./membership.server");
+      const m = await loadMyMembership(userId);
+      const cur = m.current && m.current.status === "active" ? m.current : null;
+      const decision = membershipDecision(
+        baseTotals,
+        cur ? { creditsAvailable: cur.credits.available, minBasket: cur.minBasket, zoneIds: cur.zoneIds } : null,
+        zone.id,
+      );
+      if (!cur) return { ok: false as const, error: "You don't have an active delivery plan right now." };
+      if (!decision.applies) return { ok: false as const, error: decision.reason ?? "A plan credit can't be used on this order." };
+      totals = applyMembershipCredit(baseTotals, decision);
+    }
 
     const items = lines.map((l) => ({
       product_id: l.p.id,
