@@ -28,6 +28,7 @@ import { Route as RationCircleRouteImport } from './routes/ration-circle'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
@@ -127,6 +128,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -168,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -218,6 +226,7 @@ export interface FileRoutesById {
   '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/shop'
     | '/terms'
+    | '/account'
     | '/checkout'
     | '/product/$slug'
     | '/orders/$id'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/shop'
     | '/terms'
+    | '/account'
     | '/checkout'
     | '/product/$slug'
     | '/orders/$id'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/shop'
     | '/terms'
+    | '/_authenticated/account'
     | '/_authenticated/checkout'
     | '/product/$slug'
     | '/_authenticated/orders/$id'
@@ -457,6 +469,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/checkout': {
       id: '/_authenticated/checkout'
       path: '/checkout'
@@ -489,12 +508,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedOrdersIdRoute: typeof AuthenticatedOrdersIdRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedOrdersIdRoute: AuthenticatedOrdersIdRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
