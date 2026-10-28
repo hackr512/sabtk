@@ -35,11 +35,17 @@ function Plans() {
   const [done, setDone] = useState<{ amount: number; kind: string } | null>(null);
 
   const choose = async (planId: string) => {
-    if (!user) return navigate({ to: "/auth", search: { redirect: "/plans" } });
+    if (!user) {
+      navigate({ to: "/auth", search: { redirect: "/plans" } });
+      return;
+    }
     setBusy(planId);
     try {
       const r = await request({ data: { planId } });
-      if (!r.ok) return toast.error(r.error);
+      if (!r.ok) {
+        toast.error(r.error);
+        return;
+      }
       setDone({ amount: r.amount, kind: r.kind });
       qc.invalidateQueries({ queryKey: ["my-membership"] });
     } catch {
