@@ -14,8 +14,17 @@ import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
 import { usePointsBalance } from "@/hooks/use-customer";
 import { supabase } from "@/integrations/supabase/client";
+import { getMyMembership } from "@/lib/membership.functions";
 import { checkPromo, placeOrder } from "@/lib/orders.functions";
-import { computeTotals, deliveryDateOptions, formatDeliveryDate, formatPKR, type PromoRule } from "@/lib/pricing";
+import {
+  applyMembershipCredit,
+  computeTotals,
+  deliveryDateOptions,
+  formatDeliveryDate,
+  formatPKR,
+  membershipDecision,
+  type PromoRule,
+} from "@/lib/pricing";
 import { storeConfigQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
@@ -70,8 +79,11 @@ function Checkout() {
   const [promoInput, setPromoInput] = useState("");
   const [promo, setPromo] = useState<{ code: string; rule: PromoRule } | null>(null);
   const [rewardId, setRewardId] = useState<string | null>(null);
+  const [useCredit, setUseCredit] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const membershipFn = useServerFn(getMyMembership);
+  const { data: membership } = useQuery({ queryKey: ["my-membership", user?.id], enabled: !!user, queryFn: () => membershipFn() });
 
   useEffect(() => {
     const a = addresses?.[0];
@@ -91,10 +103,18 @@ function Checkout() {
   }, [config, f.windowId]);
 
   const lines = cart.items.filter((i) => i.quantity > 0);
-  const totals = computeTotals(
+  const baseTotals = computeTotals(
     lines.map((i) => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })),
     promo?.rule ?? null,
   );
+  const plan = membership?.current?.status === "active" ? membership.current : null;
+  const decision = membershipDecision(
+    baseTotals,
+    plan ? { creditsAvailable: plan.credits.available, minBasket: plan.minBasket, zoneIds: plan.zoneIds } : null,
+    f.zoneId || null,
+  );
+  const creditOn = useCredit && decision.applies;
+  const totals = applyMembershipCredit(baseTotals, { ...decision, applies: creditOn });
   const balance = points.data ?? 0;
 
   if (cart.ready && lines.length === 0) {
@@ -137,6 +157,7 @@ function Checkout() {
       if (f.notes) payload.notes = f.notes;
       if (promo) payload.promoCode = promo.code;
       if (rewardId) payload.rewardId = rewardId;
+      if (creditOn) payload.useMembershipCredit = true;
       const r = await place({ data: payload });
       if (!r.ok) {
         setError(r.error);
@@ -282,6 +303,24 @@ function Checkout() {
             </div>
           )}
 
+          {plan && (
+            <div className={cn("rounded-xl border p-3 text-sm", creditOn ? "border-loyalty bg-loyalty-soft" : "border-border")}>
+              <label className="flex items-start gap-3">
+                <input type="checkbox" className="mt-1" disabled={!decision.applies} checked={creditOn} onChange={(e) => setUseCredit(e.target.checked)} />
+                <span>
+                  <span className="block font-semibold text-loyalty">Use 1 delivery credit ({plan.planName})</span>
+                  <span className="text-xs text-muted-foreground">
+                    {plan.credits.available} of {plan.credits.granted} credits left this period.
+                    {decision.reason ? ` ${decision.reason}` : " Your credit is used only when this order is delivered."}
+                  </span>
+                </span>
+              </label>
+            </div>
+          )}
+          {!plan && membership?.current?.status === "pending_payment" && (
+            <p className="text-xs text-muted-foreground">Your delivery plan starts once we confirm your payment.</p>
+          )}
+
           {config?.rewards.map((r) => {
             const can = balance >= r.pointsRequired;
             return (
@@ -299,7 +338,7 @@ function Checkout() {
             <div className="flex justify-between"><dt>Item subtotal</dt><dd>{formatPKR(totals.subtotal)}</dd></div>
             {totals.discount > 0 && <div className="flex justify-between text-primary"><dt>Promo discount</dt><dd>-{formatPKR(totals.discount)}</dd></div>}
             {rewardId && <div className="flex justify-between text-loyalty"><dt>Reward item</dt><dd>Free</dd></div>}
-            <div className="flex justify-between"><dt>Delivery fee</dt><dd>{totals.deliveryFee === 0 ? "Free" : formatPKR(totals.deliveryFee)}</dd></div>
+            <div className="flex justify-between"><dt>Delivery fee</dt><dd>{totals.deliveryFee === 0 ? (creditOn ? <span className="text-loyalty">Covered by plan</span> : "Free") : formatPKR(totals.deliveryFee)}</dd></div>
             <div className="flex justify-between border-t border-border pt-3 text-lg font-extrabold"><dt>Pay on delivery</dt><dd>{formatPKR(totals.total)}</dd></div>
           </dl>
           {totals.pointsToEarn > 0 && <p className="text-xs font-semibold text-loyalty">Earn {totals.pointsToEarn} points after delivery.</p>}

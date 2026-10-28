@@ -11,10 +11,23 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BudgetRouteImport } from './routes/budget'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CategoriesRouteImport } from './routes/categories'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DeliveryRouteImport } from './routes/delivery'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as OffersRouteImport } from './routes/offers'
+import { Route as PlansRouteImport } from './routes/plans'
+import { Route as PoliciesRouteImport } from './routes/policies'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RationRouteImport } from './routes/ration'
+import { Route as RationCircleRouteImport } from './routes/ration-circle'
+import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
@@ -29,9 +42,19 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BudgetRoute = BudgetRouteImport.update({
+  id: '/budget',
+  path: '/budget',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -44,9 +67,64 @@ const CategoriesRoute = CategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeliveryRoute = DeliveryRouteImport.update({
+  id: '/delivery',
+  path: '/delivery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OffersRoute = OffersRouteImport.update({
+  id: '/offers',
+  path: '/offers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RationRoute = RationRouteImport.update({
+  id: '/ration',
+  path: '/ration',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RationCircleRoute = RationCircleRouteImport.update({
+  id: '/ration-circle',
+  path: '/ration-circle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
@@ -73,10 +151,23 @@ const AuthenticatedOrdersIdRoute = AuthenticatedOrdersIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/budget': typeof BudgetRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
+  '/delivery': typeof DeliveryRoute
+  '/faq': typeof FaqRoute
+  '/offers': typeof OffersRoute
+  '/plans': typeof PlansRoute
+  '/policies': typeof PoliciesRoute
+  '/privacy': typeof PrivacyRoute
+  '/ration': typeof RationRoute
+  '/ration-circle': typeof RationCircleRoute
+  '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
+  '/terms': typeof TermsRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -84,10 +175,23 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/budget': typeof BudgetRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
+  '/delivery': typeof DeliveryRoute
+  '/faq': typeof FaqRoute
+  '/offers': typeof OffersRoute
+  '/plans': typeof PlansRoute
+  '/policies': typeof PoliciesRoute
+  '/privacy': typeof PrivacyRoute
+  '/ration': typeof RationRoute
+  '/ration-circle': typeof RationCircleRoute
+  '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
+  '/terms': typeof TermsRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -97,10 +201,23 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/budget': typeof BudgetRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
+  '/delivery': typeof DeliveryRoute
+  '/faq': typeof FaqRoute
+  '/offers': typeof OffersRoute
+  '/plans': typeof PlansRoute
+  '/policies': typeof PoliciesRoute
+  '/privacy': typeof PrivacyRoute
+  '/ration': typeof RationRoute
+  '/ration-circle': typeof RationCircleRoute
+  '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
+  '/terms': typeof TermsRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -110,10 +227,23 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/auth'
+    | '/budget'
     | '/cart'
     | '/categories'
+    | '/contact'
+    | '/delivery'
+    | '/faq'
+    | '/offers'
+    | '/plans'
+    | '/policies'
+    | '/privacy'
+    | '/ration'
+    | '/ration-circle'
+    | '/rewards'
     | '/shop'
+    | '/terms'
     | '/checkout'
     | '/product/$slug'
     | '/orders/$id'
@@ -121,10 +251,23 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/auth'
+    | '/budget'
     | '/cart'
     | '/categories'
+    | '/contact'
+    | '/delivery'
+    | '/faq'
+    | '/offers'
+    | '/plans'
+    | '/policies'
+    | '/privacy'
+    | '/ration'
+    | '/ration-circle'
+    | '/rewards'
     | '/shop'
+    | '/terms'
     | '/checkout'
     | '/product/$slug'
     | '/orders/$id'
@@ -133,10 +276,23 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
     | '/auth'
+    | '/budget'
     | '/cart'
     | '/categories'
+    | '/contact'
+    | '/delivery'
+    | '/faq'
+    | '/offers'
+    | '/plans'
+    | '/policies'
+    | '/privacy'
+    | '/ration'
+    | '/ration-circle'
+    | '/rewards'
     | '/shop'
+    | '/terms'
     | '/_authenticated/checkout'
     | '/product/$slug'
     | '/_authenticated/orders/$id'
@@ -146,10 +302,23 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  BudgetRoute: typeof BudgetRoute
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRoute
+  ContactRoute: typeof ContactRoute
+  DeliveryRoute: typeof DeliveryRoute
+  FaqRoute: typeof FaqRoute
+  OffersRoute: typeof OffersRoute
+  PlansRoute: typeof PlansRoute
+  PoliciesRoute: typeof PoliciesRoute
+  PrivacyRoute: typeof PrivacyRoute
+  RationRoute: typeof RationRoute
+  RationCircleRoute: typeof RationCircleRoute
+  RewardsRoute: typeof RewardsRoute
   ShopRoute: typeof ShopRoute
+  TermsRoute: typeof TermsRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
@@ -169,11 +338,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/budget': {
+      id: '/budget'
+      path: '/budget'
+      fullPath: '/budget'
+      preLoaderRoute: typeof BudgetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -190,11 +373,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delivery': {
+      id: '/delivery'
+      path: '/delivery'
+      fullPath: '/delivery'
+      preLoaderRoute: typeof DeliveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offers': {
+      id: '/offers'
+      path: '/offers'
+      fullPath: '/offers'
+      preLoaderRoute: typeof OffersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ration': {
+      id: '/ration'
+      path: '/ration'
+      fullPath: '/ration'
+      preLoaderRoute: typeof RationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ration-circle': {
+      id: '/ration-circle'
+      path: '/ration-circle'
+      fullPath: '/ration-circle'
+      preLoaderRoute: typeof RationCircleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shop': {
       id: '/shop'
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/checkout': {
@@ -246,10 +506,23 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  BudgetRoute: BudgetRoute,
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRoute,
+  ContactRoute: ContactRoute,
+  DeliveryRoute: DeliveryRoute,
+  FaqRoute: FaqRoute,
+  OffersRoute: OffersRoute,
+  PlansRoute: PlansRoute,
+  PoliciesRoute: PoliciesRoute,
+  PrivacyRoute: PrivacyRoute,
+  RationRoute: RationRoute,
+  RationCircleRoute: RationCircleRoute,
+  RewardsRoute: RewardsRoute,
   ShopRoute: ShopRoute,
+  TermsRoute: TermsRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
