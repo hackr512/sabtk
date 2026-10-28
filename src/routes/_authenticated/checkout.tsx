@@ -157,6 +157,7 @@ function Checkout() {
       if (f.notes) payload.notes = f.notes;
       if (promo) payload.promoCode = promo.code;
       if (rewardId) payload.rewardId = rewardId;
+      if (creditOn) payload.useMembershipCredit = true;
       const r = await place({ data: payload });
       if (!r.ok) {
         setError(r.error);
@@ -302,6 +303,24 @@ function Checkout() {
             </div>
           )}
 
+          {plan && (
+            <div className={cn("rounded-xl border p-3 text-sm", creditOn ? "border-loyalty bg-loyalty-soft" : "border-border")}>
+              <label className="flex items-start gap-3">
+                <input type="checkbox" className="mt-1" disabled={!decision.applies} checked={creditOn} onChange={(e) => setUseCredit(e.target.checked)} />
+                <span>
+                  <span className="block font-semibold text-loyalty">Use 1 delivery credit ({plan.planName})</span>
+                  <span className="text-xs text-muted-foreground">
+                    {plan.credits.available} of {plan.credits.granted} credits left this period.
+                    {decision.reason ? ` ${decision.reason}` : " Your credit is used only when this order is delivered."}
+                  </span>
+                </span>
+              </label>
+            </div>
+          )}
+          {!plan && membership?.current?.status === "pending_payment" && (
+            <p className="text-xs text-muted-foreground">Your delivery plan starts once we confirm your payment.</p>
+          )}
+
           {config?.rewards.map((r) => {
             const can = balance >= r.pointsRequired;
             return (
@@ -319,7 +338,7 @@ function Checkout() {
             <div className="flex justify-between"><dt>Item subtotal</dt><dd>{formatPKR(totals.subtotal)}</dd></div>
             {totals.discount > 0 && <div className="flex justify-between text-primary"><dt>Promo discount</dt><dd>-{formatPKR(totals.discount)}</dd></div>}
             {rewardId && <div className="flex justify-between text-loyalty"><dt>Reward item</dt><dd>Free</dd></div>}
-            <div className="flex justify-between"><dt>Delivery fee</dt><dd>{totals.deliveryFee === 0 ? "Free" : formatPKR(totals.deliveryFee)}</dd></div>
+            <div className="flex justify-between"><dt>Delivery fee</dt><dd>{totals.deliveryFee === 0 ? (creditOn ? <span className="text-loyalty">Covered by plan</span> : "Free") : formatPKR(totals.deliveryFee)}</dd></div>
             <div className="flex justify-between border-t border-border pt-3 text-lg font-extrabold"><dt>Pay on delivery</dt><dd>{formatPKR(totals.total)}</dd></div>
           </dl>
           {totals.pointsToEarn > 0 && <p className="text-xs font-semibold text-loyalty">Earn {totals.pointsToEarn} points after delivery.</p>}
