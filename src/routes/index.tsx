@@ -13,7 +13,6 @@ import {
   Sparkles,
   Truck,
   Users,
-  Wallet,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -80,9 +79,9 @@ function Home() {
               key={c.id}
               to="/shop"
               search={{ category: c.slug }}
-              className="group flex flex-col items-center rounded-2xl border border-border bg-card p-2.5 text-center transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card"
+              className="group flex flex-col items-center rounded-lg p-2 text-center transition hover:bg-surface"
             >
-              <div className="aspect-square w-full overflow-hidden rounded-xl bg-surface">
+              <div className="aspect-square w-full overflow-hidden rounded-lg bg-surface">
                 {c.image && (
                   <img
                     src={c.image}
@@ -101,7 +100,7 @@ function Home() {
           ))}
           <Link
             to="/shop"
-            className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-primary p-3 text-center text-primary-foreground transition hover:bg-primary/90"
+            className="flex flex-col items-center justify-center gap-2 rounded-lg border border-border bg-surface p-3 text-center text-foreground transition hover:bg-accent"
           >
             <LayoutGrid className="size-7 text-lime" />
             <span className="text-sm font-bold">Browse all products</span>
@@ -136,15 +135,15 @@ function Home() {
         <div className="container-page">
           <SectionHeader
             eyebrow="Monthly Ration"
-            title="Mahinay Bhar Ka Ration, Aasaan."
-            subtitle="Ready-made baskets priced from today's shelf prices. Add everything in one tap, or tweak quantities to fit your family."
+            title="A well-stocked home, all month."
+            subtitle="Monthly baskets for your household, at today’s prices."
             action={{ label: "Build my ration", to: "/ration" }}
           />
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {home.bundles.map((b, i) => (
               <BundleCard key={b.id} bundle={b} highlight={i === 1} />
             ))}
-            <article className="flex flex-col justify-between rounded-2xl border border-dashed border-primary/40 bg-card p-5">
+            <article className="flex flex-col justify-between rounded-lg border border-border bg-card p-5">
               <div>
                 <div className="grid size-11 place-items-center rounded-full bg-lime text-lime-foreground">
                   <ShoppingBasket className="size-5" />
@@ -166,17 +165,15 @@ function Home() {
       </section>
 
       {/* E. Ration Circle */}
-      <section className="relative overflow-hidden bg-deep py-16 text-deep-foreground">
-        <div className="tick-pattern pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+      <section className="relative overflow-hidden border-y border-border bg-deep py-16 text-deep-foreground">
         <div className="container-page relative grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
           <div>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-lime px-3 py-1 text-xs font-bold text-lime-foreground">
               <Users className="size-3.5" /> Ration Circle
             </span>
-            <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">Neighbourhood group buying</h2>
+            <h2 className="mt-4 text-3xl font-semibold md:text-4xl">Neighbourhood group buying</h2>
             <p className="mt-3 text-deep-foreground/80 md:text-lg">
-              Apne neighborhood ke saath mil kar grocery khareedein aur behtar bulk deals unlock karne mein madad
-              paayein.
+              A shared basket. A better bulk deal. Join households in your neighbourhood.
             </p>
             <ol className="mt-6 space-y-3">
               {[
@@ -246,17 +243,15 @@ function Home() {
       <RecentlyViewed />
 
       {/* H. Loyalty */}
-      <section className="container-page mt-16">
-        <div className="relative overflow-hidden rounded-3xl bg-loyalty p-7 text-loyalty-foreground md:p-10">
-          <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-loyalty-foreground/10" aria-hidden />
-          <div className="pointer-events-none absolute -bottom-20 right-24 size-48 rounded-full bg-lime/20" aria-hidden />
+      <section className="mt-16 border-y border-loyalty/20 bg-loyalty-soft py-14 text-foreground">
+        <div className="container-page">
           <div className="relative grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-center">
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-loyalty-foreground/15 px-3 py-1 text-xs font-bold">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-loyalty/10 text-loyalty px-3 py-1 text-xs font-bold">
                 <Sparkles className="size-3.5" /> SabTk Rewards
               </span>
-              <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">Har order pe points, har mahinay faida.</h2>
-              <p className="mt-3 max-w-lg text-loyalty-foreground/85">
+              <h2 className="mt-4 text-3xl font-semibold md:text-4xl">More from every order.</h2>
+              <p className="mt-3 max-w-lg text-muted-foreground">
                 Earn 1 point for every {formatPKR(RUPEES_PER_POINT)} of eligible groceries, credited once your
                 order is delivered. Invite friends and earn {REFERRAL_POINTS} points when their first delivered
                 order is {formatPKR(FREE_DELIVERY_THRESHOLD)} or more.
@@ -265,7 +260,7 @@ function Home() {
                 <Button asChild variant="lime">
                   <Link to="/rewards">How rewards work</Link>
                 </Button>
-                <Button asChild variant="on-deep">
+                <Button asChild variant="outline">
                   <Link to="/rewards">Invite a friend</Link>
                 </Button>
               </div>
@@ -288,88 +283,40 @@ function Home() {
 
 function Hero({ firstWindow }: { firstWindow: string | undefined }) {
   return (
-    <section className="hero-wash relative overflow-hidden">
-      <div className="container-page grid items-center gap-10 py-10 md:py-16 lg:grid-cols-[1.05fr_1fr] lg:py-20">
-        <div className="relative z-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-card/80 px-3 py-1 text-xs font-semibold text-primary backdrop-blur">
-            <span className="size-1.5 rounded-full bg-lime ring-4 ring-lime/30" />
-            Grocery delivery in Islamabad & Rawalpindi
-          </span>
-          <h1 className="mt-5 text-[2.6rem] font-extrabold leading-[1.02] text-foreground sm:text-6xl lg:text-[4.25rem]">
-            Sab Khuch SabTk,{" "}
-            <span className="relative inline-block text-primary">
-              Everything to Everyone.
-              <svg viewBox="0 0 300 18" className="absolute -bottom-2 left-0 h-3 w-full" aria-hidden preserveAspectRatio="none">
-                <path d="M2 13C70 4 180 2 298 9" className="stroke-lime" strokeWidth="7" fill="none" strokeLinecap="round" />
-              </svg>
-            </span>
-          </h1>
-          <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
-            Apni rozmarra ki grocery order karein, monthly ration plan karein aur apne ghar ka budget behtar manage
-            karein.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <Link to="/shop">
-                <ShoppingBasket /> Shop Groceries
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/ration">
-                <CalendarClock /> Plan My Monthly Ration
-              </Link>
-            </Button>
-          </div>
-
-          <div className="mt-8 grid max-w-xl gap-2 sm:grid-cols-2">
-            <div className="flex items-center gap-3 rounded-2xl border border-border bg-card/90 p-3 backdrop-blur">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-lime-foreground">
-                <Truck className="size-5" />
-              </span>
-              <span className="text-sm leading-tight">
-                <b className="block">Free delivery</b>
-                <span className="text-muted-foreground">on orders of {formatPKR(FREE_DELIVERY_THRESHOLD)} or more</span>
-              </span>
+    <section aria-label="SabTk grocery delivery" className="relative">
+      <HeroCarousel>
+        <div className="container-page relative z-20 flex h-full flex-col justify-center pb-14 pt-8 sm:py-10">
+          <div className="max-w-xl">
+            <p className="mb-5 flex items-center gap-3 text-xs font-semibold text-deep-foreground/85">
+              <span className="h-px w-8 bg-lime" /> ISLAMABAD & RAWALPINDI
+            </p>
+            <h1 className="text-6xl font-semibold leading-none text-deep-foreground sm:text-7xl">SabTk<span className="text-lime">.</span></h1>
+            <p className="mt-5 max-w-md font-display text-2xl font-semibold leading-tight text-deep-foreground sm:text-4xl">
+              Sab Khuch SabTk.<br />Everything to Everyone.
+            </p>
+            <p className="mt-5 max-w-sm text-base leading-relaxed text-deep-foreground/80">
+              Your daily essentials. Your monthly ration. Delivered to your doorstep.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Button asChild size="lg" variant="lime">
+                <Link to="/shop">Shop groceries <ArrowRight /></Link>
+              </Button>
+              <Button asChild size="lg" variant="on-deep">
+                <Link to="/ration">Monthly ration</Link>
+              </Button>
             </div>
-            <div className="flex items-center gap-3 rounded-2xl border border-border bg-card/90 p-3 backdrop-blur">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-primary">
-                <Wallet className="size-5" />
-              </span>
-              <span className="text-sm leading-tight">
-                <b className="block">{formatPKR(DELIVERY_FEE)} delivery</b>
-                <span className="text-muted-foreground">on orders below {formatPKR(FREE_DELIVERY_THRESHOLD)}</span>
-              </span>
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-deep-foreground/85">
+              <span className="inline-flex items-center gap-2"><Truck className="size-4 text-lime" /> Free delivery at {formatPKR(FREE_DELIVERY_THRESHOLD)}+</span>
+              <span className="inline-flex items-center gap-2"><Banknote className="size-4 text-lime" /> Cash on delivery</span>
             </div>
-          </div>
-          <p className="mt-3 text-xs text-muted-foreground">
-            Fee is based on your item subtotal. Free reward items don't count toward the threshold. No other charges.{" "}
-            <Link to="/delivery" className="font-semibold text-primary underline-offset-2 hover:underline">
-              Delivery details
-            </Link>
-          </p>
-        </div>
-
-        <div className="relative">
-          <div className="absolute -right-10 -top-10 hidden size-72 rounded-full bg-lime/30 blur-3xl lg:block" aria-hidden />
-          <HeroCarousel />
-
-          {firstWindow && (
-            <div className="absolute -bottom-5 left-4 flex items-center gap-3 rounded-2xl border border-border bg-card p-3 pr-5 shadow-pop sm:left-6">
-              <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground">
-                <CalendarClock className="size-5" />
-              </span>
-              <span className="text-sm leading-tight">
-                <span className="block text-xs text-muted-foreground">Delivery windows from tomorrow</span>
-                <b>{firstWindow}</b>
-              </span>
+            <div className="mt-2 text-xs text-deep-foreground/65">
+              {formatPKR(DELIVERY_FEE)} delivery below {formatPKR(FREE_DELIVERY_THRESHOLD)}.
+              {firstWindow && <span className="ml-2">Tomorrow: {firstWindow}</span>}
+              <Link to="/delivery" className="ml-2 underline underline-offset-4">Details</Link>
             </div>
-          )}
-          <div className="absolute -top-4 right-4 hidden items-center gap-2 rounded-2xl bg-loyalty px-4 py-2.5 text-loyalty-foreground shadow-pop sm:flex">
-            <Sparkles className="size-4" />
-            <span className="text-sm font-semibold">Earn points on every delivered order</span>
           </div>
         </div>
-      </div>
+      </HeroCarousel>
     </section>
   );
 }
@@ -382,15 +329,15 @@ function FeatureStrip() {
     { to: "/rewards", icon: Gift, title: "Rewards", text: "Points on every order", tone: "bg-secondary text-primary" },
   ] as const;
   return (
-    <section className="container-page mt-12">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+    <section className="border-b border-border">
+      <div className="container-page grid grid-cols-2 gap-x-5 md:grid-cols-4">
         {items.map(({ to, icon: Icon, title, text, tone }) => (
           <Link
             key={to}
             to={to}
-            className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3 transition hover:shadow-card md:p-4"
+            className="group flex items-center gap-3 border-b border-border py-5 transition hover:text-primary md:border-b-0 md:py-7"
           >
-            <span className={cn("grid size-11 shrink-0 place-items-center rounded-xl", tone)}>
+            <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", tone)}>
               <Icon className="size-5" />
             </span>
             <span className="min-w-0 leading-tight">
@@ -413,13 +360,13 @@ function BudgetTeaser({ mediumTotal, mediumName }: { mediumTotal: number | null;
   const share = mediumTotal && budget > 0 ? Math.round((mediumTotal / budget) * 100) : null;
 
   return (
-    <section className="container-page mt-16">
-      <div className="grid overflow-hidden rounded-3xl border border-border bg-card shadow-card lg:grid-cols-2">
-        <div className="p-7 md:p-10">
+    <section className="mt-16 border-y border-border">
+      <div className="container-page grid gap-8 py-14 lg:grid-cols-2">
+        <div className="py-4">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-loyalty-soft px-3 py-1 text-xs font-bold text-loyalty">
             <Calculator className="size-3.5" /> GharBudget
           </span>
-          <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">Aapka Grocery Budget, Ab Aapke Control Mein.</h2>
+          <h2 className="mt-4 text-3xl font-semibold md:text-4xl">A little planning. More peace of mind.</h2>
           <p className="mt-3 text-muted-foreground">
             Set a monthly budget, build your ration list, compare pack sizes and see your remaining budget before
             you check out. Track what you've actually spent each month.
@@ -440,15 +387,15 @@ function BudgetTeaser({ mediumTotal, mediumName }: { mediumTotal: number | null;
           </ul>
         </div>
 
-        <div className="relative bg-surface p-7 md:p-10">
+        <div className="relative">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               navigate({ to: "/budget", search: { amount: budget || undefined, size: Number(size) } });
             }}
-            className="rounded-2xl border border-border bg-card p-5 shadow-card"
+            className="rounded-lg border border-border bg-card p-6"
           >
-            <div className="text-sm font-bold">Try it — no account needed</div>
+            <div className="text-sm font-bold">Your monthly grocery budget</div>
             <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
               <label className="block">
                 <span className="text-xs font-semibold text-muted-foreground">Monthly grocery budget</span>
@@ -511,13 +458,13 @@ function BudgetTeaser({ mediumTotal, mediumName }: { mediumTotal: number | null;
 
 function RewardTile({ icon: Icon, title, text }: { icon: typeof Gift; title: string; text: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-loyalty-foreground/10 p-4 backdrop-blur">
+    <div className="flex items-center gap-3 border-b border-loyalty/20 py-4">
       <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-lime-foreground">
         <Icon className="size-5" />
       </span>
       <span className="leading-tight">
         <b className="block">{title}</b>
-        <span className="text-sm text-loyalty-foreground/80">{text}</span>
+        <span className="text-sm text-muted-foreground">{text}</span>
       </span>
     </div>
   );
@@ -532,7 +479,7 @@ function TrustStrip() {
   ];
   return (
     <section className="container-page mt-14">
-      <div className="grid grid-cols-2 gap-4 rounded-3xl border border-border bg-surface p-5 md:grid-cols-4 md:p-7">
+      <div className="grid grid-cols-2 gap-6 border-t border-border py-7 md:grid-cols-4">
         {items.map(({ icon: Icon, title, text }) => (
           <div key={title} className="flex items-start gap-3">
             <Icon className="mt-0.5 size-5 shrink-0 text-primary" />

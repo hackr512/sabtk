@@ -78,7 +78,7 @@
 
 /* Light theme (default for visitors who switch) — refined professional green */
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
   --background: oklch(0.982 0.004 106);
   --surface: oklch(0.965 0.008 112);
   --brand-cream: oklch(0.965 0.006 95);
@@ -142,7 +142,7 @@
 
 /* Dark theme (default) — Dark Forest & Lime (#0c1f14 family) */
 .dark {
-  --radius: 1rem;
+  --radius: 0.5rem;
   --background: oklch(0.21 0.028 155);
   --surface: oklch(0.25 0.032 155);
   /* The cream the brand logo is printed on — used behind the logo on dark surfaces. */
@@ -227,7 +227,7 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 }
 
@@ -268,4 +268,16 @@
 @utility tick-pattern {
   background-image: radial-gradient(var(--tick) 1px, transparent 1px);
   background-size: 14px 14px;
+}
+
+/* Photography-led storefront: fixed composition, independent of theme. */
+@utility storefront-hero {
+  height: 540px;
+  @media (width < 48rem) { height: 520px; }
+}
+@utility storefront-shade {
+  background: linear-gradient(90deg, var(--deep) 0%, color-mix(in oklch, var(--deep) 94%, transparent) 20%, color-mix(in oklch, var(--deep) 65%, transparent) 43%, transparent 78%);
+  @media (width < 48rem) {
+    background: linear-gradient(90deg, color-mix(in oklch, var(--deep) 96%, transparent), color-mix(in oklch, var(--deep) 65%, transparent));
+  }
 }

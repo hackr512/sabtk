@@ -56,7 +56,7 @@ export function Header() {
         <div className="ml-auto flex items-center gap-1 md:ml-0">
           <Link
             to="/rewards"
-            className="hidden items-center gap-1.5 rounded-full bg-loyalty-soft px-3 py-2 text-sm font-semibold text-loyalty hover:brightness-95 sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-loyalty hover:brightness-95 sm:inline-flex"
           >
             <Sparkles className="size-4" />
             {user && points.data != null ? `${points.data} pts` : "Rewards"}
@@ -71,7 +71,7 @@ export function Header() {
           </Link>
           <Link
             to="/cart"
-            className="relative flex items-center gap-2 rounded-full bg-primary py-2 pl-3 pr-4 text-primary-foreground hover:bg-primary/90"
+            className="relative flex items-center gap-2 rounded-lg bg-primary py-2 pl-3 pr-4 text-primary-foreground hover:bg-primary/90"
             aria-label={`Cart, ${cart.count} items, ${formatPKR(cart.totals.subtotal)}`}
           >
             <ShoppingBag className="size-5" />
@@ -93,13 +93,13 @@ export function Header() {
       </div>
 
       <nav aria-label="Main" className="hidden border-t border-border md:block">
-        <div className="container-page flex h-11 items-center gap-1">
+        <div className="container-page scrollbar-none flex h-11 items-center gap-5 overflow-x-auto">
           {NAV.map((n) => (
             <Link
               key={n.to}
               to={n.to}
               activeOptions={{ exact: n.to === "/" }}
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground data-[status=active]:bg-secondary data-[status=active]:font-semibold data-[status=active]:text-secondary-foreground"
+              className="flex h-full shrink-0 items-center border-b-2 border-transparent text-sm font-medium text-muted-foreground transition hover:text-foreground data-[status=active]:border-primary data-[status=active]:font-semibold data-[status=active]:text-foreground"
             >
               {n.label}
             </Link>
