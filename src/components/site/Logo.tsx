@@ -12,7 +12,7 @@ export function LogoMark({ className }: { className?: string }) {
   return <img src={iconAsset.url} alt="" aria-hidden className={cn("h-9 w-auto shrink-0", className)} />;
 }
 
-export function Logo({ showSlogan = true, className }: { showSlogan?: boolean; className?: string }) {
+export function Logo({ className }: { className?: string }) {
   return (
     <Link to="/" className={cn("flex shrink-0 items-center gap-2.5", className)} aria-label="SabTk home">
       <LogoMark />
@@ -20,11 +20,6 @@ export function Logo({ showSlogan = true, className }: { showSlogan?: boolean; c
         <span className="font-display text-xl font-extrabold tracking-tight text-foreground">
           Sab<span className="text-primary">Tk</span>
         </span>
-        {showSlogan && (
-          <span className="mt-0.5 hidden text-[11px] font-medium text-muted-foreground lg:block">
-            Sab Khuch SabTk · Everything to Everyone
-          </span>
-        )}
       </span>
     </Link>
   );
