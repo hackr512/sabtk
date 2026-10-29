@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type Slide = {
@@ -27,7 +29,7 @@ const SLIDES: Slide[] = [
 
 const ROTATE_MS = 5000;
 
-export function HeroCarousel({ className }: { className?: string }) {
+export function HeroCarousel({ className, children }: { className?: string; children?: ReactNode }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -55,7 +57,7 @@ export function HeroCarousel({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn("group/caro relative isolate", className)}
+      className={cn("storefront-hero group/caro relative isolate overflow-hidden bg-deep", className)}
       role="group"
       aria-roledescription="carousel"
       aria-label="SabTk grocery photos"
@@ -64,8 +66,8 @@ export function HeroCarousel({ className }: { className?: string }) {
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      <div className="relative overflow-hidden rounded-[2rem] shadow-pop ring-1 ring-border">
-        <div className="aspect-[4/3] w-full lg:aspect-[5/4]">
+      <div className="absolute inset-0">
+        <div className="size-full">
           {SLIDES.map((slide, i) => (
             <img
               key={slide.src}
@@ -77,62 +79,36 @@ export function HeroCarousel({ className }: { className?: string }) {
               decoding="async"
               fetchPriority={i === 0 ? "high" : "auto"}
               aria-hidden={i !== index}
+              data-active={i === index}
               className={cn(
-                "absolute inset-0 size-full object-cover transition-[opacity,transform] duration-[900ms] ease-out",
-                i === index ? "z-10 scale-100 opacity-100" : "z-0 scale-[1.04] opacity-0",
+                "absolute inset-0 size-full object-cover object-center transition-opacity duration-[900ms] ease-out motion-reduce:transition-none",
+                i === index ? "z-10 opacity-100" : "z-0 opacity-0",
               )}
             />
           ))}
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-3 bg-gradient-to-t from-foreground/55 via-foreground/10 to-transparent p-4">
-          <span
-            key={index}
-            className="rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-foreground backdrop-blur"
-          >
-            {SLIDES[index]?.caption}
-          </span>
-        </div>
-
-
-        <div className="absolute inset-y-0 z-30 flex w-full items-center justify-between px-2">
-          <button
-            type="button"
-            onClick={() => go(index - 1)}
-            aria-label="Previous photo"
-            className="grid size-9 place-items-center rounded-full bg-card/80 text-foreground opacity-0 shadow-pop backdrop-blur transition hover:bg-card focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group-hover/caro:opacity-100 motion-reduce:opacity-100"
-          >
-            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
-              <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => go(index + 1)}
-            aria-label="Next photo"
-            className="grid size-9 place-items-center rounded-full bg-card/80 text-foreground opacity-0 shadow-pop backdrop-blur transition hover:bg-card focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group-hover/caro:opacity-100 motion-reduce:opacity-100"
-          >
-            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
-              <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
       </div>
-
-      <div className="mt-9 flex items-center justify-end gap-2.5 pr-4">
+      <div className="storefront-shade pointer-events-none absolute inset-0 z-10" />
+      {children}
+      <div className="absolute inset-x-0 bottom-4 z-30">
+      <div className="container-page flex items-center justify-end gap-2 text-deep-foreground">
+        <span className="mr-3 hidden text-xs sm:inline">{SLIDES[index]?.caption} · 0{index + 1} / 03</span>
+        <Button type="button" size="icon-sm" variant="on-deep" onClick={() => go(index - 1)} aria-label="Previous photo" title="Previous photo"><ChevronLeft /></Button>
         {SLIDES.map((slide, i) => (
-          <button
+          <Button
             key={slide.src}
             type="button"
+            size="icon-sm"
+            variant="ghost"
             onClick={() => go(i)}
             aria-label={`Show photo ${i + 1} of ${SLIDES.length}`}
             aria-current={i === index}
-            className={cn(
-              "h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              i === index ? "w-8 bg-primary" : "w-2.5 bg-border hover:bg-primary/50",
-            )}
-          />
+            className="w-6 hover:bg-deep-foreground/10"
+          ><span className={cn("h-0.5 w-4", i === index ? "bg-lime" : "bg-deep-foreground/40")} /></Button>
         ))}
+        <Button type="button" size="icon-sm" variant="on-deep" onClick={() => go(index + 1)} aria-label="Next photo" title="Next photo"><ChevronRight /></Button>
+      </div>
       </div>
     </div>
   );
