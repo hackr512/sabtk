@@ -285,13 +285,13 @@ function Hero({ firstWindow }: { firstWindow: string | undefined }) {
   return (
     <section aria-label="SabTk grocery delivery" className="relative">
       <HeroCarousel>
-        <div className="container-page relative z-20 flex h-full flex-col justify-center py-10">
+        <div className="container-page relative z-20 flex h-full flex-col justify-center pb-14 pt-8 sm:py-10">
           <div className="max-w-xl">
             <p className="mb-5 flex items-center gap-3 text-xs font-semibold text-deep-foreground/85">
               <span className="h-px w-8 bg-lime" /> ISLAMABAD & RAWALPINDI
             </p>
             <h1 className="text-6xl font-semibold leading-none text-deep-foreground sm:text-7xl">SabTk<span className="text-lime">.</span></h1>
-            <p className="mt-5 max-w-md font-display text-3xl font-medium leading-tight text-deep-foreground sm:text-4xl">
+            <p className="mt-5 max-w-md font-display text-2xl font-semibold leading-tight text-deep-foreground sm:text-4xl">
               Sab Khuch SabTk.<br />Everything to Everyone.
             </p>
             <p className="mt-5 max-w-sm text-base leading-relaxed text-deep-foreground/80">
@@ -305,7 +305,7 @@ function Hero({ firstWindow }: { firstWindow: string | undefined }) {
                 <Link to="/ration">Monthly ration</Link>
               </Button>
             </div>
-            <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs text-deep-foreground/85">
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-deep-foreground/85">
               <span className="inline-flex items-center gap-2"><Truck className="size-4 text-lime" /> Free delivery at {formatPKR(FREE_DELIVERY_THRESHOLD)}+</span>
               <span className="inline-flex items-center gap-2"><Banknote className="size-4 text-lime" /> Cash on delivery</span>
             </div>

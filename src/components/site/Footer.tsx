@@ -1,12 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import { Mail, MessageCircle, Phone } from "lucide-react";
 import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
-import { storeConfigQuery } from "@/lib/queries";
 import { LOGO_URL } from "./Logo";
 
 export function Footer() {
-  const { data } = useQuery(storeConfigQuery);
+  const data = getRouteApi("__root__").useLoaderData();
   const s = data?.settings ?? {};
   const socials = [
     { label: "Facebook", url: s["facebook_url"] },
