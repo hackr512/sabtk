@@ -119,7 +119,7 @@ export function HeroCarousel({ className }: { className?: string }) {
         </div>
       </div>
 
-      <div className="mt-9 flex items-center justify-end gap-2.5 pr-1">
+      <div className="mt-9 flex items-center justify-end gap-2.5 pr-4">
         {SLIDES.map((slide, i) => (
           <button
             key={slide.src}
