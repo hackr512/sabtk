@@ -55,7 +55,7 @@ export function HeroCarousel({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn("group/caro relative", className)}
+      className={cn("group/caro relative isolate", className)}
       role="group"
       aria-roledescription="carousel"
       aria-label="SabTk grocery photos"
