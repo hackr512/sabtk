@@ -78,68 +78,67 @@
 
 :root {
   --radius: 1rem;
-  /* Warm paper-white background (#fafaf7 family) */
-  --background: oklch(0.982 0.004 106);
-  --surface: oklch(0.965 0.008 112);
+  /* Dark Forest & Lime — deep forest-green background (#0c1f14 family) */
+  --background: oklch(0.21 0.028 155);
+  --surface: oklch(0.25 0.032 155);
   /* The cream the brand logo is printed on — used behind the logo on dark surfaces. */
   --brand-cream: oklch(0.965 0.006 95);
-  /* Near-black warm charcoal (#1c1917 family) */
-  --foreground: oklch(0.24 0.012 60);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.012 60);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.012 60);
+  /* Soft off-white with a green tint (#e8f0e4 family) */
+  --foreground: oklch(0.93 0.02 130);
+  --card: oklch(0.25 0.032 155);
+  --card-foreground: oklch(0.93 0.02 130);
+  --popover: oklch(0.25 0.032 155);
+  --popover-foreground: oklch(0.93 0.02 130);
 
-  /* Deep forest green (#14532d family) — primary actions */
-  --primary: oklch(0.42 0.085 152);
-  --primary-foreground: oklch(0.985 0.005 120);
-  --primary-soft: oklch(0.94 0.03 150);
+  /* Brand lime (#a3e635 family) — primary actions glow on the dark forest */
+  --primary: oklch(0.87 0.17 124);
+  --primary-foreground: oklch(0.22 0.05 150);
+  --primary-soft: oklch(0.32 0.05 150);
 
-  /* Soft lime (#a3e635 family) — highlights */
   --lime: oklch(0.87 0.17 124);
-  --lime-foreground: oklch(0.3 0.07 148);
-  --lime-soft: oklch(0.955 0.05 124);
+  --lime-foreground: oklch(0.22 0.05 150);
+  --lime-soft: oklch(0.32 0.05 148);
 
-  /* Muted professional purple — loyalty & special features */
-  --loyalty: oklch(0.44 0.16 300);
-  --loyalty-foreground: oklch(0.99 0.01 300);
-  --loyalty-soft: oklch(0.95 0.03 305);
+  /* Brightened purple — loyalty & special features, readable on dark */
+  --loyalty: oklch(0.62 0.17 300);
+  --loyalty-foreground: oklch(0.98 0.01 300);
+  --loyalty-soft: oklch(0.32 0.05 305);
 
-  /* Darkest forest green — footer & deep sections */
-  --deep: oklch(0.27 0.06 155);
-  --deep-foreground: oklch(0.96 0.015 125);
+  /* Deepest forest — footer & deep sections, darker than the page */
+  --deep: oklch(0.16 0.022 155);
+  --deep-foreground: oklch(0.9 0.02 128);
 
-  --secondary: oklch(0.95 0.02 126);
-  --secondary-foreground: oklch(0.32 0.06 152);
-  --muted: oklch(0.955 0.007 110);
-  --muted-foreground: oklch(0.48 0.02 120);
-  --accent: oklch(0.945 0.03 132);
-  --accent-foreground: oklch(0.32 0.06 152);
-  --destructive: oklch(0.55 0.19 27);
-  --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.52 0.12 150);
-  --warning: oklch(0.6 0.13 65);
-  --warning-soft: oklch(0.955 0.04 85);
-  --border: oklch(0.905 0.012 118);
-  --input: oklch(0.885 0.014 118);
-  --ring: oklch(0.42 0.085 152);
+  --secondary: oklch(0.3 0.04 152);
+  --secondary-foreground: oklch(0.9 0.02 130);
+  --muted: oklch(0.28 0.03 155);
+  --muted-foreground: oklch(0.68 0.025 135);
+  --accent: oklch(0.32 0.05 148);
+  --accent-foreground: oklch(0.92 0.02 130);
+  --destructive: oklch(0.6 0.19 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.7 0.14 150);
+  --warning: oklch(0.72 0.13 70);
+  --warning-soft: oklch(0.32 0.04 80);
+  --border: oklch(0.33 0.035 155);
+  --input: oklch(0.33 0.035 155);
+  --ring: oklch(0.87 0.17 124);
 
-  --shadow-card: 0 1px 2px oklch(0.28 0.04 150 / 0.05), 0 6px 20px -10px oklch(0.28 0.04 150 / 0.16);
-  --shadow-pop: 0 18px 40px -18px oklch(0.27 0.06 155 / 0.35);
+  --shadow-card: 0 1px 2px oklch(0.1 0.02 155 / 0.4), 0 6px 20px -10px oklch(0.1 0.02 155 / 0.5);
+  --shadow-pop: 0 18px 40px -18px oklch(0.08 0.02 155 / 0.7);
 
-  --chart-1: oklch(0.42 0.085 152);
-  --chart-2: oklch(0.87 0.17 124);
-  --chart-3: oklch(0.44 0.16 300);
-  --chart-4: oklch(0.6 0.13 65);
-  --chart-5: oklch(0.58 0.09 200);
-  --sidebar: oklch(0.982 0.004 106);
-  --sidebar-foreground: oklch(0.24 0.012 60);
-  --sidebar-primary: oklch(0.42 0.085 152);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.945 0.03 132);
-  --sidebar-accent-foreground: oklch(0.32 0.06 152);
-  --sidebar-border: oklch(0.905 0.012 118);
-  --sidebar-ring: oklch(0.42 0.085 152);
+  --chart-1: oklch(0.87 0.17 124);
+  --chart-2: oklch(0.7 0.14 150);
+  --chart-3: oklch(0.62 0.17 300);
+  --chart-4: oklch(0.72 0.13 70);
+  --chart-5: oklch(0.65 0.09 200);
+  --sidebar: oklch(0.19 0.025 155);
+  --sidebar-foreground: oklch(0.93 0.02 130);
+  --sidebar-primary: oklch(0.87 0.17 124);
+  --sidebar-primary-foreground: oklch(0.22 0.05 150);
+  --sidebar-accent: oklch(0.3 0.04 152);
+  --sidebar-accent-foreground: oklch(0.92 0.02 130);
+  --sidebar-border: oklch(0.33 0.035 155);
+  --sidebar-ring: oklch(0.87 0.17 124);
 }
 
 @layer base {
@@ -194,11 +193,11 @@
 
 @utility hero-wash {
   background-image:
-    radial-gradient(60% 80% at 0% 0%, oklch(0.955 0.05 124 / 0.85), transparent 60%),
-    radial-gradient(50% 60% at 100% 100%, oklch(0.95 0.03 305 / 0.6), transparent 60%);
+    radial-gradient(60% 80% at 0% 0%, oklch(0.35 0.07 150 / 0.55), transparent 60%),
+    radial-gradient(50% 60% at 100% 100%, oklch(0.3 0.06 305 / 0.4), transparent 60%);
 }
 
 @utility tick-pattern {
-  background-image: radial-gradient(oklch(0.87 0.17 124 / 0.22) 1px, transparent 1px);
+  background-image: radial-gradient(oklch(0.87 0.17 124 / 0.14) 1px, transparent 1px);
   background-size: 14px 14px;
 }
