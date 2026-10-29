@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ShoppingBag, Sparkles, Truck, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,6 +18,7 @@ const NAV = [
   { to: "/ration-circle", label: "Ration Circle" },
   { to: "/budget", label: "GharBudget" },
   { to: "/offers", label: "Offers" },
+  { to: "/plans", label: "Delivery Plans" },
   { to: "/orders", label: "My Orders" },
 ] as const;
 
@@ -25,7 +27,10 @@ export function Header() {
   const cart = useCart();
   const points = usePointsBalance();
   const { data: config } = useQuery(storeConfigQuery);
-  const isSample = config?.settings["catalog_is_sample"] === "true";
+  // Only read the setting after the page has loaded in the browser so server and browser render the same text.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isSample = mounted && config?.settings["catalog_is_sample"] === "true";
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
