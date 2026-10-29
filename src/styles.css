@@ -56,6 +56,7 @@
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
   --color-surface: var(--surface);
+  --color-brand-cream: var(--brand-cream);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -79,6 +80,8 @@
   --radius: 1rem;
   --background: oklch(0.985 0.006 110);
   --surface: oklch(0.97 0.01 115);
+  /* The cream the brand logo is printed on — used behind the logo on dark surfaces. */
+  --brand-cream: oklch(0.965 0.006 95);
   --foreground: oklch(0.22 0.03 155);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.22 0.03 155);
