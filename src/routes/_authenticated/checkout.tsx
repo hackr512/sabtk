@@ -145,7 +145,10 @@ function Checkout() {
       const payload: PlaceOrderInput = {
         items: lines.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         customerName: f.name,
-        phone: f.phone.replace(/\s/g, ""),
+        phone: (() => {
+          const p = f.phone.replace(/[\s\-()]/g, "");
+          return p.startsWith("92") ? `+${p}` : p.startsWith("3") && p.length === 10 ? `0${p}` : p;
+        })(),
         zoneId: f.zoneId,
         addressLine: f.address,
         deliveryDate: f.date,
@@ -168,7 +171,19 @@ function Checkout() {
       navigate({ to: "/orders/$id", params: { id: r.orderId } });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
-      setError(msg.includes("[") ? "Please check the highlighted details and try again." : msg || "Could not place the order.");
+      let friendly = msg || "Could not place the order.";
+      try {
+        const issues = JSON.parse(msg) as { message?: string; path?: unknown[] }[];
+        if (Array.isArray(issues) && issues.length) {
+          friendly = issues
+            .map((i) => (i.path?.[0] === "deliveryDate" ? "Choose a delivery date" : i.message))
+            .filter(Boolean)
+            .join(" • ");
+        }
+      } catch {
+        /* not a validation error */
+      }
+      setError(friendly);
     } finally {
       setBusy(false);
     }
