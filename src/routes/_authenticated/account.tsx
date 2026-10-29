@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Crown, LogOut, Package, Sparkles } from "lucide-react";
+import { Crown, LogOut, Package, ShieldCheck, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -29,6 +29,11 @@ function Account() {
     queryKey: ["profile", user?.id],
     enabled: !!user,
     queryFn: async () => (await supabase.from("profiles").select("full_name, phone").maybeSingle()).data,
+  });
+  const { data: isAdmin } = useQuery({
+    queryKey: ["is-admin", user?.id],
+    enabled: !!user,
+    queryFn: async () => (await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" })).data === true,
   });
   const cur = m?.current;
 
@@ -68,6 +73,7 @@ function Account() {
           )}
         </section>
         <aside className="space-y-3">
+          {isAdmin && <Link to="/admin" className="card-surface flex items-center gap-3 border-primary p-4 font-semibold"><ShieldCheck className="size-5 text-primary" /> Admin panel</Link>}
           <Link to="/orders" className="card-surface flex items-center gap-3 p-4 font-semibold"><Package className="size-5 text-primary" /> My orders</Link>
           <Link to="/rewards" className="card-surface flex items-center gap-3 p-4 font-semibold"><Sparkles className="size-5 text-loyalty" /> Rewards · {points.data ?? 0} pts</Link>
           <Button variant="outline" className="w-full" onClick={signOut}><LogOut className="size-4" /> Sign out</Button>
