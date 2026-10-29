@@ -76,9 +76,73 @@
   --shadow-pop: var(--shadow-pop);
 }
 
+/* Light theme (default for visitors who switch) — refined professional green */
 :root {
   --radius: 1rem;
-  /* Dark Forest & Lime — deep forest-green background (#0c1f14 family) */
+  --background: oklch(0.982 0.004 106);
+  --surface: oklch(0.965 0.008 112);
+  --brand-cream: oklch(0.965 0.006 95);
+  --foreground: oklch(0.24 0.012 60);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.012 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.012 60);
+
+  --primary: oklch(0.42 0.085 152);
+  --primary-foreground: oklch(0.985 0.005 120);
+  --primary-soft: oklch(0.94 0.03 150);
+
+  --lime: oklch(0.87 0.17 124);
+  --lime-foreground: oklch(0.3 0.07 148);
+  --lime-soft: oklch(0.955 0.05 124);
+
+  --loyalty: oklch(0.44 0.16 300);
+  --loyalty-foreground: oklch(0.99 0.01 300);
+  --loyalty-soft: oklch(0.95 0.03 305);
+
+  --deep: oklch(0.27 0.06 155);
+  --deep-foreground: oklch(0.96 0.015 125);
+
+  --secondary: oklch(0.95 0.02 126);
+  --secondary-foreground: oklch(0.32 0.06 152);
+  --muted: oklch(0.955 0.007 110);
+  --muted-foreground: oklch(0.48 0.02 120);
+  --accent: oklch(0.945 0.03 132);
+  --accent-foreground: oklch(0.32 0.06 152);
+  --destructive: oklch(0.55 0.19 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.52 0.12 150);
+  --warning: oklch(0.6 0.13 65);
+  --warning-soft: oklch(0.955 0.04 85);
+  --border: oklch(0.905 0.012 118);
+  --input: oklch(0.885 0.014 118);
+  --ring: oklch(0.42 0.085 152);
+
+  --shadow-card: 0 1px 2px oklch(0.28 0.04 150 / 0.05), 0 6px 20px -10px oklch(0.28 0.04 150 / 0.16);
+  --shadow-pop: 0 18px 40px -18px oklch(0.27 0.06 155 / 0.35);
+
+  --chart-1: oklch(0.42 0.085 152);
+  --chart-2: oklch(0.87 0.17 124);
+  --chart-3: oklch(0.44 0.16 300);
+  --chart-4: oklch(0.6 0.13 65);
+  --chart-5: oklch(0.58 0.09 200);
+  --sidebar: oklch(0.982 0.004 106);
+  --sidebar-foreground: oklch(0.24 0.012 60);
+  --sidebar-primary: oklch(0.42 0.085 152);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.945 0.03 132);
+  --sidebar-accent-foreground: oklch(0.32 0.06 152);
+  --sidebar-border: oklch(0.905 0.012 118);
+  --sidebar-ring: oklch(0.42 0.085 152);
+
+  --wash-1: oklch(0.955 0.05 124 / 0.85);
+  --wash-2: oklch(0.95 0.03 305 / 0.6);
+  --tick: oklch(0.87 0.17 124 / 0.22);
+}
+
+/* Dark theme (default) — Dark Forest & Lime (#0c1f14 family) */
+.dark {
+  --radius: 1rem;
   --background: oklch(0.21 0.028 155);
   --surface: oklch(0.25 0.032 155);
   /* The cream the brand logo is printed on — used behind the logo on dark surfaces. */
@@ -139,6 +203,10 @@
   --sidebar-accent-foreground: oklch(0.92 0.02 130);
   --sidebar-border: oklch(0.33 0.035 155);
   --sidebar-ring: oklch(0.87 0.17 124);
+
+  --wash-1: oklch(0.35 0.07 150 / 0.55);
+  --wash-2: oklch(0.3 0.06 305 / 0.4);
+  --tick: oklch(0.87 0.17 124 / 0.14);
 }
 
 @layer base {
@@ -193,11 +261,11 @@
 
 @utility hero-wash {
   background-image:
-    radial-gradient(60% 80% at 0% 0%, oklch(0.35 0.07 150 / 0.55), transparent 60%),
-    radial-gradient(50% 60% at 100% 100%, oklch(0.3 0.06 305 / 0.4), transparent 60%);
+    radial-gradient(60% 80% at 0% 0%, var(--wash-1), transparent 60%),
+    radial-gradient(50% 60% at 100% 100%, var(--wash-2), transparent 60%);
 }
 
 @utility tick-pattern {
-  background-image: radial-gradient(oklch(0.87 0.17 124 / 0.14) 1px, transparent 1px);
+  background-image: radial-gradient(var(--tick) 1px, transparent 1px);
   background-size: 14px 14px;
 }
