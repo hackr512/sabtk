@@ -243,15 +243,17 @@ function Home() {
       <RecentlyViewed />
 
       {/* H. Loyalty */}
-      <section className="mt-16 border-y border-loyalty/20 bg-loyalty-soft py-14 text-foreground">
+      <section className="mt-16 py-6">
         <div className="container-page">
-          <div className="relative grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-center">
+          <div className="relative isolate grid gap-8 overflow-hidden rounded-[2rem] bg-loyalty p-8 text-loyalty-foreground md:grid-cols-[1.2fr_1fr] md:items-center md:p-12">
+            <span aria-hidden className="pointer-events-none absolute -right-16 -top-20 -z-10 size-72 rounded-full bg-loyalty-foreground/10" />
+            <span aria-hidden className="pointer-events-none absolute -bottom-24 right-1/4 -z-10 size-56 rounded-full bg-loyalty-foreground/10" />
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-loyalty/10 text-loyalty px-3 py-1 text-xs font-bold">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-loyalty-foreground/15 text-loyalty-foreground px-3 py-1 text-xs font-bold">
                 <Sparkles className="size-3.5" /> SabTk Rewards
               </span>
-              <h2 className="mt-4 text-3xl font-semibold md:text-4xl">More from every order.</h2>
-              <p className="mt-3 max-w-lg text-muted-foreground">
+              <h2 className="mt-4 text-3xl font-semibold md:text-5xl">Har order pe points, har mahinay faida.</h2>
+              <p className="mt-3 max-w-lg text-loyalty-foreground/85">
                 Earn 1 point for every {formatPKR(RUPEES_PER_POINT)} of eligible groceries, credited once your
                 order is delivered. Invite friends and earn {REFERRAL_POINTS} points when their first delivered
                 order is {formatPKR(FREE_DELIVERY_THRESHOLD)} or more.
@@ -260,7 +262,7 @@ function Home() {
                 <Button asChild variant="lime">
                   <Link to="/rewards">How rewards work</Link>
                 </Button>
-                <Button asChild variant="outline">
+                <Button asChild variant="outline" className="border-loyalty-foreground/30 bg-loyalty-foreground/10 text-loyalty-foreground hover:bg-loyalty-foreground/20 hover:text-loyalty-foreground">
                   <Link to="/rewards">Invite a friend</Link>
                 </Button>
               </div>
@@ -458,13 +460,13 @@ function BudgetTeaser({ mediumTotal, mediumName }: { mediumTotal: number | null;
 
 function RewardTile({ icon: Icon, title, text }: { icon: typeof Gift; title: string; text: string }) {
   return (
-    <div className="flex items-center gap-3 border-b border-loyalty/20 py-4">
+    <div className="flex items-center gap-4 rounded-2xl bg-loyalty-foreground/10 p-4 backdrop-blur-sm">
       <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-lime-foreground">
         <Icon className="size-5" />
       </span>
       <span className="leading-tight">
         <b className="block">{title}</b>
-        <span className="text-sm text-muted-foreground">{text}</span>
+        <span className="text-sm text-loyalty-foreground/85">{text}</span>
       </span>
     </div>
   );
