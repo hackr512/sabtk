@@ -37,13 +37,13 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(homeQuery),
   head: () => ({
     meta: [
-      { title: "SabTk — Har Ghar Ki Grocery, Aasaan Delivery" },
+      { title: "SabTk — Sab Khuch SabTk, Everything to Everyone" },
       {
         name: "description",
         content:
           "Order daily groceries, plan your monthly ration and manage your household budget with SabTk delivery in Islamabad and Rawalpindi.",
       },
-      { property: "og:title", content: "SabTk — Har Ghar Ki Grocery, Aasaan Delivery" },
+      { property: "og:title", content: "SabTk — Sab Khuch SabTk, Everything to Everyone" },
       {
         property: "og:description",
         content: "Groceries, monthly ration bundles, neighbourhood group buying and rewards in Islamabad & Rawalpindi.",
@@ -296,9 +296,9 @@ function Hero({ firstWindow }: { firstWindow: string | undefined }) {
             Grocery delivery in Islamabad & Rawalpindi
           </span>
           <h1 className="mt-5 text-[2.6rem] font-extrabold leading-[1.02] text-foreground sm:text-6xl lg:text-[4.25rem]">
-            Har Ghar Ki Grocery,{" "}
+            Sab Khuch SabTk,{" "}
             <span className="relative inline-block text-primary">
-              Aasaan Delivery.
+              Everything to Everyone.
               <svg viewBox="0 0 300 18" className="absolute -bottom-2 left-0 h-3 w-full" aria-hidden preserveAspectRatio="none">
                 <path d="M2 13C70 4 180 2 298 9" className="stroke-lime" strokeWidth="7" fill="none" strokeLinecap="round" />
               </svg>
