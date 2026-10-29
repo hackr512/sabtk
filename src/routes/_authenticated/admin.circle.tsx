@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -53,7 +54,7 @@ function Circle() {
                 </div>
                 {!c.participants.length ? <p className="text-muted-foreground">Nobody has joined yet.</p> : (
                   <div className="divide-y rounded-md border">
-                    {c.participants.map((p) => (
+                    {c.participants.map((p: any) => (
                       <div key={p.id} className="flex flex-wrap items-center justify-between gap-2 p-3">
                         <div>
                           <div className="font-semibold">{p.name} <Badge variant="secondary">×{p.quantity}</Badge></div>
