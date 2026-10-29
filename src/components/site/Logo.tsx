@@ -9,7 +9,7 @@ export const LOGO_ICON_URL = iconAsset.url;
 export const SLOGAN = "Sab Khuch SabTk, Everything to Everyone";
 
 export function LogoMark({ className }: { className?: string }) {
-  return <img src={iconAsset.url} alt="" aria-hidden className={cn("h-11 w-auto shrink-0", className)} />;
+  return <img src={iconAsset.url} alt="" aria-hidden className={cn("h-11 w-auto shrink-0 rounded-md p-1 dark:bg-brand-cream", className)} />;
 }
 
 export function Logo({ className }: { className?: string }) {
