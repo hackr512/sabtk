@@ -2,6 +2,7 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { CreditCard, Crown, Users, LayoutDashboard, Package, Settings, ShieldAlert, ShoppingCart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
+import { OrderAlerts } from "@/components/admin/OrderAlerts";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => pageHead("Admin", "SabTk store admin panel.", { noindex: true }),
@@ -56,6 +57,7 @@ function AdminLayout() {
       <div className="min-w-0">
         <Outlet />
       </div>
+      <OrderAlerts />
     </div>
   );
 }
