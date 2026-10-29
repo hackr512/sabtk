@@ -618,10 +618,11 @@ export const adminListCampaigns = createServerFn({ method: "GET" })
       .from("campaigns")
       .select("id, title, slug, status, price, min_quantity, max_per_user, deadline, delivery_window_text, products(name)")
       .order("deadline", { ascending: false });
-    const { data: parts } = await db
+    const { data: parts, error: pErr } = await db
       .from("campaign_participants")
-      .select("id, campaign_id, user_id, quantity, status, created_at, zone_id, delivery_zones(name)")
+      .select("id, campaign_id, user_id, quantity, status, created_at, zone_id, delivery_zones(city, area)")
       .order("created_at", { ascending: false });
+    if (pErr) throw new Error("Could not load Ration Circle reservations.");
     const ids = [...new Set((parts ?? []).map((p: any) => p.user_id))];
     const { data: profs } = ids.length
       ? await db.from("profiles").select("id, full_name, phone").in("id", ids)
@@ -630,7 +631,7 @@ export const adminListCampaigns = createServerFn({ method: "GET" })
     return (camps ?? []).map((c: any) => {
       const ps = (parts ?? []).filter((p: any) => p.campaign_id === c.id).map((p: any) => ({
         id: p.id, quantity: p.quantity, status: p.status, created_at: p.created_at,
-        zone: p.delivery_zones?.name ?? null,
+        zone: p.delivery_zones ? `${p.delivery_zones.area}, ${p.delivery_zones.city}` : null,
         name: (pm.get(p.user_id) as any)?.full_name ?? "Customer",
         phone: (pm.get(p.user_id) as any)?.phone ?? null,
       }));
