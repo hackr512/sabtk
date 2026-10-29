@@ -17,7 +17,7 @@ export function Logo({ className }: { className?: string }) {
     <Link to="/" className={cn("flex shrink-0 items-center gap-2.5", className)} aria-label="SabTk home">
       <LogoMark />
       <span className="flex flex-col leading-none">
-        <span className="font-display text-xl font-extrabold tracking-tight text-foreground">
+        <span className="font-display text-2xl font-extrabold tracking-tight text-foreground">
           Sab<span className="text-primary">Tk</span>
         </span>
       </span>
