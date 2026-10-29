@@ -2,12 +2,12 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
-  Banknote,
+  Calculator,
   CalendarClock,
   Gift,
   LayoutGrid,
   PackageOpen,
-  PiggyBank,
+  LayoutGrid,
   ShieldCheck,
   ShoppingBasket,
   Sparkles,
