@@ -1,8 +1,10 @@
 # SabTk Storefront Roadmap
 
 ## Current request
-- [ ] Refine homepage, shared navigation and product presentation for a distinctive premium storefront.
-- [ ] Verify both themes, small-screen layout, carousel and add-to-cart flow.
+- [x] Refine homepage, shared navigation and product presentation for a distinctive premium storefront.
+- [x] Verify both themes, small-screen layout, carousel and add-to-cart flow.
+
+## Earlier implementation checklist (historical, outside this presentation request)
 
 - [ ] Backend: catalogue, delivery zones/windows, orders, loyalty, referrals, ration bundles, Ration Circle, GharBudget, support
 - [ ] Design system (lime / deep green / purple), header, mobile bottom nav, footer
