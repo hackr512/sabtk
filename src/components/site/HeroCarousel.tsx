@@ -55,7 +55,7 @@ export function HeroCarousel({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn("relative", className)}
+      className={cn("group/caro relative", className)}
       role="group"
       aria-roledescription="carousel"
       aria-label="SabTk grocery photos"
@@ -99,7 +99,7 @@ export function HeroCarousel({ className }: { className?: string }) {
             type="button"
             onClick={() => go(index - 1)}
             aria-label="Previous photo"
-            className="grid size-9 place-items-center rounded-full bg-card/80 text-foreground opacity-0 shadow-pop backdrop-blur transition hover:bg-card focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-reduce:opacity-100 group-hover/caro:opacity-100 hover:opacity-100"
+            className="grid size-9 place-items-center rounded-full bg-card/80 text-foreground opacity-0 shadow-pop backdrop-blur transition hover:bg-card focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group-hover/caro:opacity-100 motion-reduce:opacity-100"
           >
             <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
               <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -109,7 +109,7 @@ export function HeroCarousel({ className }: { className?: string }) {
             type="button"
             onClick={() => go(index + 1)}
             aria-label="Next photo"
-            className="grid size-9 place-items-center rounded-full bg-card/80 text-foreground opacity-0 shadow-pop backdrop-blur transition hover:bg-card focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-reduce:opacity-100 hover:opacity-100"
+            className="grid size-9 place-items-center rounded-full bg-card/80 text-foreground opacity-0 shadow-pop backdrop-blur transition hover:bg-card focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary group-hover/caro:opacity-100 motion-reduce:opacity-100"
           >
             <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
               <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
