@@ -3,11 +3,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   Banknote,
+  Calculator,
   CalendarClock,
   Gift,
   LayoutGrid,
   PackageOpen,
-  PiggyBank,
   ShieldCheck,
   ShoppingBasket,
   Sparkles,
@@ -378,7 +378,7 @@ function FeatureStrip() {
   const items = [
     { to: "/ration", icon: ShoppingBasket, title: "Monthly Ration", text: "Family-size baskets", tone: "bg-lime text-lime-foreground" },
     { to: "/ration-circle", icon: Users, title: "Ration Circle", text: "Buy with neighbours", tone: "bg-primary text-primary-foreground" },
-    { to: "/budget", icon: PiggyBank, title: "GharBudget", text: "Plan & track spending", tone: "bg-loyalty text-loyalty-foreground" },
+    { to: "/budget", icon: Calculator, title: "GharBudget", text: "Plan & track spending", tone: "bg-loyalty text-loyalty-foreground" },
     { to: "/rewards", icon: Gift, title: "Rewards", text: "Points on every order", tone: "bg-secondary text-primary" },
   ] as const;
   return (
@@ -417,7 +417,7 @@ function BudgetTeaser({ mediumTotal, mediumName }: { mediumTotal: number | null;
       <div className="grid overflow-hidden rounded-3xl border border-border bg-card shadow-card lg:grid-cols-2">
         <div className="p-7 md:p-10">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-loyalty-soft px-3 py-1 text-xs font-bold text-loyalty">
-            <PiggyBank className="size-3.5" /> GharBudget
+            <Calculator className="size-3.5" /> GharBudget
           </span>
           <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">Aapka Grocery Budget, Ab Aapke Control Mein.</h2>
           <p className="mt-3 text-muted-foreground">

@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PiggyBank, Search, ShoppingBag, Trash2 } from "lucide-react";
+import { Calculator, Search, ShoppingBag, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -146,7 +146,7 @@ function Budget() {
               <ShoppingBag className="size-4" /> Add list to cart
             </Button>
             {user ? (
-              <Button variant="outline" className="w-full" onClick={save} disabled={saving}><PiggyBank className="size-4" /> {saving ? "Saving…" : "Save this month's budget"}</Button>
+              <Button variant="outline" className="w-full" onClick={save} disabled={saving}><Calculator className="size-4" /> {saving ? "Saving…" : "Save this month's budget"}</Button>
             ) : (
               <Notice>
                 <Link to="/auth" className="font-semibold text-primary underline">Sign in</Link> to save your budget and come back to it.
