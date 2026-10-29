@@ -5,8 +5,12 @@ const STORAGE_KEY = "sabtk-theme";
 
 type Theme = "dark" | "light";
 
-function currentTheme(): Theme {
-  return document.documentElement.classList.contains("dark") ? "dark" : "light";
+function savedTheme(): Theme {
+  try {
+    return localStorage.getItem(STORAGE_KEY) === "light" ? "light" : "dark";
+  } catch {
+    return "dark";
+  }
 }
 
 function applyTheme(theme: Theme) {
@@ -20,8 +24,14 @@ function applyTheme(theme: Theme) {
 
 export function ThemeToggle() {
   // Render a stable placeholder until hydration so server and client match.
+  // On mount, read the saved preference and apply it — this component is the
+  // single source of truth for the theme class after hydration.
   const [theme, setTheme] = useState<Theme | null>(null);
-  useEffect(() => setTheme(currentTheme()), []);
+  useEffect(() => {
+    const saved = savedTheme();
+    applyTheme(saved);
+    setTheme(saved);
+  }, []);
 
   const isDark = theme !== "light";
 

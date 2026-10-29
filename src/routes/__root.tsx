@@ -135,17 +135,6 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  // Re-apply the saved theme after hydration (the pre-paint script sets it
-  // first, but hydration can reconcile the <html> attributes).
-  useEffect(() => {
-    try {
-      const t = localStorage.getItem("sabtk-theme");
-      document.documentElement.classList.toggle("dark", t !== "light");
-    } catch {
-      // private mode — keep the default dark theme
-    }
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
