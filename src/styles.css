@@ -194,11 +194,11 @@
 
 @utility hero-wash {
   background-image:
-    radial-gradient(60% 80% at 0% 0%, oklch(0.96 0.06 125 / 0.9), transparent 60%),
-    radial-gradient(50% 60% at 100% 100%, oklch(0.95 0.035 305 / 0.7), transparent 60%);
+    radial-gradient(60% 80% at 0% 0%, oklch(0.955 0.05 124 / 0.85), transparent 60%),
+    radial-gradient(50% 60% at 100% 100%, oklch(0.95 0.03 305 / 0.6), transparent 60%);
 }
 
 @utility tick-pattern {
-  background-image: radial-gradient(oklch(0.89 0.19 126 / 0.25) 1px, transparent 1px);
+  background-image: radial-gradient(oklch(0.87 0.17 124 / 0.22) 1px, transparent 1px);
   background-size: 14px 14px;
 }
