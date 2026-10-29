@@ -10,6 +10,7 @@ import { storeConfigQuery } from "@/lib/queries";
 import { AreaPicker } from "./AreaPicker";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
+import { ThemeToggle } from "./ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -60,6 +61,7 @@ export function Header() {
             <Sparkles className="size-4" />
             {user && points.data != null ? `${points.data} pts` : "Rewards"}
           </Link>
+          <ThemeToggle />
           <Link
             to="/account"
             className="grid size-10 place-items-center rounded-full text-foreground hover:bg-muted"

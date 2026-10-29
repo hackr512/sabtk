@@ -113,8 +113,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <script
+          // Apply the saved theme before first paint; dark is the default.
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('sabtk-theme');document.documentElement.classList.toggle('dark',t!=='light');}catch(e){}",
+          }}
+        />
         <HeadContent />
       </head>
       <body>
