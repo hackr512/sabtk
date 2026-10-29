@@ -22,6 +22,7 @@ import { BundleCard, bundleTotals } from "@/components/ration/BundleCard";
 import { ProductRail } from "@/components/shop/ProductCard";
 import { RecentlyViewed, ReorderEssentials } from "@/components/shop/Recommendations";
 import { EmptyState, SectionHeader } from "@/components/site/Blocks";
+import { HeroCarousel } from "@/components/site/HeroCarousel";
 import {
   DELIVERY_FEE,
   FREE_DELIVERY_THRESHOLD,
@@ -350,16 +351,8 @@ function Hero({ firstWindow }: { firstWindow: string | undefined }) {
 
         <div className="relative">
           <div className="absolute -right-10 -top-10 hidden size-72 rounded-full bg-lime/30 blur-3xl lg:block" aria-hidden />
-          <div className="relative overflow-hidden rounded-[2rem] shadow-pop ring-1 ring-border">
-            <img
-              src="/images/hero.jpg"
-              alt="Fresh atta, rice, lentils, cooking oil, eggs and vegetables on a kitchen counter"
-              width={1600}
-              height={1008}
-              fetchPriority="high"
-              className="aspect-[4/3] w-full object-cover lg:aspect-[5/4]"
-            />
-          </div>
+          <HeroCarousel />
+
           {firstWindow && (
             <div className="absolute -bottom-5 left-4 flex items-center gap-3 rounded-2xl border border-border bg-card p-3 pr-5 shadow-pop sm:left-6">
               <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground">
