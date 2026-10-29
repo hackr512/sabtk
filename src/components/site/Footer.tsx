@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Mail, MessageCircle, Phone } from "lucide-react";
 import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
 import { storeConfigQuery } from "@/lib/queries";
-import { LogoMark } from "./Logo";
+import { LOGO_URL } from "./Logo";
 
 export function Footer() {
   const { data } = useQuery(storeConfigQuery);
@@ -19,13 +19,12 @@ export function Footer() {
     <footer className="mt-16 bg-deep pb-24 text-deep-foreground md:pb-0">
       <div className="container-page grid gap-10 py-12 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2.5">
-            <LogoMark />
-            <span className="font-display text-xl font-extrabold">SabTk</span>
+          <div className="inline-flex rounded-2xl bg-brand-cream px-4 py-3">
+            <img src={LOGO_URL} alt="SabTk — Sab Khuch SabTk, Everything to Everyone" className="h-32 w-auto" />
           </div>
-          <p className="mt-3 text-sm text-deep-foreground/75">
-            Har Ghar Ki Grocery, Aasaan Delivery. Everyday groceries, monthly ration planning and neighbourhood
-            group buying for Islamabad and Rawalpindi.
+          <p className="mt-4 text-sm font-semibold text-lime">Everything to Everyone.</p>
+          <p className="mt-2 text-sm text-deep-foreground/75">
+            Everyday groceries, monthly ration planning and neighbourhood group buying for Islamabad and Rawalpindi.
           </p>
         </div>
 
