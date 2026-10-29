@@ -17,10 +17,10 @@ export function Footer() {
 
   return (
     <footer className="mt-16 bg-deep pb-24 text-deep-foreground md:pb-0">
-      <div className="container-page grid gap-10 py-12 md:grid-cols-4">
+      <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div>
-          <div className="inline-flex rounded-2xl bg-brand-cream px-4 py-3">
-            <img src={LOGO_URL} alt="SabTk — Sab Khuch SabTk, Everything to Everyone" className="h-32 w-auto" />
+          <div className="inline-flex rounded-lg bg-brand-cream px-4 py-3">
+            <img src={LOGO_URL} alt="SabTk — Sab Khuch SabTk, Everything to Everyone" className="h-24 w-auto" />
           </div>
           <p className="mt-4 text-sm font-semibold text-lime">Everything to Everyone.</p>
           <p className="mt-2 text-sm text-deep-foreground/75">

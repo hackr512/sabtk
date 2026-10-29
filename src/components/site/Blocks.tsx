@@ -17,12 +17,12 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("mb-5 flex items-end justify-between gap-4", className)}>
+    <div className={cn("mb-7 flex flex-wrap items-end justify-between gap-4", className)}>
       <div>
         {eyebrow && (
-          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-primary">{eyebrow}</div>
+          <div className="mb-1 text-xs font-medium text-muted-foreground">{eyebrow}</div>
         )}
-        <h2 className="text-2xl font-bold text-foreground md:text-3xl">{title}</h2>
+        <h2 className="text-2xl font-semibold text-foreground md:text-3xl">{title}</h2>
         {subtitle && <p className="mt-1 max-w-2xl text-sm text-muted-foreground md:text-base">{subtitle}</p>}
       </div>
       {action && (
@@ -31,7 +31,7 @@ export function SectionHeader({
           to={action.to as any}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           search={action.search as any}
-          className="hidden shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline sm:inline-flex"
+          className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
         >
           {action.label} <ArrowRight className="size-4" />
         </Link>
@@ -84,7 +84,7 @@ export function PageHeader({
   return (
     <div className="border-b border-border bg-surface">
       <div className="container-page py-8 md:py-12">
-        {eyebrow && <div className="mb-2 text-xs font-bold uppercase tracking-wider text-primary">{eyebrow}</div>}
+        {eyebrow && <div className="mb-2 text-xs font-medium text-muted-foreground">{eyebrow}</div>}
         <h1 className="text-3xl font-extrabold md:text-5xl">{title}</h1>
         {subtitle && <p className="mt-3 max-w-2xl text-muted-foreground md:text-lg">{subtitle}</p>}
         {children}
