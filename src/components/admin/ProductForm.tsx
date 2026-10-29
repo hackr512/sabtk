@@ -93,7 +93,10 @@ export function ProductForm({ initial }: { initial: Values }) {
   }
 
   async function submit(status: "active" | "draft") {
-    if (price == null || Number.isNaN(price)) return toast.error("Enter a selling price");
+    if (price == null || Number.isNaN(price)) {
+      toast.error("Enter a selling price");
+      return;
+    }
     const input: ProductInput = {
       id: v.id,
       name: v.name,
