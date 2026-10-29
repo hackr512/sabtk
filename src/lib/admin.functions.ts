@@ -50,7 +50,10 @@ const productSchema = z
     name: z.string().trim().min(2, "Enter a product name").max(120),
     categoryId: z.string().uuid("Choose a category"),
     brand: z.string().trim().max(60).optional().default(""),
-    images: z.array(z.string().url()).max(6).default([]),
+    images: z
+      .array(z.string().trim().max(2000).refine((s) => s.startsWith("/") || /^https:\/\//.test(s), "Image links must start with https://"))
+      .max(6)
+      .default([]),
     description: z.string().trim().max(3000).optional().default(""),
     sku: z.string().trim().max(60).optional().default(""),
     purchaseCost: z.number().min(0, "Purchase cost can't be negative").max(10_000_000).nullable(),
