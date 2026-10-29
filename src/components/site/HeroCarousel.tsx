@@ -87,12 +87,13 @@ export function HeroCarousel({ className }: { className?: string }) {
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-3 bg-gradient-to-t from-foreground/55 via-foreground/10 to-transparent p-4">
           <span
-            key={SLIDES[index].caption}
+            key={index}
             className="rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-foreground backdrop-blur"
           >
-            {SLIDES[index].caption}
+            {SLIDES[index]?.caption}
           </span>
         </div>
+
 
         <div className="absolute inset-y-0 z-30 flex w-full items-center justify-between px-2">
           <button
