@@ -604,3 +604,57 @@ export const adminCategories = createServerFn({ method: "GET" })
     const { data } = await context.supabase.from("categories").select("id, name, is_active").order("sort_order");
     return data ?? [];
   });
+
+/* ---------------- Ration Circle ---------------- */
+
+const CAMPAIGN_STATUSES = ["collecting", "goal_reached", "confirming_supplier", "confirmed", "failed", "cancelled", "completed"] as const;
+
+export const adminListCampaigns = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const db = await admin();
+    const { data: camps } = await db
+      .from("campaigns")
+      .select("id, title, slug, status, price, min_quantity, max_per_user, deadline, delivery_window_text, products(name)")
+      .order("deadline", { ascending: false });
+    const { data: parts } = await db
+      .from("campaign_participants")
+      .select("id, campaign_id, user_id, quantity, status, created_at, zone_id, delivery_zones(name)")
+      .order("created_at", { ascending: false });
+    const ids = [...new Set((parts ?? []).map((p: any) => p.user_id))];
+    const { data: profs } = ids.length
+      ? await db.from("profiles").select("id, full_name, phone").in("id", ids)
+      : { data: [] as any[] };
+    const pm = new Map((profs ?? []).map((p: any) => [p.id, p]));
+    return (camps ?? []).map((c: any) => {
+      const ps = (parts ?? []).filter((p: any) => p.campaign_id === c.id).map((p: any) => ({
+        id: p.id, quantity: p.quantity, status: p.status, created_at: p.created_at,
+        zone: p.delivery_zones?.name ?? null,
+        name: (pm.get(p.user_id) as any)?.full_name ?? "Customer",
+        phone: (pm.get(p.user_id) as any)?.phone ?? null,
+      }));
+      const committed = ps.filter((p: any) => ["reserved", "confirmed", "fulfilled"].includes(p.status)).reduce((s: number, p: any) => s + p.quantity, 0);
+      return { ...c, product: c.products?.name ?? null, committed, participants: ps };
+    });
+  });
+
+export const adminSetCampaignStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid(), status: z.enum(CAMPAIGN_STATUSES) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await (await admin()).from("campaigns").update({ status: data.status }).eq("id", data.id);
+    if (error) return fail("Could not update the campaign.");
+    return { ok: true as const };
+  });
+
+export const adminSetParticipantStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid(), status: z.enum(["reserved", "confirmed", "fulfilled", "released", "cancelled"]) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await (await admin()).from("campaign_participants").update({ status: data.status }).eq("id", data.id);
+    if (error) return fail("Could not update the reservation.");
+    return { ok: true as const };
+  });

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { CreditCard, Crown, LayoutDashboard, Package, Settings, ShieldAlert, ShoppingCart } from "lucide-react";
+import { CreditCard, Crown, Users, LayoutDashboard, Package, Settings, ShieldAlert, ShoppingCart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
 
@@ -16,6 +16,7 @@ const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { to: "/admin/circle", label: "Ration Circle", icon: Users },
   { to: "/admin/plans", label: "Delivery Plans", icon: Crown },
   { to: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
   { to: "/admin/settings", label: "Settings", icon: Settings },
