@@ -1,7 +1,10 @@
 # SabTk Storefront Roadmap
 
 ## Current request
-- [x] Remove the Ration Circle feature from the storefront, navigation and admin panel.
+- [ ] Add configurable GharBudget consumption rules and quality mappings.
+- [ ] Build and test budget-constrained server recommendations.
+- [ ] Upgrade customer setup, customization, saved budgets and cart handoff.
+- [ ] Add admin GharBudget controls and verify customer/admin flows.
 
 ## Earlier implementation checklist (historical, outside this presentation request)
 
