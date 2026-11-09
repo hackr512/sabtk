@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { InfoPage, Section } from "@/components/site/InfoPage";
 import { DELIVERY_FEE, MAX_DELIVERY_DAYS_AHEAD, formatPKR } from "@/lib/pricing";
@@ -6,12 +6,13 @@ import { storeConfigQuery } from "@/lib/queries";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/delivery")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(storeConfigQuery),
   head: () => pageHead("Delivery information", `Delivery areas, time windows and the ${formatPKR(DELIVERY_FEE)} regular delivery fee.`),
   component: Delivery,
 });
 
 function Delivery() {
-  const { data: config } = useQuery(storeConfigQuery);
+  const { data: config } = useSuspenseQuery(storeConfigQuery);
   return (
     <InfoPage title="Delivery information" subtitle="Where we deliver, when, and what it costs.">
       <Section title="Delivery fee">
