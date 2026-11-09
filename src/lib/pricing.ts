@@ -4,7 +4,6 @@
  */
 
 export const DELIVERY_FEE = 150;
-export const FREE_DELIVERY_THRESHOLD = 1500;
 export const RUPEES_PER_POINT = 100;
 export const REFERRAL_POINTS = 30;
 export const REFERRAL_MIN_ORDER = 1500;
@@ -30,19 +29,14 @@ export type OrderTotals = {
   total: number;
   eligiblePointsSubtotal: number;
   pointsToEarn: number;
-  amountToFreeDelivery: number;
 };
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
-/** Delivery fee is based on the item subtotal (before promo discounts; free reward items don't count). */
+/** Every nonempty grocery subtotal pays the regular fee, unless a paid plan credit covers it. */
 export function deliveryFeeFor(itemSubtotal: number): number {
   if (itemSubtotal <= 0) return 0;
-  return itemSubtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-}
-
-export function amountToFreeDelivery(itemSubtotal: number): number {
-  return Math.max(0, round2(FREE_DELIVERY_THRESHOLD - itemSubtotal));
+  return DELIVERY_FEE;
 }
 
 /** 1 point per Rs. 100 of eligible merchandise subtotal, rounded down. */
@@ -75,7 +69,6 @@ export function computeTotals(lines: PricingLine[], promo?: PromoRule | null): O
     total: round2(subtotal - discount + deliveryFee),
     eligiblePointsSubtotal,
     pointsToEarn: pointsForAmount(eligiblePointsSubtotal),
-    amountToFreeDelivery: amountToFreeDelivery(subtotal),
   };
 }
 
@@ -157,8 +150,7 @@ export type MembershipDecision = {
 };
 
 /**
- * One credit covers the delivery fee of one eligible order. A credit is never spent
- * when delivery is already free (it doesn't stack with free delivery).
+ * One paid plan credit covers the delivery fee of one eligible order.
  */
 export function membershipDecision(
   totals: Pick<OrderTotals, "subtotal" | "deliveryFee">,
@@ -168,7 +160,7 @@ export function membershipDecision(
   const no = (reason: string | null): MembershipDecision => ({ applies: false, reason, deliveryFeeWaived: 0 });
   if (!plan) return no(null);
   if (totals.subtotal <= 0) return no(null);
-  if (totals.deliveryFee <= 0) return no("Delivery is already free on this order, so no plan credit is used.");
+  if (totals.deliveryFee <= 0) return no("There is no delivery fee to cover on this order.");
   if (plan.creditsAvailable < 1) return no("You have no delivery credits left in this period.");
   if (totals.subtotal < plan.minBasket)
     return no(`Add ${formatPKR(plan.minBasket - totals.subtotal)} more to use a plan delivery credit.`);
