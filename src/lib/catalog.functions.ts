@@ -176,7 +176,7 @@ export const getProduct = createServerFn({ method: "GET" })
 async function loadBundles(db: ReturnType<typeof createPublicClient>): Promise<Bundle[]> {
   const { data, error } = await db
     .from("ration_bundles")
-    .select(`id, slug, name, household_label, description, ration_bundle_items(quantity, products(${PRODUCT_COLUMNS}))`)
+    .select(`id, slug, name, household_label, description, quality_tier, ration_bundle_items(quantity, products(${PRODUCT_COLUMNS}))`)
     .eq("is_active", true)
     .order("sort_order");
   if (error) {
@@ -189,6 +189,7 @@ async function loadBundles(db: ReturnType<typeof createPublicClient>): Promise<B
     name: b.name,
     householdLabel: b.household_label,
     description: b.description,
+    tier: (b.quality_tier === "basic" || b.quality_tier === "premium" ? b.quality_tier : "standard") as Bundle["tier"],
     items: (b.ration_bundle_items ?? [])
       .filter((i: any) => i.products)
       .map((i: any) => ({ quantity: i.quantity, product: mapProduct(i.products) })),

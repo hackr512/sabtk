@@ -61,6 +61,7 @@ export type Bundle = {
   name: string;
   householdLabel: string;
   description: string | null;
+  tier: "basic" | "standard" | "premium";
   items: { product: Product; quantity: number }[];
 };
 

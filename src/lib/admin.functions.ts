@@ -659,3 +659,80 @@ export const adminSetParticipantStatus = createServerFn({ method: "POST" })
     if (error) return fail("Could not update the reservation.");
     return { ok: true as const };
   });
+
+/* ---------------- Ration plans (Monthly Ration bundles) ---------------- */
+
+export const adminListRationBundles = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const db = await admin();
+    const { data, error } = await db
+      .from("ration_bundles")
+      .select("id, slug, name, household_label, description, sort_order, is_active, quality_tier, ration_bundle_items(quantity, product_id, products(id, name, brand, pack_size, price, stock_quantity, is_active))")
+      .order("sort_order");
+    if (error) throw new Error("Could not load ration plans.");
+    return (data ?? []).map((b: any) => ({
+      ...b,
+      items: (b.ration_bundle_items ?? [])
+        .filter((i: any) => i.products)
+        .map((i: any) => ({ productId: i.product_id, quantity: i.quantity, product: i.products })),
+      ration_bundle_items: undefined,
+    }));
+  });
+
+export const adminUpdateRationBundle = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        name: z.string().trim().min(2, "Enter a plan name").max(80),
+        description: z.string().trim().max(300).optional().default(""),
+        isActive: z.boolean(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await (await admin())
+      .from("ration_bundles")
+      .update({ name: data.name, description: data.description || null, is_active: data.isActive })
+      .eq("id", data.id);
+    if (error) return fail("Could not save the plan.");
+    return { ok: true as const };
+  });
+
+export const adminSetRationItem = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        bundleId: z.string().uuid(),
+        productId: z.string().uuid(),
+        quantity: z.number().int().min(1, "Quantity must be at least 1").max(99),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await (await admin())
+      .from("ration_bundle_items")
+      .upsert({ bundle_id: data.bundleId, product_id: data.productId, quantity: data.quantity });
+    if (error) return fail("Could not save the item.");
+    return { ok: true as const };
+  });
+
+export const adminRemoveRationItem = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ bundleId: z.string().uuid(), productId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await (await admin())
+      .from("ration_bundle_items")
+      .delete()
+      .eq("bundle_id", data.bundleId)
+      .eq("product_id", data.productId);
+    if (error) return fail("Could not remove the item.");
+    return { ok: true as const };
+  });
