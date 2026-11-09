@@ -1539,6 +1539,10 @@ export type Database = {
           participant_count: number
         }[]
       }
+      checkout_plan_request: {
+        Args: { p_plan: string; p_user: string }
+        Returns: Json
+      }
       create_order: { Args: { p: Json }; Returns: Json }
       create_order_with_plan: { Args: { p: Json }; Returns: Json }
       frequently_bought_with: {
