@@ -43,6 +43,13 @@
       "when": 1794253412032,
       "tag": "0005_order_delivery_plan_purchase",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794253600289,
+      "tag": "0006_cod_membership_payment_method",
+      "breakpoints": true
     }
   ]
 }
