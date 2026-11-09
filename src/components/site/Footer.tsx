@@ -22,7 +22,7 @@ export function Footer() {
           </div>
           <p className="mt-4 text-sm font-semibold text-lime">Everything to Everyone.</p>
           <p className="mt-2 text-sm text-deep-foreground/75">
-            Everyday groceries, monthly ration planning and neighbourhood group buying for Islamabad and Rawalpindi.
+            Everyday groceries, monthly ration planning and rewards for Islamabad and Rawalpindi.
           </p>
         </div>
 

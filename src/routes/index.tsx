@@ -46,7 +46,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "SabTk — Sab Khuch SabTk, Everything to Everyone" },
       {
         property: "og:description",
-        content: "Groceries, monthly ration bundles, neighbourhood group buying and rewards in Islamabad & Rawalpindi.",
+        content: "Groceries, monthly ration bundles and rewards in Islamabad & Rawalpindi.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
