@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -13,6 +14,7 @@ import { adminListPlans, adminSavePlan } from "@/lib/admin.functions";
 import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/plans")({
+  head: () => pageHead("Delivery Plan Management", "Manage SabTk monthly delivery plan pricing and benefits.", { noindex: true }),
   component: Plans,
 });
 

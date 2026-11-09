@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -11,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { adminGetSettings, adminSaveSettings, SETTINGS_KEYS } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/settings")({
+  head: () => pageHead("Store Settings", "Manage SabTk store contact details and settings.", { noindex: true }),
   component: Settings,
 });
 
