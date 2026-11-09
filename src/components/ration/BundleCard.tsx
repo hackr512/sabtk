@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { formatPKR } from "@/lib/pricing";
+import { TIER_META, bundleSize } from "@/lib/ration";
 import type { Bundle } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -13,26 +14,36 @@ export function bundleTotals(b: Bundle) {
   return { total, unavailable: b.items.length - available.length, units: b.items.reduce((s, i) => s + i.quantity, 0) };
 }
 
-export function BundleCard({ bundle, highlight = false }: { bundle: Bundle; highlight?: boolean }) {
+/** Quality-plan card (Basic / Standard / Premium) for one family size. Prices are live from product data. */
+export function PlanCard({ bundle }: { bundle: Bundle }) {
   const cart = useCart();
+  const meta = TIER_META[bundle.tier];
+  const size = bundleSize(bundle);
   const { total, unavailable } = bundleTotals(bundle);
-  const shown = bundle.items.slice(0, 6);
+  const shown = bundle.items.slice(0, 5);
+  const highlight = bundle.tier === "standard";
 
   return (
     <article
       className={cn(
-        "flex flex-col rounded-2xl border bg-card p-5 shadow-card",
-        highlight ? "border-primary ring-2 ring-primary/15" : "border-border",
+        "flex flex-col rounded-lg border bg-card p-5",
+        highlight ? "border-primary ring-2 ring-primary/30" : "border-border",
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-bold text-secondary-foreground">
-          {bundle.householdLabel}
+        <span
+          className={cn(
+            "rounded-full px-2.5 py-1 text-xs font-bold",
+            highlight ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
+          )}
+        >
+          {meta.badge}
         </span>
         <span className="text-xs text-muted-foreground">{bundle.items.length} products</span>
       </div>
-      <h3 className="mt-3 text-xl font-bold">{bundle.name}</h3>
-      {bundle.description && <p className="mt-1 text-sm text-muted-foreground">{bundle.description}</p>}
+      <h3 className="mt-3 text-xl font-bold">{meta.name}</h3>
+      <p className="text-sm font-semibold text-primary">{meta.quality}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{meta.blurb}</p>
       <ul className="mt-4 space-y-1.5 text-sm">
         {shown.map((i) => (
           <li key={i.product.id} className="flex items-start gap-2">
@@ -56,19 +67,25 @@ export function BundleCard({ bundle, highlight = false }: { bundle: Bundle; high
         )}
         <div className="mt-4 grid grid-cols-2 gap-2">
           <Button
+            size="sm"
             onClick={() => {
               cart.addMany(bundle.items);
-              toast.success(`${bundle.name} added to cart`);
+              toast.success(`${meta.name} ration (${bundle.householdLabel}) added to cart`);
             }}
           >
-            <ShoppingBasket /> Add all
+            <ShoppingBasket /> Add to Cart
           </Button>
-          <Button variant="outline" asChild>
-            <Link to="/ration" search={{ bundle: bundle.slug }}>
-              Customize
+          <Button size="sm" variant="outline" asChild>
+            <Link to="/ration" search={{ size, plan: bundle.tier }}>
+              Customize Plan
             </Link>
           </Button>
         </div>
+        <Button size="sm" variant="ghost" asChild className="mt-2 w-full">
+          <Link to="/ration" search={{ size, plan: bundle.tier }}>
+            View Products
+          </Link>
+        </Button>
       </div>
     </article>
   );
