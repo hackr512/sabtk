@@ -18,6 +18,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CampaignCard } from "@/components/circle/CampaignCard";
 import { RationPlans } from "@/components/ration/RationPlans";
+import { bundleTotals } from "@/components/ration/BundleCard";
+import { findBundle } from "@/lib/ration";
 import { ProductRail } from "@/components/shop/ProductCard";
 import { RecentlyViewed, ReorderEssentials } from "@/components/shop/Recommendations";
 import { EmptyState, SectionHeader } from "@/components/site/Blocks";
@@ -193,7 +195,10 @@ function Home() {
       </section>
 
       {/* F. GharBudget */}
-      <BudgetTeaser mediumTotal={home.bundles[1] ? bundleTotals(home.bundles[1]).total : null} mediumName={home.bundles[1]?.name} />
+      <BudgetTeaser
+        mediumTotal={(() => { const b = findBundle(home.bundles, "medium", "standard"); return b ? bundleTotals(b).total : null; })()}
+        mediumName={findBundle(home.bundles, "medium", "standard")?.name}
+      />
 
       {/* G. Offers and recommendations */}
       {home.offers.length > 0 && (
