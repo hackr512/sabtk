@@ -1,3 +1,4 @@
+import { DeliveryPlanSelection, SelectedDeliveryPlan, deliveryPlansQuery } from "@/components/plans/DeliveryPlanSelection";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ShoppingBag, Trash2, Truck } from "lucide-react";
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/cart")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(deliveryPlansQuery),
   component: CartPage,
 });
 
@@ -62,7 +64,7 @@ function CartPage() {
     <div className="container-page py-6 md:py-10">
       <h1 className="text-3xl font-extrabold md:text-4xl">Your cart</h1>
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
-        <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <div><ul className="divide-y divide-border rounded-2xl border border-border bg-card">
           {cart.items.map((i) => {
             const unavailable = i.stock <= 0 || i.quantity === 0;
             return (
@@ -101,7 +103,7 @@ function CartPage() {
               </li>
             );
           })}
-        </ul>
+        </ul><div className="mt-4"><SelectedDeliveryPlan /></div><DeliveryPlanSelection /></div>
 
         <aside className="h-fit space-y-4 rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-40">
           <div className="rounded-xl bg-surface p-3">
@@ -114,7 +116,8 @@ function CartPage() {
             <Progress value={progress} className="mt-2 h-2" aria-label="Progress to free delivery" />
           </div>
           <dl className="space-y-2 text-sm">
-            <div className="flex justify-between"><dt>Item subtotal</dt><dd>{formatPKR(t.subtotal)}</dd></div>
+            <div className="flex justify-between"><dt>Grocery subtotal</dt><dd>{formatPKR(t.subtotal)}</dd></div>
+            {cart.selectedPlan && <div className="flex justify-between"><dt>Delivery plan · {cart.selectedPlan.name}</dt><dd>{formatPKR(cart.selectedPlan.price)}</dd></div>}
             <div className="flex justify-between"><dt>Delivery fee</dt><dd>{t.deliveryFee === 0 ? "Free" : formatPKR(t.deliveryFee)}</dd></div>
             <div className="flex justify-between text-muted-foreground"><dt>Promo codes & rewards</dt><dd>Applied at checkout</dd></div>
             <div className="flex justify-between border-t border-border pt-3 text-base font-extrabold"><dt>Total</dt><dd>{formatPKR(t.total)}</dd></div>

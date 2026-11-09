@@ -65,6 +65,8 @@ const placeOrderSchema = z.object({
   notes: z.string().trim().max(300).optional(),
   saveAddress: z.boolean().optional(),
   useMembershipCredit: z.boolean().optional(),
+  deliveryPlanId: z.string().uuid().optional(),
+  deliveryPlanExpectedPrice: z.number().finite().nonnegative().optional(),
 });
 
 export type PlaceOrderInput = z.infer<typeof placeOrderSchema>;
@@ -91,7 +93,7 @@ export const placeOrder = createServerFn({ method: "POST" })
     const lines: any[] = [];
     for (const id of ids) {
       const p = products?.find((x) => x.id === id);
-      const qty = qtyById.get(id)!;
+      const qty = qtyById.get(id) ?? 0;
       if (!p || !p.is_active) {
         problems.push("An item in your cart is no longer available.");
         continue;
@@ -201,9 +203,11 @@ export const placeOrder = createServerFn({ method: "POST" })
 
     // create_order locks per user, re-checks points, and decrements stock atomically.
     // Reward lines share a product row with paid lines, so stock is decremented per line.
-    const { data: created, error: cErr } = await admin.rpc("create_order", {
+    const { data: created, error: cErr } = await admin.rpc("create_order_with_plan", {
       p: {
         user_id: userId,
+        delivery_plan_id: data.deliveryPlanId ?? "",
+        delivery_plan_expected_price: data.deliveryPlanExpectedPrice ?? null,
         payment_method: "cod",
         customer_name: data.customerName,
         phone: data.phone,
@@ -230,6 +234,11 @@ export const placeOrder = createServerFn({ method: "POST" })
     });
     if (cErr) {
       const msg = cErr.message || "";
+      if (msg.includes("PLAN_PRICE_CHANGED")) return { ok: false as const, error: "The delivery plan price changed. Refresh checkout to review its current price." };
+      if (msg.includes("PLAN_UNAVAILABLE")) return { ok: false as const, error: "This delivery plan is no longer available. Remove it to continue." };
+      if (msg.includes("ALREADY_PENDING")) return { ok: false as const, error: "You already have a plan awaiting payment. Remove this plan to avoid paying twice." };
+      if (msg.includes("ALREADY_RENEWED")) return { ok: false as const, error: "Your next delivery plan period is already paid. Remove this plan to continue." };
+      if (msg.includes("MEMBERSHIP_SUSPENDED")) return { ok: false as const, error: "Your membership is suspended. Remove the selected plan and contact us." };
       if (msg.includes("OUT_OF_STOCK"))
         return {
           ok: false as const,

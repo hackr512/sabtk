@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { computeTotals, type OrderTotals } from "@/lib/pricing";
+import { addDeliveryPlan } from "@/lib/delivery-plan";
+import type { Plan } from "@/lib/membership.functions";
 import type { Product } from "@/lib/types";
 
 export type CartItem = {
@@ -18,6 +20,8 @@ export type CartItem = {
 };
 
 type CartState = {
+  selectedPlan: Plan | null;
+  selectPlan: (plan: Plan | null) => void;
   items: CartItem[];
   ready: boolean;
   count: number;
@@ -54,12 +58,18 @@ const cap = (i: Pick<CartItem, "stock" | "maxPerOrder">) => Math.max(0, Math.min
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [selectedPlan, selectPlan] = useState<Plan | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) setItems(JSON.parse(raw));
+      const savedPlan = localStorage.getItem("sabtk-cart-plan-v1");
+      if (savedPlan) {
+        const parsed = JSON.parse(savedPlan);
+        if (parsed && typeof parsed.id === "string" && Number.isFinite(parsed.price)) selectPlan(parsed);
+      }
     } catch {
       /* ignore corrupt cart */
     }
@@ -68,7 +78,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (ready) localStorage.setItem(KEY, JSON.stringify(items));
-  }, [items, ready]);
+    if (ready) {
+      if (selectedPlan) localStorage.setItem("sabtk-cart-plan-v1", JSON.stringify(selectedPlan));
+      else localStorage.removeItem("sabtk-cart-plan-v1");
+    }
+  }, [items, ready, selectedPlan]);
 
   const add = useCallback((p: Product, qty = 1) => {
     if (p.stock <= 0) {
@@ -100,7 +114,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((i) => i.productId !== productId));
   }, []);
 
-  const clear = useCallback(() => setItems([]), []);
+  const clear = useCallback(() => { setItems([]); selectPlan(null); }, []);
 
   const addMany = useCallback((lines: { product: Product; quantity: number }[]) => {
     let skipped = 0;
@@ -112,7 +126,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           continue;
         }
         const idx = next.findIndex((i) => i.productId === product.id);
-        const q = Math.min(cap(product), (idx >= 0 ? next[idx]!.quantity : 0) + quantity);
+        const q = Math.min(cap(product), (idx >= 0 ? (next[idx]?.quantity ?? 0) : 0) + quantity);
         if (idx >= 0) next[idx] = toItem(product, q);
         else next.push(toItem(product, q));
       }
@@ -137,11 +151,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const priced = items.filter((i) => i.quantity > 0);
     return {
       items,
+      selectedPlan,
+      selectPlan,
       ready,
       count: priced.reduce((s, i) => s + i.quantity, 0),
-      totals: computeTotals(
+      totals: addDeliveryPlan(computeTotals(
         priced.map((i) => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })),
-      ),
+      ), selectedPlan?.price ?? 0),
       quantityOf: (id) => items.find((i) => i.productId === id)?.quantity ?? 0,
       add,
       setQuantity,
@@ -150,7 +166,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addMany,
       refresh,
     };
-  }, [items, ready, add, setQuantity, remove, clear, addMany, refresh]);
+  }, [items, ready, selectedPlan, add, setQuantity, remove, clear, addMany, refresh]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
