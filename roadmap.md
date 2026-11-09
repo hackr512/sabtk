@@ -1,6 +1,7 @@
 # SabTk Storefront Roadmap
 
 ## Current request
+- [ ] Remove subtotal-based free-delivery messaging and enforce Rs. 150 delivery on all grocery subtotals, preserving paid plan credits.
 - [x] Add optional cart/checkout delivery-plan selection and persistent order snapshots.
 - [x] Show delivery-plan filters and details in admin orders.
 - [x] Test pricing, plan changes/removal, and signed-in order roundtrip.
