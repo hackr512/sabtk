@@ -86,7 +86,7 @@ function BundleEditor({ bundle }: { bundle: BundleRow }) {
   const [addId, setAddId] = useState("");
   const [addQty, setAddQty] = useState("1");
 
-  const { data: products } = useQuery({ queryKey: ["admin", "products"], queryFn: () => productsFn() });
+  const { data: products } = useQuery({ queryKey: ["admin", "products"], queryFn: () => productsFn({ data: {} }) });
 
   const save = useMutation({
     mutationFn: () => saveFn({ data: { id: bundle.id, name, description, isActive } }),
