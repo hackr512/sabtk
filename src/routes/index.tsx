@@ -25,7 +25,7 @@ import { EmptyState, SectionHeader } from "@/components/site/Blocks";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import {
   DELIVERY_FEE,
-  FREE_DELIVERY_THRESHOLD,
+  REFERRAL_MIN_ORDER,
   REFERRAL_POINTS,
   RUPEES_PER_POINT,
   formatPKR,
@@ -190,7 +190,7 @@ function Home() {
               <p className="mt-3 max-w-lg text-loyalty-foreground/85">
                 Earn 1 point for every {formatPKR(RUPEES_PER_POINT)} of eligible groceries, credited once your
                 order is delivered. Invite friends and earn {REFERRAL_POINTS} points when their first delivered
-                order is {formatPKR(FREE_DELIVERY_THRESHOLD)} or more.
+                order is {formatPKR(REFERRAL_MIN_ORDER)} or more.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild variant="lime">
@@ -242,11 +242,11 @@ function Hero({ firstWindow }: { firstWindow: string | undefined }) {
               </Button>
             </div>
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-deep-foreground/85">
-              <span className="inline-flex items-center gap-2"><Truck className="size-4 text-lime" /> Free delivery at {formatPKR(FREE_DELIVERY_THRESHOLD)}+</span>
+              <span className="inline-flex items-center gap-2"><Truck className="size-4 text-lime" /> {formatPKR(DELIVERY_FEE)} delivery</span>
               <span className="inline-flex items-center gap-2"><Banknote className="size-4 text-lime" /> Cash on delivery</span>
             </div>
             <div className="mt-2 text-xs text-deep-foreground/65">
-              {formatPKR(DELIVERY_FEE)} delivery below {formatPKR(FREE_DELIVERY_THRESHOLD)}.
+              Delivery fee shown at checkout.
               {firstWindow && <span className="ml-2">Tomorrow: {firstWindow}</span>}
               <Link to="/delivery" className="ml-2 underline underline-offset-4">Details</Link>
             </div>

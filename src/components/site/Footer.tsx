@@ -1,6 +1,6 @@
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { Mail, MessageCircle, Phone } from "lucide-react";
-import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
+import { DELIVERY_FEE, formatPKR } from "@/lib/pricing";
 import { LOGO_URL } from "./Logo";
 
 export function Footer() {
@@ -99,8 +99,7 @@ export function Footer() {
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-deep-foreground/60 md:flex-row md:justify-between">
           <span>© {new Date().getFullYear()} SabTk. Prices in PKR.</span>
           <span>
-            Delivery {formatPKR(DELIVERY_FEE)} on orders below {formatPKR(FREE_DELIVERY_THRESHOLD)} · Free at{" "}
-            {formatPKR(FREE_DELIVERY_THRESHOLD)}+
+            Delivery {formatPKR(DELIVERY_FEE)} · Loyalty points on eligible groceries
           </span>
         </div>
       </div>

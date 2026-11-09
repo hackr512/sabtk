@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Notice, PageHeader } from "@/components/site/Blocks";
 import { useAuth } from "@/hooks/use-auth";
 import { getMyMembership, getPlans, requestPlan } from "@/lib/membership.functions";
-import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, costPerDelivery, formatPKR } from "@/lib/pricing";
+import { DELIVERY_FEE, costPerDelivery, formatPKR } from "@/lib/pricing";
 import { pageHead } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 const plansQuery = queryOptions({ queryKey: ["plans"], queryFn: () => getPlans(), staleTime: 60_000 });
 
 export const Route = createFileRoute("/plans")({
-  head: () => pageHead("Monthly Delivery Plans", `Pay once a month and get delivery credits that cover the ${formatPKR(DELIVERY_FEE)} fee on smaller orders.`),
+  head: () => pageHead("Monthly Delivery Plans", `Pay once a month and get delivery credits that cover the ${formatPKR(DELIVERY_FEE)} fee on eligible orders.`),
   loader: ({ context }) => context.queryClient.ensureQueryData(plansQuery),
   errorComponent: ({ error }) => <div role="alert" className="container-page py-12">{error instanceof Error ? error.message : "Could not load plans."}</div>,
   notFoundComponent: () => <div className="container-page py-12">No plans found.</div>,
@@ -60,7 +60,7 @@ function Plans() {
 
   return (
     <>
-      <PageHeader eyebrow={<span className="text-loyalty">Monthly Delivery Plans</span>} title="Small orders, no delivery fee" subtitle={`Orders under ${formatPKR(FREE_DELIVERY_THRESHOLD)} normally cost ${formatPKR(DELIVERY_FEE)} to deliver. A plan gives you monthly credits — one credit covers the fee on one order.`} />
+      <PageHeader eyebrow={<span className="text-loyalty">Monthly Delivery Plans</span>} title="Monthly delivery credits" subtitle={`Delivery normally costs ${formatPKR(DELIVERY_FEE)}, regardless of grocery subtotal. A plan gives you monthly credits — one credit covers the fee on one order.`} />
       <div className="container-page space-y-8 py-8">
         {!data.enabled && <Notice tone="warning">New subscriptions are paused right now.</Notice>}
         {(done || pending) && (
@@ -102,7 +102,7 @@ function Plans() {
           })}
         </div>
         <section className="card-surface grid gap-4 p-5 md:grid-cols-2">
-          <div className="flex gap-3"><Truck className="size-5 shrink-0 text-primary" /><p className="text-sm">Orders of {formatPKR(FREE_DELIVERY_THRESHOLD)}+ already ship free, so no credit is used on them.</p></div>
+          <div className="flex gap-3"><Truck className="size-5 shrink-0 text-primary" /><p className="text-sm">One paid plan credit covers the {formatPKR(DELIVERY_FEE)} delivery fee on an eligible order, regardless of grocery subtotal.</p></div>
           <p className="text-sm text-muted-foreground">Credits are used only when your order is delivered. Cancelled orders give the credit back. Your plan starts only after we confirm your payment — nothing is charged online.</p>
         </section>
       </div>

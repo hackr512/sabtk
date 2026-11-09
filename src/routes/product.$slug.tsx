@@ -11,7 +11,7 @@ import { useSelectedZone } from "@/components/site/AreaPicker";
 import { SectionHeader } from "@/components/site/Blocks";
 import { useCart } from "@/hooks/use-cart";
 import { useRecentlyViewed, useWishlist } from "@/hooks/use-customer";
-import { FREE_DELIVERY_THRESHOLD, formatPKR, pointsForAmount, unitPriceLabel } from "@/lib/pricing";
+import { DELIVERY_FEE, formatPKR, pointsForAmount, unitPriceLabel } from "@/lib/pricing";
 import { productQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
@@ -192,7 +192,7 @@ function ProductPage() {
               </div>
               <div className="flex items-start gap-2">
                 <Truck className="mt-0.5 size-4 shrink-0 text-primary" />
-                <span>Free delivery on orders of {formatPKR(FREE_DELIVERY_THRESHOLD)}+, otherwise Rs. 150.</span>
+                <span>Delivery {formatPKR(DELIVERY_FEE)}, regardless of grocery subtotal.</span>
               </div>
             </div>
 
