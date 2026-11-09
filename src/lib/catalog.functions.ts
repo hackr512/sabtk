@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createPublicClient } from "./public-client.server";
 import { mapProduct, mapProductDetail, PRODUCT_COLUMNS, PRODUCT_DETAIL_COLUMNS } from "./mappers";
 import { pricePerBaseUnit } from "./pricing";
-import type { Bundle, Campaign, Product, StoreConfig } from "./types";
+import type { Bundle, Product, StoreConfig } from "./types";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -196,45 +196,6 @@ async function loadBundles(db: ReturnType<typeof createPublicClient>): Promise<B
   }));
 }
 
-async function loadCampaigns(db: ReturnType<typeof createPublicClient>): Promise<Campaign[]> {
-  const [{ data, error }, progress] = await Promise.all([
-    db
-      .from("campaigns")
-      .select(`*, products(${PRODUCT_COLUMNS})`)
-      .in("status", ["collecting", "goal_reached", "confirming_supplier", "confirmed"])
-      .order("deadline"),
-    db.rpc("campaign_progress"),
-  ]);
-  if (error) {
-    console.error("loadCampaigns", error);
-    return [];
-  }
-  const prog = new Map((progress.data ?? []).map((p: any) => [p.campaign_id, p]));
-  return (data ?? [])
-    .filter((c: any) => c.products)
-    .map((c: any) => {
-      const p: any = prog.get(c.id);
-      return {
-        id: c.id,
-        slug: c.slug,
-        title: c.title,
-        description: c.description,
-        product: mapProduct(c.products),
-        price: Number(c.price),
-        priceIsConfirmed: c.price_is_confirmed,
-        minQuantity: c.min_quantity,
-        maxPerUser: c.max_per_user,
-        deadline: c.deadline,
-        deliveryWindowText: c.delivery_window_text,
-        status: c.status,
-        paymentRule: c.payment_rule,
-        failurePolicy: c.failure_policy,
-        committedQuantity: p ? Number(p.committed_quantity) : 0,
-        participantCount: p ? Number(p.participant_count) : 0,
-      };
-    });
-}
-
 /** Best Value rule: lowest price per kg / L / piece within a category, among in-stock items with a comparable unit. */
 function bestValue(products: Product[]): (Product & { valueNote: string })[] {
   const groups = new Map<string, { p: Product; v: number; base: string }[]>();
@@ -262,12 +223,11 @@ function bestValue(products: Product[]): (Product & { valueNote: string })[] {
 
 export const getHomeData = createServerFn({ method: "GET" }).handler(async () => {
   const db = createPublicClient();
-  const [featured, offers, all, bundles, campaigns] = await Promise.all([
+  const [featured, offers, all, bundles] = await Promise.all([
     db.from("products").select(PRODUCT_COLUMNS).eq("is_active", true).eq("is_featured", true).order("name").limit(12),
     db.from("products").select(PRODUCT_COLUMNS).eq("is_active", true).not("compare_at_price", "is", null).limit(12),
     db.from("products").select(PRODUCT_COLUMNS).eq("is_active", true).limit(500),
     loadBundles(db),
-    loadCampaigns(db),
   ]);
   const allItems = (all.data ?? []).map((r: any) => mapProduct(r));
   return {
@@ -276,16 +236,11 @@ export const getHomeData = createServerFn({ method: "GET" }).handler(async () =>
     bestValue: bestValue(allItems).slice(0, 8),
     productCount: allItems.length,
     bundles,
-    campaigns,
   };
 });
 
 export const getBundles = createServerFn({ method: "GET" }).handler(async () => {
   return loadBundles(createPublicClient());
-});
-
-export const getCampaigns = createServerFn({ method: "GET" }).handler(async () => {
-  return loadCampaigns(createPublicClient());
 });
 
 export const getOffersData = createServerFn({ method: "GET" }).handler(async () => {
