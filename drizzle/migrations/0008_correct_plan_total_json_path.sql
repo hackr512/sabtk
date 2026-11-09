@@ -1,0 +1,1 @@
+DO $$ DECLARE definition text; BEGIN SELECT pg_get_functiondef('public.create_order_with_plan(jsonb)'::regprocedure) INTO definition; definition := replace(definition, 'jsonb_set(p,''total'',', 'jsonb_set(p,''{total}'','); EXECUTE definition; END $$;

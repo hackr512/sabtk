@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { SearchX, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
@@ -59,7 +59,7 @@ function Shop() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/shop" });
   const filters = toFilters(search);
-  const { data, isFetching } = useQuery({ ...shopQuery(filters), placeholderData: (p) => p });
+  const { data, isFetching } = useSuspenseQuery(shopQuery(filters));
   const { data: config } = useQuery(storeConfigQuery);
   const category = config?.categories.find((c) => c.slug === search.category);
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;

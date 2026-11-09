@@ -1,3 +1,4 @@
+import { OrderDeliveryPlan } from "@/components/plans/OrderDeliveryPlan";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -131,6 +132,8 @@ function OrderDetail() {
             ))}
           </ul>
 
+          <OrderDeliveryPlan snapshot={order.delivery_plan_snapshot} selectedAt={order.delivery_plan_selected_at} />
+
           <div className="card-surface p-5">
             <h2 className="font-bold">Need help with this order?</h2>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -148,6 +151,7 @@ function OrderDetail() {
             <div className="flex justify-between"><span>Item subtotal</span><span>{formatPKR(Number(order.subtotal))}</span></div>
             {Number(order.discount_total) > 0 && <div className="flex justify-between text-primary"><span>Promo discount</span><span>-{formatPKR(Number(order.discount_total))}</span></div>}
             {order.points_redeemed > 0 && <div className="flex justify-between text-loyalty"><span>Points redeemed</span><span>{order.points_redeemed} pts</span></div>}
+            {order.delivery_plan_id && <div className="flex justify-between"><span>Delivery plan</span><span>{formatPKR(Number(order.delivery_plan_price))}</span></div>}
             <div className="flex justify-between"><span>Delivery fee</span><span>{Number(order.delivery_fee) ? formatPKR(Number(order.delivery_fee)) : "Free"}</span></div>
             <div className="flex justify-between border-t border-border pt-2 text-base font-extrabold"><span>Total (Cash on Delivery)</span><span>{formatPKR(Number(order.total))}</span></div>
             {order.points_to_earn > 0 && (

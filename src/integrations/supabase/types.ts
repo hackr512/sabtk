@@ -968,6 +968,11 @@ export type Database = {
           delivery_date: string
           delivery_fee: number
           delivery_fee_waived: number
+          delivery_plan_id: string | null
+          delivery_plan_payment_id: string | null
+          delivery_plan_price: number
+          delivery_plan_selected_at: string | null
+          delivery_plan_snapshot: Json | null
           delivery_window: string
           discount_total: number
           eligible_points_subtotal: number
@@ -1000,6 +1005,11 @@ export type Database = {
           delivery_date: string
           delivery_fee: number
           delivery_fee_waived?: number
+          delivery_plan_id?: string | null
+          delivery_plan_payment_id?: string | null
+          delivery_plan_price?: number
+          delivery_plan_selected_at?: string | null
+          delivery_plan_snapshot?: Json | null
           delivery_window: string
           discount_total?: number
           eligible_points_subtotal?: number
@@ -1032,6 +1042,11 @@ export type Database = {
           delivery_date?: string
           delivery_fee?: number
           delivery_fee_waived?: number
+          delivery_plan_id?: string | null
+          delivery_plan_payment_id?: string | null
+          delivery_plan_price?: number
+          delivery_plan_selected_at?: string | null
+          delivery_plan_snapshot?: Json | null
           delivery_window?: string
           discount_total?: number
           eligible_points_subtotal?: number
@@ -1056,6 +1071,20 @@ export type Database = {
           zone_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "orders_delivery_plan_id_fkey"
+            columns: ["delivery_plan_id"]
+            isOneToOne: false
+            referencedRelation: "membership_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_delivery_plan_payment_id_fkey"
+            columns: ["delivery_plan_payment_id"]
+            isOneToOne: false
+            referencedRelation: "membership_payments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "orders_membership_cycle_id_fkey"
             columns: ["membership_cycle_id"]
@@ -1510,7 +1539,12 @@ export type Database = {
           participant_count: number
         }[]
       }
+      checkout_plan_request: {
+        Args: { p_plan: string; p_user: string }
+        Returns: Json
+      }
       create_order: { Args: { p: Json }; Returns: Json }
+      create_order_with_plan: { Args: { p: Json }; Returns: Json }
       frequently_bought_with: {
         Args: { p_limit?: number; p_product: string }
         Returns: {

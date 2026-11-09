@@ -1,3 +1,5 @@
+import { DeliveryPlanSelection, SelectedDeliveryPlan, deliveryPlansQuery } from "@/components/plans/DeliveryPlanSelection";
+import { addDeliveryPlan } from "@/lib/delivery-plan";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -40,6 +42,7 @@ export const Route = createFileRoute("/_authenticated/checkout")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(deliveryPlansQuery),
   component: Checkout,
 });
 
@@ -99,7 +102,7 @@ function Checkout() {
   }, [profile, addresses, zoneId]);
 
   useEffect(() => {
-    if (!f.windowId && config?.windows[0]) setF((p) => ({ ...p, windowId: config.windows[0]!.id }));
+    if (!f.windowId && config?.windows[0]) setF((p) => ({ ...p, windowId: config.windows[0]?.id ?? "" }));
   }, [config, f.windowId]);
 
   const lines = cart.items.filter((i) => i.quantity > 0);
@@ -114,7 +117,7 @@ function Checkout() {
     f.zoneId || null,
   );
   const creditOn = useCredit && decision.applies;
-  const totals = applyMembershipCredit(baseTotals, { ...decision, applies: creditOn });
+  const totals = addDeliveryPlan(applyMembershipCredit(baseTotals, { ...decision, applies: creditOn }), cart.selectedPlan?.price ?? 0);
   const balance = points.data ?? 0;
 
   if (cart.ready && lines.length === 0) {
@@ -161,6 +164,7 @@ function Checkout() {
       if (promo) payload.promoCode = promo.code;
       if (rewardId) payload.rewardId = rewardId;
       if (creditOn) payload.useMembershipCredit = true;
+      if (cart.selectedPlan) { payload.deliveryPlanId = cart.selectedPlan.id; payload.deliveryPlanExpectedPrice = cart.selectedPlan.price; }
       const r = await place({ data: payload });
       if (!r.ok) {
         setError(r.error);
@@ -289,6 +293,8 @@ function Checkout() {
           </div>
         </fieldset>
 
+        <DeliveryPlanSelection />
+
         <Notice>
           <b>Substitutions:</b> we never substitute without asking. If an item is unavailable when we pack your order, we'll call you or remove it and adjust your total.{" "}
           <Link to="/policies" className="font-semibold text-primary underline">Cancellation & refund policy</Link>
@@ -307,6 +313,7 @@ function Checkout() {
             ))}
           </ul>
 
+          <SelectedDeliveryPlan />
           <div className="flex gap-2">
             <Input placeholder="Promo code" value={promoInput} onChange={(e) => setPromoInput(e.target.value)} aria-label="Promo code" />
             <Button type="button" variant="secondary" onClick={applyPromo} disabled={promoInput.trim().length < 2}>Apply</Button>
@@ -350,7 +357,8 @@ function Checkout() {
           })}
 
           <dl className="space-y-2 border-t border-border pt-3 text-sm">
-            <div className="flex justify-between"><dt>Item subtotal</dt><dd>{formatPKR(totals.subtotal)}</dd></div>
+            <div className="flex justify-between"><dt>Grocery subtotal</dt><dd>{formatPKR(totals.subtotal)}</dd></div>
+            {cart.selectedPlan && <div className="flex justify-between"><dt>Delivery plan · {cart.selectedPlan.name}</dt><dd>{formatPKR(totals.planPrice)}</dd></div>}
             {totals.discount > 0 && <div className="flex justify-between text-primary"><dt>Promo discount</dt><dd>-{formatPKR(totals.discount)}</dd></div>}
             {rewardId && <div className="flex justify-between text-loyalty"><dt>Reward item</dt><dd>Free</dd></div>}
             <div className="flex justify-between"><dt>Delivery fee</dt><dd>{totals.deliveryFee === 0 ? (creditOn ? <span className="text-loyalty">Covered by plan</span> : "Free") : formatPKR(totals.deliveryFee)}</dd></div>

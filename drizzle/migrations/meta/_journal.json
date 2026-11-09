@@ -36,6 +36,34 @@
       "when": 1794232988720,
       "tag": "0004_gharbudget_recommendation_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794253412032,
+      "tag": "0005_order_delivery_plan_purchase",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794253600289,
+      "tag": "0006_cod_membership_payment_method",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794253696613,
+      "tag": "0007_reuse_pending_checkout_plan",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794253781560,
+      "tag": "0008_correct_plan_total_json_path",
+      "breakpoints": true
     }
   ]
 }
