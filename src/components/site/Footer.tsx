@@ -22,7 +22,7 @@ export function Footer() {
           </div>
           <p className="mt-4 text-sm font-semibold text-lime">Everything to Everyone.</p>
           <p className="mt-2 text-sm text-deep-foreground/75">
-            Everyday groceries, monthly ration planning and neighbourhood group buying for Islamabad and Rawalpindi.
+            Everyday groceries, monthly ration planning and rewards for Islamabad and Rawalpindi.
           </p>
         </div>
 
@@ -31,7 +31,6 @@ export function Footer() {
           <ul className="mt-3 space-y-2 text-sm text-deep-foreground/80">
             <li><Link to="/shop" className="hover:text-deep-foreground">All products</Link></li>
             <li><Link to="/ration" className="hover:text-deep-foreground">Monthly Ration</Link></li>
-            <li><Link to="/ration-circle" className="hover:text-deep-foreground">Ration Circle</Link></li>
             <li><Link to="/budget" className="hover:text-deep-foreground">GharBudget</Link></li>
             <li><Link to="/rewards" className="hover:text-deep-foreground">Rewards & referrals</Link></li>
           </ul>

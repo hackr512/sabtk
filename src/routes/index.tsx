@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CampaignCard } from "@/components/circle/CampaignCard";
 import { RationPlans } from "@/components/ration/RationPlans";
 import { bundleTotals } from "@/components/ration/BundleCard";
 import { findBundle } from "@/lib/ration";
@@ -47,7 +46,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "SabTk — Sab Khuch SabTk, Everything to Everyone" },
       {
         property: "og:description",
-        content: "Groceries, monthly ration bundles, neighbourhood group buying and rewards in Islamabad & Rawalpindi.",
+        content: "Groceries, monthly ration bundles and rewards in Islamabad & Rawalpindi.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -142,55 +141,6 @@ function Home() {
             action={{ label: "Build my ration", to: "/ration" }}
           />
           <RationPlans bundles={home.bundles} />
-        </div>
-      </section>
-
-      {/* E. Ration Circle */}
-      <section className="relative overflow-hidden border-y border-border bg-deep py-16 text-deep-foreground">
-        <div className="container-page relative grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-lime px-3 py-1 text-xs font-bold text-lime-foreground">
-              <Users className="size-3.5" /> Ration Circle
-            </span>
-            <h2 className="mt-4 text-3xl font-semibold md:text-4xl">Neighbourhood group buying</h2>
-            <p className="mt-3 text-deep-foreground/80 md:text-lg">
-              A shared basket. A better bulk deal. Join households in your neighbourhood.
-            </p>
-            <ol className="mt-6 space-y-3">
-              {[
-                ["Reserve", "Pick a campaign and reserve your packs. No advance payment."],
-                ["Reach the goal", "When enough households join, we request a bulk rate from the supplier."],
-                ["Get it delivered", "Once confirmed, pay cash on delivery. If the goal isn't met, your reservation is released."],
-              ].map(([t, d], i) => (
-                <li key={t} className="flex gap-3">
-                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-deep-foreground/10 text-sm font-bold text-lime">
-                    {i + 1}
-                  </span>
-                  <span>
-                    <span className="font-semibold">{t}</span>
-                    <span className="block text-sm text-deep-foreground/70">{d}</span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-            <Button asChild variant="lime" className="mt-7">
-              <Link to="/ration-circle">
-                See all campaigns <ArrowRight />
-              </Link>
-            </Button>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {home.campaigns.slice(0, 2).map((c) => (
-              <CampaignCard key={c.id} campaign={c} />
-            ))}
-            {home.campaigns.length === 0 && (
-              <div className="rounded-2xl border border-deep-foreground/20 p-8 text-center md:col-span-2">
-                <Users className="mx-auto size-8 text-lime" />
-                <p className="mt-3 font-semibold">No group-buy campaigns are open right now.</p>
-                <p className="mt-1 text-sm text-deep-foreground/70">New campaigns will appear here as soon as they open.</p>
-              </div>
-            )}
-          </div>
         </div>
       </section>
 
@@ -310,7 +260,6 @@ function Hero({ firstWindow }: { firstWindow: string | undefined }) {
 function FeatureStrip() {
   const items = [
     { to: "/ration", icon: ShoppingBasket, title: "Monthly Ration", text: "Family-size baskets", tone: "bg-lime text-lime-foreground" },
-    { to: "/ration-circle", icon: Users, title: "Ration Circle", text: "Buy with neighbours", tone: "bg-primary text-primary-foreground" },
     { to: "/budget", icon: Calculator, title: "GharBudget", text: "Plan & track spending", tone: "bg-loyalty text-loyalty-foreground" },
     { to: "/rewards", icon: Gift, title: "Rewards", text: "Points on every order", tone: "bg-secondary text-primary" },
   ] as const;

@@ -13,7 +13,6 @@ export const Route = createFileRoute("/about")({
         <ul>
           <li>Clear prices with per-kg and per-litre comparisons.</li>
           <li>Monthly ration bundles and GharBudget to plan your spending.</li>
-          <li>Ration Circle group buying for bulk savings with your neighbours.</li>
           <li>Pay cash on delivery — nothing is charged online.</li>
         </ul>
       </Section>

@@ -16,7 +16,6 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
   { to: "/ration", label: "Monthly Ration" },
-  { to: "/ration-circle", label: "Ration Circle" },
   { to: "/budget", label: "GharBudget" },
   { to: "/offers", label: "Offers" },
   { to: "/plans", label: "Delivery Plans" },

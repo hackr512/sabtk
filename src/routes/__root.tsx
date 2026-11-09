@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#1f4d33" },
       { title: "SabTk — Sab Khuch SabTk, Everything to Everyone" },
-      { name: "description", content: "Sab Khuch SabTk, Everything to Everyone. Grocery delivery in Islamabad and Rawalpindi with monthly ration planning, group buying and rewards." },
+      { name: "description", content: "Sab Khuch SabTk, Everything to Everyone. Grocery delivery in Islamabad and Rawalpindi with monthly ration planning and rewards." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

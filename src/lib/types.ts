@@ -65,34 +65,6 @@ export type Bundle = {
   items: { product: Product; quantity: number }[];
 };
 
-export type CampaignStatus =
-  | "collecting"
-  | "goal_reached"
-  | "confirming_supplier"
-  | "confirmed"
-  | "failed"
-  | "cancelled"
-  | "completed";
-
-export type Campaign = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string | null;
-  product: Product;
-  price: number;
-  priceIsConfirmed: boolean;
-  minQuantity: number;
-  maxPerUser: number;
-  deadline: string;
-  deliveryWindowText: string;
-  status: CampaignStatus;
-  paymentRule: string;
-  failurePolicy: string;
-  committedQuantity: number;
-  participantCount: number;
-};
-
 export type ShopFilters = {
   q?: string;
   category?: string;

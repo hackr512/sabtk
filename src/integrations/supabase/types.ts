@@ -1182,6 +1182,7 @@ export type Database = {
           id: string
           is_active: boolean
           name: string
+          quality_tier: string
           slug: string
           sort_order: number
         }
@@ -1191,6 +1192,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name: string
+          quality_tier?: string
           slug: string
           sort_order?: number
         }
@@ -1200,6 +1202,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name?: string
+          quality_tier?: string
           slug?: string
           sort_order?: number
         }

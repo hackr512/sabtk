@@ -1,7 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import {
   getBundles,
-  getCampaigns,
   getCatalogLite,
   getHomeData,
   getOffersData,
@@ -53,12 +52,6 @@ export const bundlesQuery = queryOptions({
   queryKey: ["bundles"],
   queryFn: () => getBundles(),
   staleTime: 60_000,
-});
-
-export const campaignsQuery = queryOptions({
-  queryKey: ["campaigns"],
-  queryFn: () => getCampaigns(),
-  staleTime: 15_000,
 });
 
 export const offersQuery = queryOptions({
