@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Check, Truck, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,11 +7,11 @@ import { getPlans } from '@/lib/membership.functions';
 import { formatPKR } from '@/lib/pricing';
 import { cn } from '@/lib/utils';
 
-export const deliveryPlansQuery = { queryKey: ['plans'], queryFn: () => getPlans(), staleTime: 0 };
+export const deliveryPlansQuery = { queryKey: ['plans'], queryFn: () => getPlans(), staleTime: 60_000 };
 
 export function DeliveryPlanSelection() {
   const cart = useCart();
-  const { data, isPending, error, refetch } = useQuery(deliveryPlansQuery);
+  const { data, error, refetch } = useSuspenseQuery(deliveryPlansQuery);
   const selected = cart.selectedPlan;
   useEffect(() => {
     if (!data || !cart.ready || !selected) return;
@@ -24,7 +24,6 @@ export function DeliveryPlanSelection() {
       <div><h2 className="flex items-center gap-2 text-xl font-bold"><Truck className="size-5 text-primary" />Choose Your Delivery Plan</h2><p className="mt-1 text-sm text-muted-foreground">Optional · Pay with your groceries on delivery. Credits start after payment confirmation.</p></div>
       {selected && <Button type="button" variant="ghost" size="sm" onClick={() => cart.selectPlan(null)}><X className="size-4" />Remove plan</Button>}
     </div>
-    {isPending && <p className="text-sm text-muted-foreground">Loading delivery plans…</p>}
     {error && <div role="alert" className="text-sm text-destructive">Delivery plans could not load. <Button type="button" variant="outline" size="sm" onClick={() => refetch()}>Try again</Button></div>}
     {data && !data.enabled && <p className="text-sm text-muted-foreground">New delivery plan purchases are paused.</p>}
     {data?.enabled && data.plans.length === 0 && <p className="text-sm text-muted-foreground">No delivery plans are currently available.</p>}
