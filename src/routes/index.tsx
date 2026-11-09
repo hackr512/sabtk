@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CampaignCard } from "@/components/circle/CampaignCard";
-import { BundleCard, bundleTotals } from "@/components/ration/BundleCard";
+import { RationPlans } from "@/components/ration/RationPlans";
 import { ProductRail } from "@/components/shop/ProductCard";
 import { RecentlyViewed, ReorderEssentials } from "@/components/shop/Recommendations";
 import { EmptyState, SectionHeader } from "@/components/site/Blocks";
@@ -135,32 +135,11 @@ function Home() {
         <div className="container-page">
           <SectionHeader
             eyebrow="Monthly Ration"
-            title="A well-stocked home, all month."
-            subtitle="Monthly baskets for your household, at today’s prices."
+            title="Har Budget Ka Monthly Rashan."
+            subtitle="Choose your family size, then pick the quality that fits your budget — Basic, Standard or Premium. Prices update live from today’s rates."
             action={{ label: "Build my ration", to: "/ration" }}
           />
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {home.bundles.map((b, i) => (
-              <BundleCard key={b.id} bundle={b} highlight={i === 1} />
-            ))}
-            <article className="flex flex-col justify-between rounded-lg border border-border bg-card p-5">
-              <div>
-                <div className="grid size-11 place-items-center rounded-full bg-lime text-lime-foreground">
-                  <ShoppingBasket className="size-5" />
-                </div>
-                <h3 className="mt-4 text-xl font-bold">Customize My Ration</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Start from a bundle or a blank list. Change quantities, swap brands and see the live total
-                  before adding to cart.
-                </p>
-              </div>
-              <Button asChild variant="outline" className="mt-6">
-                <Link to="/ration">
-                  Start customizing <ArrowRight />
-                </Link>
-              </Button>
-            </article>
-          </div>
+          <RationPlans bundles={home.bundles} />
         </div>
       </section>
 
