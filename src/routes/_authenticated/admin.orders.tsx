@@ -61,7 +61,7 @@ function Orders() {
               <div key={o.id} className="card-surface flex flex-wrap items-start justify-between gap-3 p-4 text-sm">
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Link to="/admin/orders/$id" params={{ id: o.id }} className="font-bold hover:underline">{o.order_number}</Link>
+                    <Link to="/admin/order/$id" params={{ id: o.id }} className="font-bold hover:underline">{o.order_number}</Link>
                     <Badge variant={s.tone}>{s.label}</Badge>
                     {o.membership_credit_status && o.membership_credit_status !== "none" && (
                       <Badge variant="loyalty">Plan credit: {o.membership_credit_status}</Badge>

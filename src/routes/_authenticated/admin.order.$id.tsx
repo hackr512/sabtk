@@ -7,7 +7,7 @@ import { adminGetOrder } from '@/lib/admin.functions';
 import { formatPKR } from '@/lib/pricing';
 import { statusOf } from '@/lib/order-status';
 import { pageHead } from '@/lib/seo';
-export const Route = createFileRoute('/_authenticated/admin/orders/$id')({
+export const Route = createFileRoute('/_authenticated/admin/order/$id')({
   head: () => pageHead('Admin Order Details', 'Review SabTk order items, payment and selected delivery plan.', { noindex: true }),
   component: AdminOrder,
 });
