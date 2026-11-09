@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin/ration")({
 });
 
 type BundleRow = Awaited<ReturnType<typeof adminListRationBundles>>[number];
+type BundleItem = BundleRow["items"][number];
 
 const TIER_LABEL: Record<string, string> = { basic: "Basic", standard: "Standard", premium: "Premium" };
 
@@ -104,9 +105,9 @@ function BundleEditor({ bundle }: { bundle: BundleRow }) {
     onError: reportError,
   });
 
-  const inBundle = new Set(bundle.items.map((i) => i.productId));
+  const inBundle = new Set(bundle.items.map((i: BundleItem) => i.productId));
   const addable = (products ?? []).filter((p: any) => !inBundle.has(p.id) && p.is_active !== false);
-  const total = bundle.items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
+  const total = bundle.items.reduce((s: number, i: BundleItem) => s + Number(i.product.price) * i.quantity, 0);
 
   return (
     <div className="space-y-4 rounded-lg border border-border bg-card p-4">
@@ -140,7 +141,7 @@ function BundleEditor({ bundle }: { bundle: BundleRow }) {
             </tr>
           </thead>
           <tbody>
-            {bundle.items.map((i) => (
+            {bundle.items.map((i: BundleItem) => (
               <tr key={i.productId} className="border-b border-border/60">
                 <td className="py-2 pr-3">
                   <div className="font-medium">{i.product.name}</div>
