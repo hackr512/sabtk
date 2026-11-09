@@ -94,6 +94,80 @@ export type Database = {
         }
         Relationships: []
       }
+      budget_categories: {
+        Row: {
+          enabled: boolean
+          id: string
+          minimum_budget: number
+          name: string
+          priority: number
+        }
+        Insert: {
+          enabled?: boolean
+          id: string
+          minimum_budget?: number
+          name: string
+          priority?: number
+        }
+        Update: {
+          enabled?: boolean
+          id?: string
+          minimum_budget?: number
+          name?: string
+          priority?: number
+        }
+        Relationships: []
+      }
+      budget_consumption_rules: {
+        Row: {
+          allow_substitution: boolean
+          category_id: string
+          enabled: boolean
+          essential: boolean
+          household_base: number
+          id: string
+          max_packs: number
+          min_packs: number
+          name: string
+          per_person: number
+          unit: string
+        }
+        Insert: {
+          allow_substitution?: boolean
+          category_id: string
+          enabled?: boolean
+          essential?: boolean
+          household_base?: number
+          id: string
+          max_packs?: number
+          min_packs?: number
+          name: string
+          per_person?: number
+          unit?: string
+        }
+        Update: {
+          allow_substitution?: boolean
+          category_id?: string
+          enabled?: boolean
+          essential?: boolean
+          household_base?: number
+          id?: string
+          max_packs?: number
+          min_packs?: number
+          name?: string
+          per_person?: number
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_consumption_rules_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "budget_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       budget_plan_items: {
         Row: {
           plan_id: string
@@ -135,6 +209,7 @@ export type Database = {
           id: string
           month: string
           preferred_brands: string[]
+          quality_tier: string
           reminders_enabled: boolean
           updated_at: string
           user_id: string
@@ -146,6 +221,7 @@ export type Database = {
           id?: string
           month: string
           preferred_brands?: string[]
+          quality_tier?: string
           reminders_enabled?: boolean
           updated_at?: string
           user_id: string
@@ -157,11 +233,48 @@ export type Database = {
           id?: string
           month?: string
           preferred_brands?: string[]
+          quality_tier?: string
           reminders_enabled?: boolean
           updated_at?: string
           user_id?: string
         }
         Relationships: []
+      }
+      budget_product_rules: {
+        Row: {
+          enabled: boolean
+          product_id: string
+          quality_tiers: string[]
+          rule_id: string
+        }
+        Insert: {
+          enabled?: boolean
+          product_id: string
+          quality_tiers?: string[]
+          rule_id: string
+        }
+        Update: {
+          enabled?: boolean
+          product_id?: string
+          quality_tiers?: string[]
+          rule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_product_rules_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_product_rules_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "budget_consumption_rules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       campaign_participants: {
         Row: {

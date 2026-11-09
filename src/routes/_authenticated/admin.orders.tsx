@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -11,6 +12,7 @@ import { ORDER_STATUS, statusOf } from "@/lib/order-status";
 import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
+  head: () => pageHead("Order Management", "Manage SabTk customer orders and delivery statuses.", { noindex: true }),
   component: Orders,
 });
 

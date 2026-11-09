@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -13,6 +14,7 @@ import { adminListProducts, adminProductAction, adminQuickUpdate } from "@/lib/a
 import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/products/")({
+  head: () => pageHead("Product Management", "Manage the SabTk grocery catalogue and availability.", { noindex: true }),
   component: Products,
 });
 

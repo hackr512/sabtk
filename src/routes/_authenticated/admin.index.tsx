@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -10,6 +11,7 @@ import { statusOf } from "@/lib/order-status";
 import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
+  head: () => pageHead("Admin Dashboard", "SabTk store overview, stock and recent orders.", { noindex: true }),
   component: Dashboard,
 });
 

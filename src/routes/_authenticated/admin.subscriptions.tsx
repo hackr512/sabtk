@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -14,6 +15,7 @@ import {
 import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/subscriptions")({
+  head: () => pageHead("Subscription Management", "Manage SabTk memberships and payment confirmations.", { noindex: true }),
   component: Subscriptions,
 });
 

@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -20,6 +21,7 @@ import { formatPKR } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/admin/ration")({
+  head: () => pageHead("Ration Plan Management", "Manage SabTk monthly ration basket products and quantities.", { noindex: true }),
   component: RationPlans,
 });
 

@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -6,6 +7,7 @@ import { ProductForm, toFormValues } from "@/components/admin/ProductForm";
 import { adminGetProduct } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/products/$id")({
+  head: () => pageHead("Edit Product", "Edit a SabTk grocery product, price and stock.", { noindex: true }),
   component: EditProduct,
 });
 
