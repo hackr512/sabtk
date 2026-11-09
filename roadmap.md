@@ -1,6 +1,9 @@
 # SabTk Storefront Roadmap
 
 ## Current request
+- [ ] Add optional cart/checkout delivery-plan selection and persistent order snapshots.
+- [ ] Show delivery-plan filters and details in admin orders.
+- [ ] Test pricing, plan changes/removal, and signed-in order roundtrip.
 - [x] Add configurable GharBudget consumption rules and quality mappings.
 - [x] Build and test budget-constrained server recommendations (24 tests pass).
 - [x] Upgrade customer setup, customization, saved budgets and cart handoff; public generation/cart and budget changes verified.
