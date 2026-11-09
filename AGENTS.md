@@ -10,5 +10,6 @@
 <!-- LOVABLE:END -->
 
 ## Storefront presentation
+- GharBudget uses a pure, tested priority-allocation engine invoked by server functions against current catalog and editable consumption/quality tables; existing checkout remains the final price and stock authority.
 - The shared HeroCarousel owns the photography and accessible rotation controls; the homepage supplies its overlay content as children so presentation does not duplicate carousel behavior.
 - Storefront colors and photo overlays use semantic tokens in src/styles.css so dark and light themes stay consistent.
