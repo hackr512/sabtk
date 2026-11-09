@@ -12,7 +12,8 @@ import type { BudgetCategory, ConsumptionRule, BudgetProduct } from '@/lib/budge
 import { pageHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/_authenticated/admin/budget')({head:()=>pageHead('GharBudget Management','Manage SabTk grocery quality mappings and monthly household consumption rules.',{noindex:true}),component:BudgetAdmin});
-type Save = (data: Parameters<ReturnType<typeof useServerFn<typeof adminSaveBudget>>>[0]['data']) => Promise<void>;
+type SaveData = {kind:'category';row:BudgetCategory} | {kind:'rule';row:ConsumptionRule & {unit:'kg'|'L'|'pc'}} | {kind:'product';row:{product_id:string;rule_id:string;quality_tiers:('basic'|'standard'|'premium')[];enabled:boolean}};
+type Save = (data: SaveData) => Promise<void>;
 const field='mt-1 h-10 w-full rounded-lg border border-input bg-background px-2 text-sm';
 function BudgetAdmin(){
   const load=useServerFn(adminBudgetData);const saveFn=useServerFn(adminSaveBudget);const qc=useQueryClient();
