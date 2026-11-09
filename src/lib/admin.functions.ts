@@ -271,16 +271,18 @@ const ORDER_STATUSES = ["pending_confirmation", "confirmed", "preparing", "out_f
 export const adminListOrders = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
-    z.object({ status: z.enum(["all", ...ORDER_STATUSES]).default("all"), q: z.string().max(60).optional() }).parse(d ?? {}),
+    z.object({ status: z.enum(["all", ...ORDER_STATUSES]).default("all"), q: z.string().max(60).optional(), planFilter: z.enum(["all", "with", "without"]).default("all") }).parse(d ?? {}),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     let q = context.supabase
       .from("orders")
-      .select("id, order_number, customer_name, phone, area, city, total, delivery_fee, delivery_fee_waived, membership_credit_status, status, payment_status, delivery_date, delivery_window, created_at")
+      .select("id, order_number, customer_name, phone, area, city, total, delivery_fee, delivery_fee_waived, membership_credit_status, delivery_plan_id, delivery_plan_snapshot, delivery_plan_price, status, payment_status, delivery_date, delivery_window, created_at")
       .order("created_at", { ascending: false })
       .limit(200);
     if (data.status !== "all") q = q.eq("status", data.status);
+    if (data.planFilter === "with") q = q.not("delivery_plan_id", "is", null);
+    if (data.planFilter === "without") q = q.is("delivery_plan_id", null);
     if (data.q?.trim()) {
       const t = data.q.trim().replace(/[%,()]/g, " ");
       q = q.or(`order_number.ilike.%${t}%,customer_name.ilike.%${t}%,phone.ilike.%${t}%`);
@@ -680,4 +682,14 @@ export const adminRemoveRationItem = createServerFn({ method: "POST" })
       .eq("product_id", data.productId);
     if (error) return fail("Could not remove the item.");
     return { ok: true as const };
+  });
+
+export const adminGetOrder = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { data: order, error } = await context.supabase.from("orders").select("*, order_items(*)").eq("id", data.id).maybeSingle();
+    if (error || !order) throw new Error("Order not found");
+    return order;
   });
