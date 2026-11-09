@@ -7,6 +7,7 @@ import { useCart } from "@/hooks/use-cart";
 import { usePointsBalance } from "@/hooks/use-customer";
 import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
 import { storeConfigQuery } from "@/lib/queries";
+import { ModeSwitcher } from "@/components/admin/ModeSwitcher";
 import { AreaPicker } from "./AreaPicker";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
@@ -60,6 +61,7 @@ export function Header() {
             <Sparkles className="size-4" />
             {user && points.data != null ? `${points.data} pts` : "Rewards"}
           </Link>
+          <ModeSwitcher />
           <ThemeToggle />
           <Link
             to="/account"
