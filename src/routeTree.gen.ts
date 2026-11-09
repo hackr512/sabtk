@@ -24,7 +24,6 @@ import { Route as PlansRouteImport } from './routes/plans'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RationRouteImport } from './routes/ration'
-import { Route as RationCircleRouteImport } from './routes/ration-circle'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -33,7 +32,6 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as AuthenticatedAdminCircleRouteImport } from './routes/_authenticated/admin.circle'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminPlansRouteImport } from './routes/_authenticated/admin.plans'
 import { Route as AuthenticatedAdminRationRouteImport } from './routes/_authenticated/admin.ration'
@@ -119,11 +117,6 @@ const RationRoute = RationRouteImport.update({
   path: '/ration',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RationCircleRoute = RationCircleRouteImport.update({
-  id: '/ration-circle',
-  path: '/ration-circle',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
@@ -164,12 +157,6 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const AuthenticatedAdminCircleRoute =
-  AuthenticatedAdminCircleRouteImport.update({
-    id: '/circle',
-    path: '/circle',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
 const AuthenticatedAdminOrdersRoute =
   AuthenticatedAdminOrdersRouteImport.update({
     id: '/orders',
@@ -244,7 +231,6 @@ export interface FileRoutesByFullPath {
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/ration': typeof RationRoute
-  '/ration-circle': typeof RationCircleRoute
   '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
@@ -252,7 +238,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/admin/circle': typeof AuthenticatedAdminCircleRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/plans': typeof AuthenticatedAdminPlansRoute
   '/admin/ration': typeof AuthenticatedAdminRationRoute
@@ -280,14 +265,12 @@ export interface FileRoutesByTo {
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/ration': typeof RationRoute
-  '/ration-circle': typeof RationCircleRoute
   '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/account': typeof AuthenticatedAccountRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/admin/circle': typeof AuthenticatedAdminCircleRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/plans': typeof AuthenticatedAdminPlansRoute
   '/admin/ration': typeof AuthenticatedAdminRationRoute
@@ -317,7 +300,6 @@ export interface FileRoutesById {
   '/policies': typeof PoliciesRoute
   '/privacy': typeof PrivacyRoute
   '/ration': typeof RationRoute
-  '/ration-circle': typeof RationCircleRoute
   '/rewards': typeof RewardsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
@@ -325,7 +307,6 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/_authenticated/admin/circle': typeof AuthenticatedAdminCircleRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/_authenticated/admin/plans': typeof AuthenticatedAdminPlansRoute
   '/_authenticated/admin/ration': typeof AuthenticatedAdminRationRoute
@@ -355,7 +336,6 @@ export interface FileRouteTypes {
     | '/policies'
     | '/privacy'
     | '/ration'
-    | '/ration-circle'
     | '/rewards'
     | '/shop'
     | '/terms'
@@ -363,7 +343,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/checkout'
     | '/product/$slug'
-    | '/admin/circle'
     | '/admin/orders'
     | '/admin/plans'
     | '/admin/ration'
@@ -391,14 +370,12 @@ export interface FileRouteTypes {
     | '/policies'
     | '/privacy'
     | '/ration'
-    | '/ration-circle'
     | '/rewards'
     | '/shop'
     | '/terms'
     | '/account'
     | '/checkout'
     | '/product/$slug'
-    | '/admin/circle'
     | '/admin/orders'
     | '/admin/plans'
     | '/admin/ration'
@@ -427,7 +404,6 @@ export interface FileRouteTypes {
     | '/policies'
     | '/privacy'
     | '/ration'
-    | '/ration-circle'
     | '/rewards'
     | '/shop'
     | '/terms'
@@ -435,7 +411,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/product/$slug'
-    | '/_authenticated/admin/circle'
     | '/_authenticated/admin/orders'
     | '/_authenticated/admin/plans'
     | '/_authenticated/admin/ration'
@@ -465,7 +440,6 @@ export interface RootRouteChildren {
   PoliciesRoute: typeof PoliciesRoute
   PrivacyRoute: typeof PrivacyRoute
   RationRoute: typeof RationRoute
-  RationCircleRoute: typeof RationCircleRoute
   RewardsRoute: typeof RewardsRoute
   ShopRoute: typeof ShopRoute
   TermsRoute: typeof TermsRoute
@@ -579,13 +553,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ration-circle': {
-      id: '/ration-circle'
-      path: '/ration-circle'
-      fullPath: '/ration-circle'
-      preLoaderRoute: typeof RationCircleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/rewards': {
       id: '/rewards'
       path: '/rewards'
@@ -640,13 +607,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/circle': {
-      id: '/_authenticated/admin/circle'
-      path: '/circle'
-      fullPath: '/admin/circle'
-      preLoaderRoute: typeof AuthenticatedAdminCircleRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/orders': {
@@ -723,7 +683,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
-  AuthenticatedAdminCircleRoute: typeof AuthenticatedAdminCircleRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
   AuthenticatedAdminPlansRoute: typeof AuthenticatedAdminPlansRoute
   AuthenticatedAdminRationRoute: typeof AuthenticatedAdminRationRoute
@@ -736,7 +695,6 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
-  AuthenticatedAdminCircleRoute: AuthenticatedAdminCircleRoute,
   AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
   AuthenticatedAdminPlansRoute: AuthenticatedAdminPlansRoute,
   AuthenticatedAdminRationRoute: AuthenticatedAdminRationRoute,
@@ -786,7 +744,6 @@ const rootRouteChildren: RootRouteChildren = {
   PoliciesRoute: PoliciesRoute,
   PrivacyRoute: PrivacyRoute,
   RationRoute: RationRoute,
-  RationCircleRoute: RationCircleRoute,
   RewardsRoute: RewardsRoute,
   ShopRoute: ShopRoute,
   TermsRoute: TermsRoute,

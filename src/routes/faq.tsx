@@ -10,13 +10,12 @@ const FAQS = [
   ["How do I pay?", "Cash on delivery. Online payment isn't available yet."],
   ["What is a Monthly Delivery Plan?", "A monthly plan gives you a set number of delivery credits. One credit covers the delivery fee on one order that would otherwise be charged. Credits are only used when the order is delivered, and a cancelled order returns the credit."],
   ["How do loyalty points work?", `You earn 1 point for every ${formatPKR(RUPEES_PER_POINT)} spent on eligible items, added after delivery. Redeem points for reward items at checkout.`],
-  ["What is Ration Circle?", "Group buying: neighbours reserve a bulk item together. If the goal is reached, everyone gets the group price. If not, nobody is charged."],
   ["Can I cancel my order?", "Yes, while it's still waiting for confirmation, from the order page. After that, send a request to support."],
   ["Do you substitute items?", "Never without asking. If something is unavailable we'll call you or remove it and adjust your total."],
 ] as const;
 
 export const Route = createFileRoute("/faq")({
-  head: () => pageHead("FAQ", "Answers about SabTk delivery, payments, plans, rewards and Ration Circle."),
+  head: () => pageHead("FAQ", "Answers about SabTk delivery, payments, plans and rewards."),
   component: () => (
     <InfoPage title="Frequently asked questions">
       <Accordion type="single" collapsible className="card-surface px-5">
