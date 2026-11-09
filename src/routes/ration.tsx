@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Notice, PageHeader } from "@/components/site/Blocks";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
-import { FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
+import { DELIVERY_FEE, formatPKR } from "@/lib/pricing";
 import { bundlesQuery, catalogLiteQuery } from "@/lib/queries";
 import {
   RATION_SIZES,
@@ -146,7 +146,7 @@ function RationBuilder() {
         <div className="grid gap-3 sm:grid-cols-3">
           {[
             { icon: PackageOpen, t: "Built for families", d: "Staples sized for 2, 4 or 6+ people." },
-            { icon: Truck, t: "Free delivery", d: `Most baskets cross ${formatPKR(FREE_DELIVERY_THRESHOLD)}, so delivery is free.` },
+            { icon: Truck, t: "Doorstep delivery", d: `${formatPKR(DELIVERY_FEE)} delivery fee, regardless of basket size.` },
             { icon: CalendarClock, t: "Choose your slot", d: "Pick the day and time window at checkout." },
           ].map(({ icon: Icon, t, d }) => (
             <div key={t} className="card-surface flex gap-3 p-4">
@@ -293,9 +293,7 @@ function Builder({ bundle, catalog }: { bundle: Bundle; catalog: Product[] }) {
             <span className="text-2xl font-extrabold">{formatPKR(total)}</span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            {total >= FREE_DELIVERY_THRESHOLD
-              ? "Free delivery included."
-              : `Add ${formatPKR(FREE_DELIVERY_THRESHOLD - total)} more for free delivery.`}
+            {formatPKR(DELIVERY_FEE)} delivery fee added at checkout.
           </p>
           {unavailable.length > 0 && (
             <p className="mt-2 text-xs text-warning">

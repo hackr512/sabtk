@@ -1,15 +1,14 @@
 import { DeliveryPlanSelection, SelectedDeliveryPlan, deliveryPlansQuery } from "@/components/plans/DeliveryPlanSelection";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ShoppingBag, Trash2, Truck } from "lucide-react";
+import { ShoppingBag, Trash2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { QuantityStepper } from "@/components/shop/QuantityStepper";
 import { EmptyState } from "@/components/site/Blocks";
 import { useCart } from "@/hooks/use-cart";
 import { getProductsByIds } from "@/lib/catalog.functions";
-import { FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
+import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -58,7 +57,6 @@ function CartPage() {
   }
 
   const t = cart.totals;
-  const progress = Math.min(100, Math.round((t.subtotal / FREE_DELIVERY_THRESHOLD) * 100));
 
   return (
     <div className="container-page py-6 md:py-10">
@@ -106,15 +104,6 @@ function CartPage() {
         </ul><div className="mt-4"><SelectedDeliveryPlan /></div><DeliveryPlanSelection /></div>
 
         <aside className="h-fit space-y-4 rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-40">
-          <div className="rounded-xl bg-surface p-3">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Truck className="size-4 text-primary" />
-              {t.amountToFreeDelivery > 0
-                ? `Add ${formatPKR(t.amountToFreeDelivery)} more for free delivery`
-                : "You've unlocked free delivery"}
-            </div>
-            <Progress value={progress} className="mt-2 h-2" aria-label="Progress to free delivery" />
-          </div>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between"><dt>Grocery subtotal</dt><dd>{formatPKR(t.subtotal)}</dd></div>
             {cart.selectedPlan && <div className="flex justify-between"><dt>Delivery plan · {cart.selectedPlan.name}</dt><dd>{formatPKR(cart.selectedPlan.price)}</dd></div>}

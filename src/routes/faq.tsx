@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { InfoPage } from "@/components/site/InfoPage";
-import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, RUPEES_PER_POINT, formatPKR } from "@/lib/pricing";
+import { DELIVERY_FEE, RUPEES_PER_POINT, formatPKR } from "@/lib/pricing";
 import { pageHead } from "@/lib/seo";
 
 const FAQS = [
   ["Where do you deliver?", "Selected areas of Islamabad and Rawalpindi. Pick your area at the top of the page or at checkout to check."],
-  ["How much is delivery?", `${formatPKR(DELIVERY_FEE)} on orders below ${formatPKR(FREE_DELIVERY_THRESHOLD)}, and free on orders of ${formatPKR(FREE_DELIVERY_THRESHOLD)} or more.`],
+  ["How much is delivery?", `${formatPKR(DELIVERY_FEE)} per order, regardless of grocery subtotal. A paid delivery-plan credit can cover the fee on an eligible order.`],
   ["How do I pay?", "Cash on delivery. Online payment isn't available yet."],
   ["What is a Monthly Delivery Plan?", "A monthly plan gives you a set number of delivery credits. One credit covers the delivery fee on one order that would otherwise be charged. Credits are only used when the order is delivered, and a cancelled order returns the credit."],
   ["How do loyalty points work?", `You earn 1 point for every ${formatPKR(RUPEES_PER_POINT)} spent on eligible items, added after delivery. Redeem points for reward items at checkout.`],

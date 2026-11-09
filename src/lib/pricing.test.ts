@@ -14,9 +14,9 @@ describe("delivery fee policy", () => {
     expect(deliveryFeeFor(200)).toBe(150);
   });
 
-  it("is free on orders of Rs. 1,500 or more", () => {
-    expect(deliveryFeeFor(1500)).toBe(0);
-    expect(deliveryFeeFor(4200)).toBe(0);
+  it("charges Rs. 150 even on orders of Rs. 1,500 or more", () => {
+    expect(deliveryFeeFor(1500)).toBe(150);
+    expect(deliveryFeeFor(4200)).toBe(150);
   });
 
   it("adds the fee into the final total", () => {
@@ -24,7 +24,6 @@ describe("delivery fee policy", () => {
     expect(t.subtotal).toBe(1200);
     expect(t.deliveryFee).toBe(150);
     expect(t.total).toBe(1350);
-    expect(t.amountToFreeDelivery).toBe(300);
   });
 });
 
@@ -91,9 +90,10 @@ describe("monthly delivery plans", () => {
     expect(after.total).toBe(1000);
   });
 
-  it("no credit is used when delivery is already free at Rs. 1,500+", () => {
+  it("a paid plan credit also covers delivery at Rs. 1,500+", () => {
     const t = computeTotals([{ unitPrice: 1500, quantity: 1, pointsEligible: true }]);
-    expect(membershipDecision(t, plan, null).applies).toBe(false);
+    expect(membershipDecision(t, plan, null).applies).toBe(true);
+    expect(applyMembershipCredit(t, membershipDecision(t, plan, null)).total).toBe(1500);
   });
 
   it("no credit when the balance is zero", () => {

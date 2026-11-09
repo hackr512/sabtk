@@ -5,7 +5,7 @@ import { ShoppingBag, Sparkles, Truck, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
 import { usePointsBalance } from "@/hooks/use-customer";
-import { DELIVERY_FEE, FREE_DELIVERY_THRESHOLD, formatPKR } from "@/lib/pricing";
+import { DELIVERY_FEE, formatPKR } from "@/lib/pricing";
 import { storeConfigQuery } from "@/lib/queries";
 import { ModeSwitcher } from "@/components/admin/ModeSwitcher";
 import { AreaPicker } from "./AreaPicker";
@@ -39,7 +39,7 @@ export function Header() {
         <div className="container-page flex h-8 items-center justify-center gap-2 text-[11px] font-medium md:justify-between md:text-xs">
           <span className="flex items-center gap-1.5">
             <Truck className="size-3.5 text-lime" />
-            Free delivery on orders of {formatPKR(FREE_DELIVERY_THRESHOLD)}+ · {formatPKR(DELIVERY_FEE)} below that
+            Delivery {formatPKR(DELIVERY_FEE)} · Earn loyalty points on eligible groceries
           </span>
           <span className="hidden md:inline">
             {isSample ? "Preview catalogue — prices shown are placeholders" : "Islamabad & Rawalpindi"}
