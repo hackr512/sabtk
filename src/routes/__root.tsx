@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -134,6 +135,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // The admin workspace has its own full-screen layout — no storefront chrome.
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdminRoute = pathname.startsWith("/admin");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -146,12 +150,12 @@ function RootComponent() {
             >
               Skip to content
             </a>
-            <Header />
-            <main id="main" className="min-h-[60vh]">
+            {!isAdminRoute && <Header />}
+            <main id="main" className={isAdminRoute ? undefined : "min-h-[60vh]"}>
               <Outlet />
             </main>
-            <Footer />
-            <MobileNav />
+            {!isAdminRoute && <Footer />}
+            {!isAdminRoute && <MobileNav />}
             <Toaster position="top-center" richColors />
           </CartProvider>
         </AreaProvider>
