@@ -36,6 +36,7 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminCircleRouteImport } from './routes/_authenticated/admin.circle'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminPlansRouteImport } from './routes/_authenticated/admin.plans'
+import { Route as AuthenticatedAdminRationRouteImport } from './routes/_authenticated/admin.ration'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
 import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
@@ -180,6 +181,12 @@ const AuthenticatedAdminPlansRoute = AuthenticatedAdminPlansRouteImport.update({
   path: '/plans',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminRationRoute =
+  AuthenticatedAdminRationRouteImport.update({
+    id: '/ration',
+    path: '/ration',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
     id: '/settings',
@@ -248,6 +255,7 @@ export interface FileRoutesByFullPath {
   '/admin/circle': typeof AuthenticatedAdminCircleRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/admin/ration': typeof AuthenticatedAdminRationRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -282,6 +290,7 @@ export interface FileRoutesByTo {
   '/admin/circle': typeof AuthenticatedAdminCircleRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/admin/ration': typeof AuthenticatedAdminRationRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -319,6 +328,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/circle': typeof AuthenticatedAdminCircleRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/_authenticated/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/_authenticated/admin/ration': typeof AuthenticatedAdminRationRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
@@ -356,6 +366,7 @@ export interface FileRouteTypes {
     | '/admin/circle'
     | '/admin/orders'
     | '/admin/plans'
+    | '/admin/ration'
     | '/admin/settings'
     | '/admin/subscriptions'
     | '/orders/$id'
@@ -390,6 +401,7 @@ export interface FileRouteTypes {
     | '/admin/circle'
     | '/admin/orders'
     | '/admin/plans'
+    | '/admin/ration'
     | '/admin/settings'
     | '/admin/subscriptions'
     | '/orders/$id'
@@ -426,6 +438,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/circle'
     | '/_authenticated/admin/orders'
     | '/_authenticated/admin/plans'
+    | '/_authenticated/admin/ration'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/subscriptions'
     | '/_authenticated/orders/$id'
@@ -650,6 +663,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPlansRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/ration': {
+      id: '/_authenticated/admin/ration'
+      path: '/ration'
+      fullPath: '/admin/ration'
+      preLoaderRoute: typeof AuthenticatedAdminRationRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
       path: '/settings'
@@ -706,6 +726,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCircleRoute: typeof AuthenticatedAdminCircleRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
   AuthenticatedAdminPlansRoute: typeof AuthenticatedAdminPlansRoute
+  AuthenticatedAdminRationRoute: typeof AuthenticatedAdminRationRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -718,6 +739,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCircleRoute: AuthenticatedAdminCircleRoute,
   AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
   AuthenticatedAdminPlansRoute: AuthenticatedAdminPlansRoute,
+  AuthenticatedAdminRationRoute: AuthenticatedAdminRationRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
