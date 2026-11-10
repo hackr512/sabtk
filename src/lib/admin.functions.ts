@@ -400,13 +400,13 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
     const [{ data: ms }, { data: pays }, { data: plans }, { data: cycles }] = await Promise.all([
       db.from("memberships").select("*").order("created_at", { ascending: false }).limit(500),
       db.from("membership_payments").select("*").order("created_at", { ascending: false }).limit(500),
-      db.from("membership_plans").select("id, name"),
-      db.from("membership_cycles").select("id, membership_id, status, period_end, credits_granted, credits_carried"),
+      db.from("membership_plans").select("id, name, included_credits"),
+      db.from("membership_cycles").select("*").order("created_at", { ascending: false }),
     ]);
     const userIds = Array.from(new Set([...(ms ?? []).map((m) => m.user_id), ...(pays ?? []).map((p) => p.user_id)]));
     const [{ data: profiles }, { data: ledger }, { data: orders }] = await Promise.all([
       userIds.length ? db.from("profiles").select("id, full_name, phone").in("id", userIds) : Promise.resolve({ data: [] as any[] }),
-      db.from("membership_credit_ledger").select("cycle_id, delta"),
+      db.from("membership_credit_ledger").select("*").order("created_at", { ascending: false }),
       db.from("orders").select("membership_cycle_id, membership_credit_status").not("membership_cycle_id", "is", null),
     ]);
     const emails = new Map<string, string>();
@@ -424,21 +424,24 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
     const avail = (cycleId: string | null) =>
       cycleId ? Math.max(0, (ledger ?? []).filter((l) => l.cycle_id === cycleId).reduce((s, l) => s + l.delta, 0)) : 0;
     return {
+      creditHistory: (ledger ?? []).map(l => ({ id: l.id, customer: who(l.user_id), cycleId: l.cycle_id, purchaseId: cycles?.find(c => c.id === l.cycle_id)?.payment_id ?? null, orderId: l.order_id, kind: l.kind, delta: l.delta, note: l.note, createdAt: l.created_at })),
       memberships: (ms ?? []).map((m) => {
-        const cyc = cycles?.find((c) => c.id === m.current_cycle_id);
-        const os = (orders ?? []).filter((o) => o.membership_cycle_id === m.current_cycle_id);
+        const cyc = cycles?.find((c) => c.id === m.current_cycle_id) ?? cycles?.find(c => c.membership_id === m.id);
+        const os = (orders ?? []).filter((o) => o.membership_cycle_id === cyc?.id);
         return {
           id: m.id,
           userId: m.user_id,
           customer: who(m.user_id),
-          plan: planName(m.plan_id),
+          plan: cyc?.plan_name ?? planName(m.plan_id),
           status: m.status,
-          periodStart: m.current_period_start,
-          periodEnd: m.current_period_end,
+          periodStart: pays?.find(p => p.id === cyc?.payment_id)?.status === "paid" ? cyc?.period_start ?? m.current_period_start : null,
+          periodEnd: pays?.find(p => p.id === cyc?.payment_id)?.status === "paid" ? cyc?.period_end ?? m.current_period_end : null,
           cancelAtPeriodEnd: m.cancel_at_period_end,
           cycleId: m.current_cycle_id,
-          granted: cyc ? cyc.credits_granted + cyc.credits_carried : 0,
-          available: avail(m.current_cycle_id),
+          granted: cyc ? cyc.credits_granted + cyc.credits_carried : plans?.find(p => p.id === m.plan_id)?.included_credits ?? 0,
+          available: avail(cyc?.id ?? null),
+          purchaseAmount: Number(cyc?.price ?? pays?.find(p => p.membership_id === m.id)?.amount ?? 0),
+          paymentStatus: pays?.find(p => p.id === cyc?.payment_id)?.status ?? pays?.find(p => p.membership_id === m.id)?.status ?? "pending",
           used: os.filter((o) => o.membership_credit_status === "consumed").length,
           held: os.filter((o) => o.membership_credit_status === "reserved").length,
           renewalScheduled: (cycles ?? []).some((c) => c.membership_id === m.id && c.status === "scheduled"),

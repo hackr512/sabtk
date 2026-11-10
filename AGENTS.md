@@ -10,7 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Storefront presentation
-- Optional checkout plan purchases reuse membership plans and payment requests; order snapshots and linked payments are saved atomically, with activation only after COD is recorded as paid.
+- Checkout plan purchases reuse membership cycles, payments and the immutable credit ledger: reserve the first eligible delivery before payment, unlock subsequent credits only after confirmed payment, and decide fee waivers atomically under a per-customer lock.
 - GharBudget uses a pure, tested priority-allocation engine invoked by server functions against current catalog and editable consumption/quality tables; existing checkout remains the final price and stock authority.
 - The shared HeroCarousel owns the photography and accessible rotation controls; the homepage supplies its overlay content as children so presentation does not duplicate carousel behavior.
 - Storefront colors and photo overlays use semantic tokens in src/styles.css so dark and light themes stay consistent.

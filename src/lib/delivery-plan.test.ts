@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { addDeliveryPlan, readPlanSnapshot } from './delivery-plan';
+import { addDeliveryPlan, deliveryPlanTotals, readPlanSnapshot } from './delivery-plan';
 import { computeTotals } from './pricing';
 const groceries = computeTotals([{ unitPrice: 1000, quantity: 1, pointsEligible: true }]);
 describe('optional delivery plan purchase', () => {
@@ -15,4 +15,15 @@ describe('optional delivery plan purchase', () => {
   it('preserves grocery discounts rather than discounting the plan', () => { const t = addDeliveryPlan(computeTotals([{ unitPrice: 1000, quantity: 1, pointsEligible: true }], { discountType: 'percent', value: 10, minSubtotal: 0, maxDiscount: null }), 499); expect(t.total).toBe(1549); expect(t.discount).toBe(100); });
   it('existing orders without snapshots are supported', () => expect(readPlanSnapshot(null)).toBeNull());
   it('reads a price snapshot independently of current plan price', () => expect(readPlanSnapshot({ id: 'saved-id', name: 'Saved plan', price: 499, credits: 4, validityDays: 30 })?.price).toBe(499));
+});
+const basic = { id: 'basic', name: 'Basic', slug: 'basic', price: 799, credits: 4, validityDays: 30, benefits: [], description: null, minBasket: 0, maxCarryForward: 0, zoneIds: [], isRecommended: false };
+describe('automatic delivery entitlement pricing', () => {
+  const basket = computeTotals([{ unitPrice: 4200, quantity: 1, pointsEligible: true }]);
+  it('without a plan charges Rs. 150', () => expect(deliveryPlanTotals(basket,null,null,null).deliveryFee).toBe(150));
+  it('Basic with groceries includes first delivery and totals Rs. 4,999', () => { const t=deliveryPlanTotals(basket,basic,null,null); expect(t.total).toBe(4999); expect(t.deliveryFee).toBe(0); expect(t.deliveryFeeWaived).toBe(150); });
+  it('paid available credit automatically covers delivery without repurchasing', () => { const t=deliveryPlanTotals(basket,null,{creditsAvailable:3,minBasket:0,zoneIds:[]},null); expect(t.total).toBe(4200); expect(t.planPrice).toBe(0); });
+  it('exhausted credits restore the Rs. 150 fee', () => expect(deliveryPlanTotals(basket,null,{creditsAvailable:0,minBasket:0,zoneIds:[]},null).total).toBe(4350));
+  it('inactive or expired benefit does not waive delivery', () => expect(deliveryPlanTotals(basket,null,null,null).total).toBe(4350));
+  it('selected plans do not waive an ineligible service zone', () => expect(deliveryPlanTotals(basket,{...basic,zoneIds:['allowed']},null,'other').deliveryFee).toBe(150));
+  it('plan fee does not earn loyalty points', () => expect(deliveryPlanTotals(basket,basic,null,null).pointsToEarn).toBe(42));
 });

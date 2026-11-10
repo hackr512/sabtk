@@ -9,6 +9,12 @@ import { EmptyState } from "@/components/site/Blocks";
 import { useCart } from "@/hooks/use-cart";
 import { getProductsByIds } from "@/lib/catalog.functions";
 import { formatPKR } from "@/lib/pricing";
+import { computeTotals } from "@/lib/pricing";
+import { deliveryPlanTotals } from "@/lib/delivery-plan";
+import { getMyMembership } from "@/lib/membership.functions";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/use-auth";
+import { useArea } from "@/hooks/use-area";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -28,6 +34,10 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const cart = useCart();
+  const { user } = useAuth();
+  const { zoneId } = useArea();
+  const membershipFn = useServerFn(getMyMembership);
+  const { data: membership } = useQuery({ queryKey: ["my-membership", user?.id], enabled: !!user, queryFn: () => membershipFn(), staleTime: 0 });
   const fetchProducts = useServerFn(getProductsByIds);
   const refreshed = useRef(false);
 
@@ -56,7 +66,8 @@ function CartPage() {
     );
   }
 
-  const t = cart.totals;
+  const active = membership?.current?.status === "active" ? membership.current : null;
+  const t = deliveryPlanTotals(computeTotals(cart.items.filter(i => i.quantity > 0).map(i => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible }))), cart.selectedPlan, active ? { creditsAvailable: active.credits.available, minBasket: active.minBasket, zoneIds: active.zoneIds } : null, zoneId);
 
   return (
     <div className="container-page py-6 md:py-10">
@@ -107,10 +118,12 @@ function CartPage() {
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between"><dt>Grocery subtotal</dt><dd>{formatPKR(t.subtotal)}</dd></div>
             {cart.selectedPlan && <div className="flex justify-between"><dt>Delivery plan · {cart.selectedPlan.name}</dt><dd>{formatPKR(cart.selectedPlan.price)}</dd></div>}
-            <div className="flex justify-between"><dt>Delivery fee</dt><dd>{t.deliveryFee === 0 ? "Free" : formatPKR(t.deliveryFee)}</dd></div>
+            <div className="flex justify-between gap-3"><dt>Delivery fee</dt><dd>{t.decision.applies ? "Rs. 0 · Covered by plan" : formatPKR(t.deliveryFee)}</dd></div>
             <div className="flex justify-between text-muted-foreground"><dt>Promo codes & rewards</dt><dd>Applied at checkout</dd></div>
             <div className="flex justify-between border-t border-border pt-3 text-base font-extrabold"><dt>Total</dt><dd>{formatPKR(t.total)}</dd></div>
           </dl>
+          {t.decision.applies && <p className="text-xs text-loyalty">{cart.selectedPlan ? `First delivery included. ${cart.selectedPlan.credits - 1} credits unlock after payment confirmation.` : `${active?.planName} · 1 credit applied automatically; ${Math.max(0, (active?.credits.available ?? 1) - 1)} remaining after reservation.`}</p>}
+          {t.decision.reason && <p className="text-xs text-muted-foreground">{t.decision.reason}</p>}
           {t.pointsToEarn > 0 && (
             <p className="rounded-xl bg-loyalty-soft px-3 py-2 text-xs font-semibold text-loyalty">
               You'll earn {t.pointsToEarn} points once this order is delivered.

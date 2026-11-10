@@ -1,9 +1,14 @@
 import { readPlanSnapshot } from '@/lib/delivery-plan';
 import { formatPKR } from '@/lib/pricing';
-export function OrderDeliveryPlan({ snapshot, selectedAt }: { snapshot: unknown; selectedAt: string | null }) {
+export function OrderDeliveryPlan({ snapshot, selectedAt, creditStatus = "none", waived = 0, charged = 0, remaining = null, purchaseId = null }: { snapshot: unknown; selectedAt: string | null; creditStatus?: string; waived?: number; charged?: number; remaining?: number | null; purchaseId?: string | null }) {
   const p = readPlanSnapshot(snapshot);
   return <section className="space-y-3 border-y border-border py-5 text-sm"><h2 className="text-lg font-bold">Delivery Plan Information</h2>{!p ? <><p>Plan selected: No</p><p className="text-muted-foreground">Customer did not select a delivery plan.</p></> : <><dl className="grid gap-2 sm:grid-cols-2">
-    <div><dt className="text-muted-foreground">Plan selected</dt><dd>Yes · {p.name}</dd></div>
+    <div><dt className="text-muted-foreground">Delivery plan used</dt><dd>{waived > 0 ? "Yes" : "No"} · {p.name}</dd></div>
+    <div><dt className="text-muted-foreground">Delivery credit</dt><dd>{creditStatus}</dd></div>
+    <div><dt className="text-muted-foreground">Delivery fee before waiver</dt><dd>{formatPKR(charged + waived)}</dd></div>
+    <div><dt className="text-muted-foreground">Actual delivery fee</dt><dd>{formatPKR(charged)}</dd></div>
+    <div><dt className="text-muted-foreground">Credits remaining after reservation</dt><dd>{remaining ?? "—"}</dd></div>
+    <div><dt className="text-muted-foreground">Related plan purchase</dt><dd className="break-all text-xs">{purchaseId ?? "—"}</dd></div>
     <div><dt className="text-muted-foreground">Price at ordering</dt><dd>{formatPKR(p.price)}</dd></div>
     <div><dt className="text-muted-foreground">Delivery frequency</dt><dd>{p.credits} deliveries per {p.validityDays} days</dd></div>
     <div><dt className="text-muted-foreground">Plan duration</dt><dd>{p.validityDays} days after payment confirmation</dd></div>

@@ -1,6 +1,8 @@
 # SabTk Storefront Roadmap
 
 ## Current request
+- [x] Upgrade existing ledger for first-order reservations, automatic paid credits, cancellation and payment lifecycle.
+- [x] Show customer usage, admin filters and per-order credit history; 29 unit tests, rollback-only lifecycle checks, signed-in order/cancellation, admin ledger and mobile checkout verified. Simultaneous-order stress test not exercised; existing per-user transaction lock retained.
 - [x] Remove subtotal-based free-delivery messaging and enforce Rs. 150 delivery on all grocery subtotals, preserving paid plan credits; verified signed-in order and cancelled test.
 - [x] Add optional cart/checkout delivery-plan selection and persistent order snapshots.
 - [x] Show delivery-plan filters and details in admin orders.

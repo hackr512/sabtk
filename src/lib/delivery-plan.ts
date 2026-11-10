@@ -1,5 +1,11 @@
 import type { Plan } from './membership.functions';
-import type { OrderTotals } from './pricing';
+import { applyMembershipCredit, membershipDecision, type MembershipBenefit, type OrderTotals } from './pricing';
+
+export function deliveryPlanTotals(totals: OrderTotals, selected: Plan | null, active: MembershipBenefit | null, zoneId: string | null) {
+  const benefit = selected ? { creditsAvailable: selected.credits, minBasket: selected.minBasket, zoneIds: selected.zoneIds } : active;
+  const decision = membershipDecision(totals, benefit, zoneId);
+  return { ...addDeliveryPlan(applyMembershipCredit(totals, decision), selected?.price ?? 0), decision };
+}
 
 export function addDeliveryPlan<T extends OrderTotals>(totals: T, planPrice = 0): T & { planPrice: number } {
   if (!Number.isFinite(planPrice) || planPrice < 0) throw new Error('Invalid delivery plan price');
