@@ -19,12 +19,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { getMyMembership } from "@/lib/membership.functions";
 import { checkPromo, placeOrder, type PlaceOrderInput } from "@/lib/orders.functions";
 import {
-  applyMembershipCredit,
   computeTotals,
   deliveryDateOptions,
   formatDeliveryDate,
   formatPKR,
-  membershipDecision,
   type PromoRule,
 } from "@/lib/pricing";
 import { storeConfigQuery } from "@/lib/queries";
