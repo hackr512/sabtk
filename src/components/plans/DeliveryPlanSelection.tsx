@@ -37,7 +37,7 @@ export function DeliveryPlanSelection() {
         <Button type="button" variant={active ? 'secondary' : 'outline'} aria-pressed={active} disabled={active || !cart.ready} onClick={() => cart.selectPlan(p)}>{active ? <><Check className="size-4" />Selected</> : `Select ${p.name}`}</Button>
       </article>;
     })}</div>}
-    <p className="text-xs text-muted-foreground">No automatic recurring payments. This purchase does not waive today’s delivery fee; existing active credits remain available.</p>
+    <p className="text-xs text-muted-foreground">First eligible delivery included. One credit is reserved for this order; remaining credits unlock after payment confirmation. No automatic recurring payments.</p>
   </section>;
 }
 

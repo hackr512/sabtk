@@ -137,7 +137,7 @@ export const placeOrder = createServerFn({ method: "POST" })
 
     // Plan delivery credit: re-checked here and again inside create_order (row lock), never trusted from the client.
     let totals = { ...baseTotals, deliveryFeeWaived: 0 };
-    if (data.useMembershipCredit) {
+    if (!data.deliveryPlanId) {
       const { loadMyMembership } = await import("./membership.server");
       const m = await loadMyMembership(userId);
       const cur = m.current && m.current.status === "active" ? m.current : null;
@@ -146,9 +146,7 @@ export const placeOrder = createServerFn({ method: "POST" })
         cur ? { creditsAvailable: cur.credits.available, minBasket: cur.minBasket, zoneIds: cur.zoneIds } : null,
         zone.id,
       );
-      if (!cur) return { ok: false as const, error: "You don't have an active delivery plan right now." };
-      if (!decision.applies) return { ok: false as const, error: decision.reason ?? "A plan credit can't be used on this order." };
-      totals = applyMembershipCredit(baseTotals, decision);
+      if (decision.applies) totals = applyMembershipCredit(baseTotals, decision);
     }
 
     const items = lines.map((l) => ({
@@ -247,9 +245,9 @@ export const placeOrder = createServerFn({ method: "POST" })
       if (msg.includes("INSUFFICIENT_POINTS"))
         return { ok: false as const, error: "You don't have enough points for this reward." };
       if (msg.includes("NO_MEMBERSHIP_CREDIT"))
-        return { ok: false as const, error: "Your last delivery credit is already held by another order. Untick the plan credit to continue." };
+        return { ok: false as const, error: "Your credit balance changed. Refresh checkout to review the delivery fee." };
       if (msg.includes("MEMBERSHIP_") || msg.includes("NO_MEMBERSHIP"))
-        return { ok: false as const, error: "Your plan credit can't be used on this order. Untick it to continue." };
+        return { ok: false as const, error: "Your delivery plan eligibility changed. Refresh checkout to review it." };
       console.error("create_order failed", cErr);
       return { ok: false as const, error: "We couldn't place your order. Nothing was charged. Please try again." };
     }
