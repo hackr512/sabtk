@@ -406,7 +406,7 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
     const userIds = Array.from(new Set([...(ms ?? []).map((m) => m.user_id), ...(pays ?? []).map((p) => p.user_id)]));
     const [{ data: profiles }, { data: ledger }, { data: orders }] = await Promise.all([
       userIds.length ? db.from("profiles").select("id, full_name, phone").in("id", userIds) : Promise.resolve({ data: [] as any[] }),
-      db.from("membership_credit_ledger").select("cycle_id, delta"),
+      db.from("membership_credit_ledger").select("*").order("created_at", { ascending: false }),
       db.from("orders").select("membership_cycle_id, membership_credit_status").not("membership_cycle_id", "is", null),
     ]);
     const emails = new Map<string, string>();
@@ -424,6 +424,7 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
     const avail = (cycleId: string | null) =>
       cycleId ? Math.max(0, (ledger ?? []).filter((l) => l.cycle_id === cycleId).reduce((s, l) => s + l.delta, 0)) : 0;
     return {
+      creditHistory: (ledger ?? []).map(l => ({ id: l.id, customer: who(l.user_id), cycleId: l.cycle_id, purchaseId: cycles?.find(c => c.id === l.cycle_id)?.payment_id ?? null, orderId: l.order_id, kind: l.kind, delta: l.delta, note: l.note, createdAt: l.created_at })),
       memberships: (ms ?? []).map((m) => {
         const cyc = cycles?.find((c) => c.id === m.current_cycle_id) ?? cycles?.find(c => c.membership_id === m.id);
         const os = (orders ?? []).filter((o) => o.membership_cycle_id === cyc?.id);

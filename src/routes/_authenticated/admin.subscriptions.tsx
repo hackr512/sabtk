@@ -44,6 +44,7 @@ function Subscriptions() {
             <TabsTrigger value="payments">Payments to confirm ({pending.length})</TabsTrigger>
             <TabsTrigger value="members">Members ({data?.memberships.length ?? 0})</TabsTrigger>
             <TabsTrigger value="history">Payment history</TabsTrigger>
+            <TabsTrigger value="credits">Credit ledger</TabsTrigger>
           </TabsList>
           <TabsContent value="payments" className="space-y-3">
             {!pending.length ? <Empty>No payments waiting.</Empty> : pending.map((p) => <PendingPayment key={p.id} p={p} />)}
@@ -75,6 +76,7 @@ function Subscriptions() {
               </div>
             )}
           </TabsContent>
+          <TabsContent value="credits"><div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr><th className="p-3">Customer</th><th className="p-3">Operation</th><th className="p-3">Credits</th><th className="p-3">Order / purchase</th><th className="p-3">Date / reason</th></tr></thead><tbody className="divide-y divide-border">{data?.creditHistory.map(l => <tr key={l.id}><td className="p-3">{l.customer.name}</td><td className="p-3">{l.kind}</td><td className="p-3">{l.delta > 0 ? "+" : ""}{l.delta}</td><td className="max-w-64 break-all p-3 text-xs">{l.orderId ?? "—"}<br />{l.purchaseId ?? "—"}</td><td className="p-3 text-xs">{fmtDate(l.createdAt)}<br />{l.note}</td></tr>)}</tbody></table>{!data?.creditHistory.length && <Empty>No credit operations yet.</Empty>}</div></TabsContent>
         </Tabs>
       )}
     </>

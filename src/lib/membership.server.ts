@@ -80,7 +80,7 @@ export async function loadMyMembership(userId: string) {
       price: Number(c.price),
       periodStart: c.period_start,
       periodEnd: c.period_end,
-      status: c.status,
+      status: payments?.find(p => p.id === c.payment_id)?.status === "cancelled" ? "cancelled" : payments?.find(p => p.id === c.payment_id)?.status === "failed" ? "failed" : c.status,
       creditsGranted: c.credits_granted + c.credits_carried,
       paymentStatus: payments?.find(p => p.id === c.payment_id)?.status ?? "pending",
       purchasedAt: payments?.find(p => p.id === c.payment_id)?.created_at ?? c.created_at,
