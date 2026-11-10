@@ -107,7 +107,7 @@ function Checkout() {
   const baseTotals = computeTotals(
     lines.map((i) => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })),
     promo?.rule ?? null,
-    configuredDeliveryFee(config?.settings.delivery_fee),
+    configuredDeliveryFee(config?.settings["delivery_fee"]),
   );
   const plan = membership?.current?.status === "active" ? membership.current : null;
   const totals = deliveryPlanTotals(baseTotals, cart.selectedPlan, plan ? { creditsAvailable: plan.credits.available, minBasket: plan.minBasket, zoneIds: plan.zoneIds } : null, f.zoneId || null);

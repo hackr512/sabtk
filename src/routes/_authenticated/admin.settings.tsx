@@ -38,7 +38,7 @@ function Settings() {
   const { data, isLoading } = useQuery({ queryKey: ["admin", "settings"], queryFn: () => getFn() });
   const [v, setV] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
-  useEffect(() => { if (data) setV({ ...data, delivery_fee: data.delivery_fee || "250" }); }, [data]);
+  useEffect(() => { if (data) setV({ ...data, delivery_fee: data["delivery_fee"] || "250" }); }, [data]);
 
   async function save() {
     setSaving(true);

@@ -69,7 +69,7 @@ function CartPage() {
   }
 
   const active = membership?.current?.status === "active" ? membership.current : null;
-  const t = deliveryPlanTotals(computeTotals(cart.items.filter(i => i.quantity > 0).map(i => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })), null, configuredDeliveryFee(config?.settings.delivery_fee)), cart.selectedPlan, active ? { creditsAvailable: active.credits.available, minBasket: active.minBasket, zoneIds: active.zoneIds } : null, zoneId);
+  const t = deliveryPlanTotals(computeTotals(cart.items.filter(i => i.quantity > 0).map(i => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })), null, configuredDeliveryFee(config?.settings["delivery_fee"])), cart.selectedPlan, active ? { creditsAvailable: active.credits.available, minBasket: active.minBasket, zoneIds: active.zoneIds } : null, zoneId);
 
   return (
     <div className="container-page py-6 md:py-10">
