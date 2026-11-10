@@ -33,7 +33,7 @@ function Account() {
   const { data: isAdmin } = useQuery({
     queryKey: ["is-admin", user?.id],
     enabled: !!user,
-    queryFn: async () => (await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" })).data === true,
+    queryFn: async () => user ? (await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" })).data === true : false,
   });
   const cur = m?.current;
 
@@ -42,7 +42,9 @@ function Account() {
       <PageHeader title="My Account" subtitle={profile?.full_name || user?.email || ""} />
       <div className="container-page grid gap-6 py-8 lg:grid-cols-[1fr_320px]">
         <section className="card-surface space-y-4 p-5">
-          <h2 className="flex items-center gap-2 text-lg font-bold"><Crown className="size-5 text-loyalty" /> Monthly Delivery Plan</h2>
+          <h2 className="flex items-center gap-2 text-lg font-bold"><Crown className="size-5 text-loyalty" /> My Delivery Subscription</h2>
+          {cur?.periodEnd && cur.status === "active" && <p className="text-sm text-muted-foreground">Expires in {Math.max(0, Math.ceil((new Date(cur.periodEnd).getTime() - Date.now()) / 86400000))} days</p>}
+          {(!cur || ["expired", "cancelled"].includes(cur.status)) && <div className="flex flex-wrap gap-2"><Button asChild variant="secondary"><Link to="/plans">Renew Subscription</Link></Button><Button asChild variant="outline"><Link to="/shop">Continue without subscription</Link></Button></div>}
           {cur ? (
             <>
               <div className="flex flex-wrap items-center gap-2">

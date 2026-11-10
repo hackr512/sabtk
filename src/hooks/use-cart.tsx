@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
-import { computeTotals, type OrderTotals } from "@/lib/pricing";
+import { computeTotals, configuredDeliveryFee, type OrderTotals } from "@/lib/pricing";
+import { useQuery } from "@tanstack/react-query";
+import { storeConfigQuery } from "@/lib/queries";
 import { addDeliveryPlan } from "@/lib/delivery-plan";
 import type { Plan } from "@/lib/membership.functions";
 import type { Product } from "@/lib/types";
@@ -57,6 +59,7 @@ function toItem(p: Product, quantity: number): CartItem {
 const cap = (i: Pick<CartItem, "stock" | "maxPerOrder">) => Math.max(0, Math.min(i.stock, i.maxPerOrder));
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { data: config } = useQuery(storeConfigQuery);
   const [items, setItems] = useState<CartItem[]>([]);
   const [selectedPlan, selectPlan] = useState<Plan | null>(null);
   const [ready, setReady] = useState(false);
@@ -157,7 +160,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       count: priced.reduce((s, i) => s + i.quantity, 0),
       totals: addDeliveryPlan(computeTotals(
         priced.map((i) => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })),
-      ), selectedPlan?.price ?? 0),
+        null, configuredDeliveryFee(config?.settings["delivery_fee"])), selectedPlan?.price ?? 0),
       quantityOf: (id) => items.find((i) => i.productId === id)?.quantity ?? 0,
       add,
       setQuantity,
@@ -166,7 +169,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addMany,
       refresh,
     };
-  }, [items, ready, selectedPlan, add, setQuantity, remove, clear, addMany, refresh]);
+  }, [items, ready, selectedPlan, config, add, setQuantity, remove, clear, addMany, refresh]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

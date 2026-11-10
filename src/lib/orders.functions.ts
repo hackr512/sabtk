@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { applyMembershipCredit, computeTotals, deliveryDateOptions, membershipDecision, type PromoRule } from "./pricing";
+import { applyMembershipCredit, computeTotals, configuredDeliveryFee, deliveryDateOptions, membershipDecision, type PromoRule } from "./pricing";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -130,9 +130,11 @@ export const placeOrder = createServerFn({ method: "POST" })
       promoCode = res.code;
     }
 
+    const { data: feeSetting } = await admin.from("store_settings").select("value").eq("key", "delivery_fee").maybeSingle();
     const baseTotals = computeTotals(
       lines.map((l) => ({ unitPrice: Number(l.p.price), quantity: l.qty, pointsEligible: l.p.points_eligible })),
       promoRule,
+      configuredDeliveryFee(feeSetting?.value),
     );
 
     // Plan delivery credit: re-checked here and again inside create_order (row lock), never trusted from the client.

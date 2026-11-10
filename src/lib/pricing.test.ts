@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   computeTotals,
+  configuredDeliveryFee,
   deliveryDateOptions,
   deliveryFeeFor,
   formatPKR,
@@ -9,21 +10,25 @@ import {
 } from "./pricing";
 
 describe("delivery fee policy", () => {
-  it("charges Rs. 150 on orders below Rs. 1,500", () => {
-    expect(deliveryFeeFor(1499)).toBe(150);
-    expect(deliveryFeeFor(200)).toBe(150);
+  it("uses a valid administrator-configured delivery fee", () => {
+    expect(computeTotals([{unitPrice:1000,quantity:1,pointsEligible:true}],null,configuredDeliveryFee("300")).total).toBe(1300);
+    expect(configuredDeliveryFee("invalid")).toBe(250);
+  });
+  it("charges Rs. 250 on orders below Rs. 1,500", () => {
+    expect(deliveryFeeFor(1499)).toBe(250);
+    expect(deliveryFeeFor(200)).toBe(250);
   });
 
-  it("charges Rs. 150 even on orders of Rs. 1,500 or more", () => {
-    expect(deliveryFeeFor(1500)).toBe(150);
-    expect(deliveryFeeFor(4200)).toBe(150);
+  it("charges Rs. 250 even on orders of Rs. 1,500 or more", () => {
+    expect(deliveryFeeFor(1500)).toBe(250);
+    expect(deliveryFeeFor(4200)).toBe(250);
   });
 
   it("adds the fee into the final total", () => {
     const t = computeTotals([{ unitPrice: 600, quantity: 2, pointsEligible: true }]);
     expect(t.subtotal).toBe(1200);
-    expect(t.deliveryFee).toBe(150);
-    expect(t.total).toBe(1350);
+    expect(t.deliveryFee).toBe(250);
+    expect(t.total).toBe(1450);
   });
 });
 
@@ -73,20 +78,20 @@ import { applyMembershipCredit, costPerDelivery, membershipDecision } from "./pr
 
 describe("monthly delivery plans", () => {
   it("prices per included delivery match the three plans", () => {
-    expect(costPerDelivery(499, 4)).toBe(124.75);
-    expect(costPerDelivery(899, 7)).toBe(128.43);
-    expect(costPerDelivery(1300, 10)).toBe(130);
+    expect(costPerDelivery(799, 4)).toBe(199.75);
+    expect(costPerDelivery(1199, 7)).toBe(171.29);
+    expect(costPerDelivery(1499, 10)).toBe(149.9);
   });
 
   const plan = { creditsAvailable: 3, minBasket: 0, zoneIds: [] as string[] };
 
-  it("a credit covers the Rs. 150 fee on an order below Rs. 1,500", () => {
+  it("a credit covers the Rs. 250 fee on an order below Rs. 1,500", () => {
     const t = computeTotals([{ unitPrice: 500, quantity: 2, pointsEligible: true }]);
     const d = membershipDecision(t, plan, null);
     expect(d.applies).toBe(true);
     const after = applyMembershipCredit(t, d);
     expect(after.deliveryFee).toBe(0);
-    expect(after.deliveryFeeWaived).toBe(150);
+    expect(after.deliveryFeeWaived).toBe(250);
     expect(after.total).toBe(1000);
   });
 

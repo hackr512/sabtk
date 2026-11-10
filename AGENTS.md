@@ -10,6 +10,9 @@
 <!-- LOVABLE:END -->
 
 ## Storefront presentation
+- Stock quantity remains available stock; derive pending reservations from order items rather than subtracting them twice, and record every adjustment through inventory triggers.
+- Order transitions and return decisions run in database transactions; authenticated return procedures enforce ownership, administrator review and idempotent restoration.
+- Delivery prices use the public store setting with a shared fallback; checkout's transaction independently reads the setting as final authority.
 - Checkout plan purchases reuse membership cycles, payments and the immutable credit ledger: reserve the first eligible delivery before payment, unlock subsequent credits only after confirmed payment, and decide fee waivers atomically under a per-customer lock.
 - GharBudget uses a pure, tested priority-allocation engine invoked by server functions against current catalog and editable consumption/quality tables; existing checkout remains the final price and stock authority.
 - The shared HeroCarousel owns the photography and accessible rotation controls; the homepage supplies its overlay content as children so presentation does not duplicate carousel behavior.

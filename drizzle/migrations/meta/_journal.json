@@ -71,6 +71,27 @@
       "when": 1794289316010,
       "tag": "0009_automatic_delivery_credit_entitlements",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794292418650,
+      "tag": "0010_extended_order_statuses",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794292507566,
+      "tag": "0011_commerce_pricing_inventory_guards",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794292588997,
+      "tag": "0012_reviewed_return_management",
+      "breakpoints": true
     }
   ]
 }

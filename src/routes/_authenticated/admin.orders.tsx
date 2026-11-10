@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { adminListOrders, adminSetOrderStatus } from "@/lib/admin.functions";
-import { ORDER_STATUS, statusOf } from "@/lib/order-status";
+import { ORDER_STATUS, statusOf, TRANSITIONS, type OrderStatus } from "@/lib/order-status";
 import { formatPKR } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
@@ -17,7 +17,6 @@ export const Route = createFileRoute("/_authenticated/admin/orders")({
   component: Orders,
 });
 
-type OrderStatus = "pending_confirmation" | "confirmed" | "preparing" | "out_for_delivery" | "delivered" | "cancelled" | "refunded";
 const STATUSES = Object.keys(ORDER_STATUS) as OrderStatus[];
 
 function Orders() {
@@ -81,7 +80,7 @@ function Orders() {
                   </div>
                   <Select value={o.status} onValueChange={(x) => change(o.id, x as OrderStatus)}>
                     <SelectTrigger className="h-9 w-52" aria-label="Change status"><SelectValue /></SelectTrigger>
-                    <SelectContent>{STATUSES.map((st) => <SelectItem key={st} value={st}>{statusOf(st).label}</SelectItem>)}</SelectContent>
+                    <SelectContent>{STATUSES.filter(st => st === o.status || TRANSITIONS[o.status]?.includes(st)).map((st) => <SelectItem key={st} value={st}>{statusOf(st).label}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
               </div>
