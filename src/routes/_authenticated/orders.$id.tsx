@@ -1,4 +1,5 @@
 import { OrderDeliveryPlan } from "@/components/plans/OrderDeliveryPlan";
+import { OrderReturns } from "@/components/plans/OrderReturns";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -133,6 +134,7 @@ function OrderDetail() {
           </ul>
 
           <OrderDeliveryPlan snapshot={order.delivery_plan_snapshot} selectedAt={order.delivery_plan_selected_at} creditStatus={order.membership_credit_status} waived={Number(order.delivery_fee_waived)} charged={Number(order.delivery_fee)} remaining={order.delivery_credit_remaining_at_order} purchaseId={order.delivery_plan_payment_id} />
+          <OrderReturns orderId={order.id} status={order.status} items={order.order_items} />
 
           <div className="card-surface p-5">
             <h2 className="font-bold">Need help with this order?</h2>

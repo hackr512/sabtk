@@ -48,6 +48,8 @@ const NAV = [
   { to: "/admin/ration", label: "Ration Plans", icon: ShoppingBasket },
   { to: "/admin/budget", label: "GharBudget", icon: Calculator },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { to: "/admin/inventory", label: "Inventory", icon: Package },
+  { to: "/admin/returns", label: "Returns", icon: ShoppingBasket },
   { to: "/admin/plans", label: "Delivery Plans", icon: Crown },
   { to: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
   { to: "/admin/settings", label: "Settings", icon: Settings },
