@@ -78,6 +78,13 @@
       "when": 1794292418650,
       "tag": "0010_extended_order_statuses",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794292507566,
+      "tag": "0011_commerce_pricing_inventory_guards",
+      "breakpoints": true
     }
   ]
 }

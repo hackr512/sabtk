@@ -473,6 +473,57 @@ export type Database = {
         }
         Relationships: []
       }
+      inventory_transactions: {
+        Row: {
+          actor: string | null
+          available_after: number
+          created_at: string
+          id: string
+          kind: string
+          order_id: string | null
+          product_id: string
+          quantity_delta: number
+          reason: string
+        }
+        Insert: {
+          actor?: string | null
+          available_after: number
+          created_at?: string
+          id?: string
+          kind: string
+          order_id?: string | null
+          product_id: string
+          quantity_delta: number
+          reason: string
+        }
+        Update: {
+          actor?: string | null
+          available_after?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          order_id?: string | null
+          product_id?: string
+          quantity_delta?: number
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       loyalty_ledger: {
         Row: {
           created_at: string
@@ -1125,6 +1176,7 @@ export type Database = {
           is_active: boolean
           is_archived: boolean
           is_featured: boolean
+          low_stock_threshold: number
           max_per_order: number
           name: string
           nutrition: string | null
@@ -1153,6 +1205,7 @@ export type Database = {
           is_active?: boolean
           is_archived?: boolean
           is_featured?: boolean
+          low_stock_threshold?: number
           max_per_order?: number
           name: string
           nutrition?: string | null
@@ -1181,6 +1234,7 @@ export type Database = {
           is_active?: boolean
           is_archived?: boolean
           is_featured?: boolean
+          low_stock_threshold?: number
           max_per_order?: number
           name?: string
           nutrition?: string | null
@@ -1534,6 +1588,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      adjust_inventory: {
+        Args: {
+          p_delta: number
+          p_product: string
+          p_reason: string
+          p_threshold: number
+        }
+        Returns: undefined
+      }
       campaign_progress: {
         Args: never
         Returns: {
@@ -1641,6 +1704,11 @@ export type Database = {
           unit: string
           unit_quantity: number
         }[]
+      }
+      standard_delivery_fee: { Args: never; Returns: number }
+      valid_order_transition: {
+        Args: { new_status: string; old_status: string }
+        Returns: boolean
       }
     }
     Enums: {
