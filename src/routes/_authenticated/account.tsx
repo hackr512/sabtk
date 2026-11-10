@@ -49,11 +49,12 @@ function Account() {
                 <span className="font-bold">{cur.planName}</span>
                 <Badge variant={cur.status === "active" ? "loyalty" : "warning"}>{cur.status === "pending_payment" ? "Waiting for payment" : cur.status}</Badge>
               </div>
-              {cur.status === "active" && (
+              {!!cur.credits.granted && (
                 <>
                   <div className="text-sm">{cur.credits.available} of {cur.credits.granted} credits left · {cur.credits.used} used · {cur.credits.held} held by open orders</div>
                   <Progress value={cur.credits.granted ? (cur.credits.available / cur.credits.granted) * 100 : 0} />
                   <div className="text-xs text-muted-foreground">Period {d(cur.periodStart)} – {d(cur.periodEnd)}{cur.renewalScheduled ? " · next month paid" : ""}</div>
+                  <p className="text-xs text-muted-foreground">Purchased {d(cur.purchasedAt)} · Payment {cur.paymentStatus}{cur.paymentStatus !== "paid" ? " · Remaining credits locked until payment confirmation" : ""}</p>
                 </>
               )}
             </>
@@ -61,6 +62,7 @@ function Account() {
             <p className="text-sm text-muted-foreground">No plan yet. <Link to="/plans" className="font-semibold text-loyalty underline">See plans</Link></p>
           )}
           {m?.pendingPayment && <p className="text-sm">Payment due: <b>{formatPKR(m.pendingPayment.amount)}</b> for {m.pendingPayment.planName} — waiting for confirmation.</p>}
+          {!!m?.cycles.length && <div className="space-y-3 border-t border-border pt-4"><h3 className="font-bold">My delivery plans</h3>{m.cycles.map(c => <div key={c.id} className="space-y-2 text-sm"><div className="flex flex-wrap justify-between gap-2"><b>{c.planName} · {formatPKR(c.price)}</b><span>{c.paymentStatus === "pending" ? "Pending payment" : c.status === "active" && c.remaining === 0 ? "Exhausted" : c.status === "closed" ? "Expired / closed" : c.status}</span></div><p>{c.creditsGranted} total · {c.used} used · {c.reserved} reserved · {c.remaining} remaining</p><Progress value={c.creditsGranted ? c.remaining / c.creditsGranted * 100 : 0} /><p className="text-xs text-muted-foreground">Purchased {d(c.purchasedAt)} · Activated {d(c.activatedAt)} · Expiry {c.activatedAt ? d(c.periodEnd) : "Starts after payment confirmation"} · Payment {c.paymentStatus}</p></div>)}</div>}
           {!!m?.payments.length && (
             <div>
               <h3 className="mb-2 text-sm font-bold">History</h3>

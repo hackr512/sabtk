@@ -33,6 +33,8 @@ function Subscriptions() {
   const fn = useServerFn(adminListSubscriptions);
   const { data, isLoading } = useQuery({ queryKey: ["admin", "subs"], queryFn: () => fn() });
   const pending = data?.payments.filter((p) => p.status === "pending") ?? [];
+  const [filter, setFilter] = useState("all");
+  const members = data?.memberships.filter(m => filter === "all" || (filter === "exhausted" ? m.status === "active" && m.available === 0 : filter === "remaining" ? m.status === "active" && m.available > 0 : filter === "pending" ? m.paymentStatus === "pending" : m.status === filter)) ?? [];
   return (
     <>
       <AdminTitle title="Subscriptions" subtitle="Confirm plan payments by hand once you've received the money. A plan only starts after you confirm." />
@@ -47,7 +49,8 @@ function Subscriptions() {
             {!pending.length ? <Empty>No payments waiting.</Empty> : pending.map((p) => <PendingPayment key={p.id} p={p} />)}
           </TabsContent>
           <TabsContent value="members" className="space-y-3">
-            {!data?.memberships.length ? <Empty>No subscriptions yet.</Empty> : data.memberships.map((m) => <Member key={m.id} m={m} />)}
+            <Select value={filter} onValueChange={setFilter}><SelectTrigger className="w-64" aria-label="Filter delivery plans"><SelectValue /></SelectTrigger><SelectContent>{[["all","All plans"],["active","Active plans"],["expired","Expired plans"],["exhausted","Exhausted plans"],["pending","Pending payment"],["remaining","Customers with remaining credits"]].map(([v,l]) => <SelectItem key={v} value={v ?? "all"}>{l}</SelectItem>)}</SelectContent></Select>
+            {!members.length ? <Empty>No matching subscriptions.</Empty> : members.map((m) => <Member key={m.id} m={m} />)}
           </TabsContent>
           <TabsContent value="history">
             {!data?.payments.length ? <Empty>No payments yet.</Empty> : (
@@ -150,10 +153,11 @@ function Member({ m }: { m: Data["memberships"][number] }) {
           <div className="flex items-center gap-2 font-bold">{m.customer.name} <Badge variant={m.status === "active" ? "loyalty" : m.status === "pending_payment" ? "warning" : "muted"}>{STATUS_LABEL[m.status] ?? m.status}</Badge></div>
           <div className="text-muted-foreground">{m.plan} · {m.customer.phone || m.customer.email}</div>
         </div>
-        {m.status === "active" && (
+        {(
           <div className="text-right">
             <div className="font-semibold">{m.available} of {m.granted} credits left</div>
             <div className="text-xs text-muted-foreground">{m.used} used · {m.held} held · {fmtDate(m.periodStart)} – {fmtDate(m.periodEnd)}</div>
+            <div className="text-xs text-muted-foreground">{formatPKR(m.purchaseAmount)} · Payment {m.paymentStatus} · Purchased {fmtDate(m.createdAt)}</div>
             {m.cancelAtPeriodEnd && <div className="text-xs text-warning">Ends at period end</div>}
             {m.renewalScheduled && <div className="text-xs text-primary">Next month paid</div>}
           </div>

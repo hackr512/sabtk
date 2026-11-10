@@ -401,7 +401,7 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
       db.from("memberships").select("*").order("created_at", { ascending: false }).limit(500),
       db.from("membership_payments").select("*").order("created_at", { ascending: false }).limit(500),
       db.from("membership_plans").select("id, name"),
-      db.from("membership_cycles").select("id, membership_id, status, period_end, credits_granted, credits_carried"),
+      db.from("membership_cycles").select("*"),
     ]);
     const userIds = Array.from(new Set([...(ms ?? []).map((m) => m.user_id), ...(pays ?? []).map((p) => p.user_id)]));
     const [{ data: profiles }, { data: ledger }, { data: orders }] = await Promise.all([
@@ -425,8 +425,8 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
       cycleId ? Math.max(0, (ledger ?? []).filter((l) => l.cycle_id === cycleId).reduce((s, l) => s + l.delta, 0)) : 0;
     return {
       memberships: (ms ?? []).map((m) => {
-        const cyc = cycles?.find((c) => c.id === m.current_cycle_id);
-        const os = (orders ?? []).filter((o) => o.membership_cycle_id === m.current_cycle_id);
+        const cyc = cycles?.find((c) => c.id === m.current_cycle_id) ?? cycles?.find(c => c.membership_id === m.id && pays?.some(p => p.id === c.payment_id && p.status === "pending"));
+        const os = (orders ?? []).filter((o) => o.membership_cycle_id === cyc?.id);
         return {
           id: m.id,
           userId: m.user_id,
@@ -438,7 +438,9 @@ export const adminListSubscriptions = createServerFn({ method: "GET" })
           cancelAtPeriodEnd: m.cancel_at_period_end,
           cycleId: m.current_cycle_id,
           granted: cyc ? cyc.credits_granted + cyc.credits_carried : 0,
-          available: avail(m.current_cycle_id),
+          available: avail(cyc?.id ?? null),
+          purchaseAmount: Number(cyc?.price ?? pays?.find(p => p.membership_id === m.id)?.amount ?? 0),
+          paymentStatus: pays?.find(p => p.id === cyc?.payment_id)?.status ?? pays?.find(p => p.membership_id === m.id)?.status ?? "pending",
           used: os.filter((o) => o.membership_credit_status === "consumed").length,
           held: os.filter((o) => o.membership_credit_status === "reserved").length,
           renewalScheduled: (cycles ?? []).some((c) => c.membership_id === m.id && c.status === "scheduled"),
