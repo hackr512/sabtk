@@ -1,12 +1,12 @@
 # SabTk Storefront Roadmap
 
 ## Current request
-- [ ] Complete-commerce brief: audit live pricing, subscription lifecycle, orders, inventory and security; preserve existing records.
-- [ ] Apply configurable Rs. 250 delivery and current Basic/Standard/Premium terms without changing purchased snapshots.
-- [ ] Enforce controlled order transitions and expose reserved inventory, adjustment history and low-stock controls.
-- [ ] Implement returns with reviewed credit restoration and optional restocking.
-- [ ] Implement wallet, customer-specific coupons and date-filtered advanced analytics after core verification.
-- [ ] Verify signed-in workflows and record remaining limitations honestly.
+- [x] Audit live pricing, subscription lifecycle, orders, inventory and relevant permissions; preserve existing records.
+- [x] Apply configurable Rs. 250 delivery and current Basic/Standard/Premium terms without changing purchased snapshots; unit tests and populated cart verified.
+- [x] Enforce controlled order transitions; expose reserved inventory, movement history, adjustment reasons and low-stock thresholds; signed-in +1/-1 adjustment verified.
+- [x] Add return submission/review with duplicate protection, explicit credit restoration and optional restocking; rollback-only delivered-return-restock workflow passed. Customer/admin return UI submission remains unverified.
+- [x] Verify signed-in checkout/order/cancellation and mobile inventory; 46 tests passed and latest preview build OK.
+- [ ] Complete remaining master-brief work listed in IMPLEMENTATION_REPORT.md: wallet, refunds, evidence uploads, coupon administration, analytics, additional lifecycle/concurrency verification. Not delivered in this execution; no external blocker claimed.
 - [x] Upgrade existing ledger for first-order reservations, automatic paid credits, cancellation and payment lifecycle.
 - [x] Show customer usage, admin filters and per-order credit history; 29 unit tests, rollback-only lifecycle checks, signed-in order/cancellation, admin ledger and mobile checkout verified. Simultaneous-order stress test not exercised; existing per-user transaction lock retained.
 - [x] Remove subtotal-based free-delivery messaging and enforce Rs. 150 delivery on all grocery subtotals, preserving paid plan credits; verified signed-in order and cancelled test.
