@@ -965,6 +965,7 @@ export type Database = {
           city: string
           created_at: string
           customer_name: string
+          delivery_credit_remaining_at_order: number | null
           delivery_date: string
           delivery_fee: number
           delivery_fee_waived: number
@@ -1002,6 +1003,7 @@ export type Database = {
           city: string
           created_at?: string
           customer_name: string
+          delivery_credit_remaining_at_order?: number | null
           delivery_date: string
           delivery_fee: number
           delivery_fee_waived?: number
@@ -1039,6 +1041,7 @@ export type Database = {
           city?: string
           created_at?: string
           customer_name?: string
+          delivery_credit_remaining_at_order?: number | null
           delivery_date?: string
           delivery_fee?: number
           delivery_fee_waived?: number
