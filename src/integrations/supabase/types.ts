@@ -1445,6 +1445,136 @@ export type Database = {
           },
         ]
       }
+      return_history: {
+        Row: {
+          action: string
+          actor: string | null
+          created_at: string
+          id: string
+          reason: string
+          return_id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          return_id: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          return_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_history_return_id_fkey"
+            columns: ["return_id"]
+            isOneToOne: false
+            referencedRelation: "return_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      return_request_items: {
+        Row: {
+          id: string
+          order_item_id: string
+          quantity: number
+          restocked: boolean
+          return_id: string
+        }
+        Insert: {
+          id?: string
+          order_item_id: string
+          quantity: number
+          restocked?: boolean
+          return_id: string
+        }
+        Update: {
+          id?: string
+          order_item_id?: string
+          quantity?: number
+          restocked?: boolean
+          return_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_request_items_order_item_id_fkey"
+            columns: ["order_item_id"]
+            isOneToOne: false
+            referencedRelation: "order_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "return_request_items_return_id_fkey"
+            columns: ["return_id"]
+            isOneToOne: false
+            referencedRelation: "return_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      return_requests: {
+        Row: {
+          created_at: string
+          credit_decision: string
+          decision_reason: string | null
+          description: string
+          id: string
+          order_id: string
+          refund_amount: number
+          refund_status: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          scenario: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credit_decision?: string
+          decision_reason?: string | null
+          description: string
+          id?: string
+          order_id: string
+          refund_amount?: number
+          refund_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          scenario: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credit_decision?: string
+          decision_reason?: string | null
+          description?: string
+          id?: string
+          order_id?: string
+          refund_amount?: number
+          refund_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          scenario?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_requests_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rewards: {
         Row: {
           description: string | null
@@ -1672,6 +1802,16 @@ export type Database = {
         Returns: undefined
       }
       my_points_balance: { Args: never; Returns: number }
+      review_return: {
+        Args: {
+          p_approve: boolean
+          p_reason: string
+          p_restock: boolean
+          p_restore: boolean
+          p_return: string
+        }
+        Returns: undefined
+      }
       search_products: {
         Args: {
           p_brands?: string[]
@@ -1706,6 +1846,15 @@ export type Database = {
         }[]
       }
       standard_delivery_fee: { Args: never; Returns: number }
+      submit_return: {
+        Args: {
+          p_description: string
+          p_items: Json
+          p_order: string
+          p_scenario: string
+        }
+        Returns: string
+      }
       valid_order_transition: {
         Args: { new_status: string; old_status: string }
         Returns: boolean
