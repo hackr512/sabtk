@@ -160,7 +160,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       count: priced.reduce((s, i) => s + i.quantity, 0),
       totals: addDeliveryPlan(computeTotals(
         priced.map((i) => ({ unitPrice: i.price, quantity: i.quantity, pointsEligible: i.pointsEligible })),
-       , null, configuredDeliveryFee(config?.settings.delivery_fee)), selectedPlan?.price ?? 0),
+        null, configuredDeliveryFee(config?.settings.delivery_fee)), selectedPlan?.price ?? 0),
       quantityOf: (id) => items.find((i) => i.productId === id)?.quantity ?? 0,
       add,
       setQuantity,
