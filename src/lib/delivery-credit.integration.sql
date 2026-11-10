@@ -5,7 +5,8 @@ DO $$
 DECLARE uid uuid:=gen_random_uuid(); plan public.membership_plans%rowtype; zone public.delivery_zones%rowtype; product public.products%rowtype; payload jsonb; result jsonb; oid uuid; pay uuid; cid uuid; before_orders jsonb; i integer;
 BEGIN
  SELECT jsonb_agg(to_jsonb(o)) INTO before_orders FROM public.orders o;
- SELECT * INTO plan FROM public.membership_plans WHERE slug='basic';
+ SELECT * INTO plan FROM public.membership_plans WHERE name='Basic' AND is_active;
+ IF plan.id IS NULL THEN RAISE EXCEPTION 'Basic test plan missing'; END IF;
  SELECT * INTO zone FROM public.delivery_zones WHERE is_active LIMIT 1;
  SELECT * INTO product FROM public.products WHERE is_active AND stock_quantity>10 LIMIT 1;
  payload:=jsonb_build_object('user_id',uid,'payment_method','cod','customer_name','Credit transaction test','phone','03000000000','zone_id',zone.id,'city',zone.city,'area',zone.area,'address_line','Rollback test only','delivery_date',current_date+1,'delivery_window','Test','subtotal',4200,'discount_total',0,'delivery_fee',150,'total',4350,'eligible_points_subtotal',4200,'points_to_earn',42,'items',jsonb_build_array(jsonb_build_object('product_id',product.id,'name',product.name,'pack_size',product.pack_size,'unit_price',4200,'quantity',1,'line_total',4200)));
