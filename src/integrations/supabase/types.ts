@@ -1661,6 +1661,10 @@ export type Database = {
         | "delivered"
         | "cancelled"
         | "refunded"
+        | "ready_for_dispatch"
+        | "failed_delivery"
+        | "return_requested"
+        | "returned"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1806,6 +1810,10 @@ export const Constants = {
         "delivered",
         "cancelled",
         "refunded",
+        "ready_for_dispatch",
+        "failed_delivery",
+        "return_requested",
+        "returned",
       ],
     },
   },

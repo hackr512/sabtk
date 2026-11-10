@@ -71,6 +71,13 @@
       "when": 1794289316010,
       "tag": "0009_automatic_delivery_credit_entitlements",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794292418650,
+      "tag": "0010_extended_order_statuses",
+      "breakpoints": true
     }
   ]
 }
