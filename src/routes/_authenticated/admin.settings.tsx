@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
 
 type Key = (typeof SETTINGS_KEYS)[number];
 const TEXT: { k: Key; l: string; ph?: string }[] = [
+  { k: "delivery_fee", l: "Standard delivery fee (Rs.)", ph: "250" },
   { k: "support_phone", l: "Support phone", ph: "03xx xxxxxxx" },
   { k: "whatsapp_number", l: "WhatsApp number", ph: "923xxxxxxxxx" },
   { k: "support_email", l: "Support email" },
@@ -27,7 +28,6 @@ const TEXT: { k: Key; l: string; ph?: string }[] = [
 ];
 const TOGGLES: { k: Key; l: string; d: string }[] = [
   { k: "membership_enabled", l: "Sell Monthly Delivery Plans", d: "Turn off to hide plans from customers." },
-  { k: "membership_restore_credit_on_refund", l: "Give the credit back when a plan order is refunded", d: "Cancelled orders always get their credit back." },
   { k: "catalog_is_sample", l: "Show 'placeholder prices' notice", d: "Turn off once your real products and prices are in." },
 ];
 
@@ -38,7 +38,7 @@ function Settings() {
   const { data, isLoading } = useQuery({ queryKey: ["admin", "settings"], queryFn: () => getFn() });
   const [v, setV] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
-  useEffect(() => { if (data) setV(data); }, [data]);
+  useEffect(() => { if (data) setV({ ...data, delivery_fee: data.delivery_fee || "250" }); }, [data]);
 
   async function save() {
     setSaving(true);

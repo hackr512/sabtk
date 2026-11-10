@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { ORDER_STATUSES } from "./order-status";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -266,7 +267,6 @@ export const adminQuickUpdate = createServerFn({ method: "POST" })
 
 /* ---------------- Orders ---------------- */
 
-const ORDER_STATUSES = ["pending_confirmation", "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled", "refunded"] as const;
 
 export const adminListOrders = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -302,7 +302,7 @@ export const adminSetOrderStatus = createServerFn({ method: "POST" })
     const { error } = await context.supabase.from("orders").update(patch as any).eq("id", data.id);
     if (error) {
       console.error("order status update failed", error);
-      return fail("Could not update the order status.");
+      return fail(error.message.includes("INVALID_ORDER_TRANSITION") ? "Choose the next permitted order stage." : "Could not update the order status.");
     }
     return { ok: true as const };
   });
@@ -569,6 +569,7 @@ export const adminAdjustCredits = createServerFn({ method: "POST" })
 /* ---------------- Settings ---------------- */
 
 export const SETTINGS_KEYS = [
+  "delivery_fee",
   "membership_enabled",
   "membership_payment_instructions",
   "membership_restore_credit_on_refund",
@@ -596,6 +597,8 @@ export const adminSaveSettings = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
+    const fee = data.values.delivery_fee;
+    if (fee !== undefined && (!/^\d+(\.\d{1,2})?$/.test(fee) || Number(fee) > 100000)) return fail("Enter a valid delivery fee from Rs. 0 to Rs. 100,000.");
     const rows = Object.entries(data.values).map(([key, value]) => ({ key, value, updated_at: new Date().toISOString() }));
     const { error } = await context.supabase.from("store_settings").upsert(rows, { onConflict: "key" });
     if (error) return fail("Could not save settings.");

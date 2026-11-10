@@ -3,7 +3,12 @@
  * checkout and the server-side order validation so they can never disagree.
  */
 
-export const DELIVERY_FEE = 150;
+export const DELIVERY_FEE = 250;
+export function configuredDeliveryFee(value?: string | null): number {
+  if (!value?.trim()) return DELIVERY_FEE;
+  const n = Number(value);
+  return Number.isFinite(n) && n >= 0 && n <= 100000 ? Math.round(n * 100) / 100 : DELIVERY_FEE;
+}
 export const RUPEES_PER_POINT = 100;
 export const REFERRAL_POINTS = 30;
 export const REFERRAL_MIN_ORDER = 1500;
@@ -34,9 +39,9 @@ export type OrderTotals = {
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
 /** Every nonempty grocery subtotal pays the regular fee, unless a paid plan credit covers it. */
-export function deliveryFeeFor(itemSubtotal: number): number {
+export function deliveryFeeFor(itemSubtotal: number, fee = DELIVERY_FEE): number {
   if (itemSubtotal <= 0) return 0;
-  return DELIVERY_FEE;
+  return fee;
 }
 
 /** 1 point per Rs. 100 of eligible merchandise subtotal, rounded down. */
@@ -52,13 +57,13 @@ export function promoDiscount(promo: PromoRule | null | undefined, subtotal: num
   return round2(Math.min(d, subtotal));
 }
 
-export function computeTotals(lines: PricingLine[], promo?: PromoRule | null): OrderTotals {
+export function computeTotals(lines: PricingLine[], promo?: PromoRule | null, fee = DELIVERY_FEE): OrderTotals {
   const subtotal = round2(lines.reduce((s, l) => s + l.unitPrice * l.quantity, 0));
   const eligibleRaw = lines
     .filter((l) => l.pointsEligible)
     .reduce((s, l) => s + l.unitPrice * l.quantity, 0);
   const discount = promoDiscount(promo, subtotal);
-  const deliveryFee = deliveryFeeFor(subtotal);
+  const deliveryFee = deliveryFeeFor(subtotal, fee);
   // Promo discounts reduce the points-eligible amount proportionally.
   const eligiblePointsSubtotal =
     subtotal > 0 ? round2(eligibleRaw * (1 - discount / subtotal)) : 0;
