@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   computeTotals,
+  configuredDeliveryFee,
   deliveryDateOptions,
   deliveryFeeFor,
   formatPKR,
@@ -9,6 +10,10 @@ import {
 } from "./pricing";
 
 describe("delivery fee policy", () => {
+  it("uses a valid administrator-configured delivery fee", () => {
+    expect(computeTotals([{unitPrice:1000,quantity:1,pointsEligible:true}],null,configuredDeliveryFee("300")).total).toBe(1300);
+    expect(configuredDeliveryFee("invalid")).toBe(250);
+  });
   it("charges Rs. 250 on orders below Rs. 1,500", () => {
     expect(deliveryFeeFor(1499)).toBe(250);
     expect(deliveryFeeFor(200)).toBe(250);

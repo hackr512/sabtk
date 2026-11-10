@@ -56,7 +56,7 @@ function PlanCard({ plan, zones }: { plan: Plan; zones: Data["zones"] }) {
           id: plan.id, name: v.name, description: v.description,
           benefits: v.benefitsText.split("\n").map((b) => b.trim()).filter(Boolean),
           price: Number(v.price), credits: Number(v.credits), validityDays: Number(v.validityDays),
-          minBasket: Number(v.minBasket), maxCarryForward: Number(v.maxCarryForward),
+          minBasket: Number(v.minBasket), maxCarryForward: 0,
           zoneIds: v.zoneIds, isActive: v.isActive, isRecommended: v.isRecommended,
         },
       });
@@ -77,9 +77,8 @@ function PlanCard({ plan, zones }: { plan: Plan; zones: Data["zones"] }) {
         <F label="Deliveries included"><Input inputMode="numeric" value={v.credits} onChange={(e) => set("credits", e.target.value)} /></F>
         <F label="Valid for (days)"><Input inputMode="numeric" value={v.validityDays} onChange={(e) => set("validityDays", e.target.value)} /></F>
         <F label="Minimum basket to use a credit (Rs.)"><Input inputMode="decimal" value={v.minBasket} onChange={(e) => set("minBasket", e.target.value)} /></F>
-        <F label="Max unused credits carried over"><Input inputMode="numeric" value={v.maxCarryForward} onChange={(e) => set("maxCarryForward", e.target.value)} /></F>
       </div>
-      <p className="text-sm text-muted-foreground">Works out to {formatPKR(Math.round(perDelivery))} per delivery.</p>
+      <p className="text-sm text-muted-foreground">Works out to {formatPKR(perDelivery)} per delivery. Unused credits expire without carry-forward.</p>
       <F label="Short description"><Textarea rows={2} value={v.description} onChange={(e) => set("description", e.target.value)} /></F>
       <F label="Benefits (one per line)"><Textarea rows={3} value={v.benefitsText} onChange={(e) => set("benefitsText", e.target.value)} /></F>
       <div>
