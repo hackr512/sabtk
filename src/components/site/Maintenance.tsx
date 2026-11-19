@@ -42,12 +42,12 @@ export function Maintenance({ settings }: { settings: Record<string, string> }) 
         </span>
 
         <h1 className="mt-6 font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
-          We&rsquo;re upgrading your shopping experience
+          We&rsquo;re upgrading your online shopping experience
         </h1>
 
         <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
           SabTk is briefly offline while we make things better. Your cart, rewards points and
-          delivery plans are safe — please check back shortly.
+          delivery plans are safe please check back shortly.
         </p>
 
         {message && (
