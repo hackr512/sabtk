@@ -29,6 +29,11 @@ const TEXT: { k: Key; l: string; ph?: string }[] = [
 const TOGGLES: { k: Key; l: string; d: string }[] = [
   { k: "membership_enabled", l: "Sell Monthly Delivery Plans", d: "Turn off to hide plans from customers." },
   { k: "catalog_is_sample", l: "Show 'placeholder prices' notice", d: "Turn off once your real products and prices are in." },
+  {
+    k: "maintenance_mode",
+    l: "Maintenance page",
+    d: "Customers see a 'we'll be right back' page instead of the shop. Your admin panel stays open.",
+  },
 ];
 
 function Settings() {
@@ -71,6 +76,16 @@ function Settings() {
             <Label htmlFor="pay">How customers should pay for a plan</Label>
             <Textarea id="pay" rows={3} placeholder="e.g. Pay the rider in cash with your next order, or send to our JazzCash account…" value={v["membership_payment_instructions"] ?? ""}
               onChange={(e) => setV((s) => ({ ...s, membership_payment_instructions: e.target.value }))} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="maint-msg">Maintenance message (optional)</Label>
+            <Textarea id="maint-msg" rows={2} placeholder="e.g. We're adding online payments and new products…" value={v["maintenance_message"] ?? ""}
+              onChange={(e) => setV((s) => ({ ...s, maintenance_message: e.target.value }))} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="maint-until">Back online (optional)</Label>
+            <Input id="maint-until" placeholder="e.g. Tonight, 9 PM" value={v["maintenance_until"] ?? ""}
+              onChange={(e) => setV((s) => ({ ...s, maintenance_until: e.target.value }))} />
           </div>
         </section>
       </div>

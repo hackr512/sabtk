@@ -580,6 +580,9 @@ export const SETTINGS_KEYS = [
   "instagram_url",
   "tiktok_url",
   "catalog_is_sample",
+  "maintenance_mode",
+  "maintenance_message",
+  "maintenance_until",
 ] as const;
 
 export const adminGetSettings = createServerFn({ method: "GET" })

@@ -5,7 +5,7 @@ import { LOGO_URL } from "./Logo";
 
 export function Footer() {
   const data = getRouteApi("__root__").useLoaderData();
-  const s = data?.settings ?? {};
+  const s = data?.config?.settings ?? {};
   const socials = [
     { label: "Facebook", url: s["facebook_url"] },
     { label: "Instagram", url: s["instagram_url"] },
