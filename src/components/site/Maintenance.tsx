@@ -9,9 +9,6 @@ import { LogoMark, SLOGAN } from "@/components/site/Logo";
 export function Maintenance({ settings }: { settings: Record<string, string> }) {
   const message = settings["maintenance_message"]?.trim();
   const until = settings["maintenance_until"]?.trim();
-  const whatsapp = (settings["whatsapp_number"] ?? "").replace(/\D/g, "");
-  const phone = (settings["support_phone"] ?? "").replace(/\D/g, "");
-  const email = settings["support_email"]?.trim();
 
   // Each page carries its own browser-tab title; during maintenance they all say the same thing.
   useEffect(() => {
@@ -65,37 +62,10 @@ export function Maintenance({ settings }: { settings: Record<string, string> }) 
           </p>
         )}
 
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          {whatsapp && (
-            <a
-              href={`https://wa.me/${whatsapp}`}
-              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Message us on WhatsApp
-            </a>
-          )}
-          {phone && (
-            <a
-              href={`tel:${phone}`}
-              className="inline-flex items-center justify-center rounded-full border border-border bg-card px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-            >
-              Call {settings["support_phone"]}
-            </a>
-          )}
-          {email && (
-            <a
-              href={`mailto:${email}`}
-              className="inline-flex items-center justify-center rounded-full border border-border bg-card px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-            >
-              Email us
-            </a>
-          )}
-        </div>
-
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-foreground/60 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+          className="mt-9 text-xs font-semibold uppercase tracking-[0.16em] text-foreground/60 underline-offset-4 transition-colors hover:text-foreground hover:underline"
         >
           Try again
         </button>
